@@ -2,8 +2,8 @@
 
 namespace Creios\Creiwork\Framework;
 
-use Monolog\Logger;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use TimTegeler\Routerunner\Controller\ControllerInterface;
 
 /**
@@ -18,7 +18,7 @@ abstract class BaseController implements ControllerInterface
      */
     protected $request;
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -30,9 +30,9 @@ abstract class BaseController implements ControllerInterface
     /**
      * BaseController constructor.
      * @param ServerRequestInterface $serverRequest
-     * @param Logger $logger
+     * @param LoggerInterface $logger
      */
-    public function __construct(ServerRequestInterface $serverRequest, Logger $logger)
+    public function __construct(ServerRequestInterface $serverRequest, LoggerInterface $logger)
     {
         $this->request = $serverRequest;
         $this->logger = $logger;
