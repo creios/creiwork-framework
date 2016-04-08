@@ -2,6 +2,9 @@
 
 use GuzzleHttp\Psr7\Response;
 
+/**
+ * @param Response $response
+ */
 function out(Response $response)
 {
     header(sprintf('%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase()));
