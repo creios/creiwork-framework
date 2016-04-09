@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "98a934fedcfffeadd710b2a764606025",
-    "content-hash": "b90aa3388ad6b21dfe879da0ad5c7d94",
+    "hash": "51249882714f12fece04976335d72395",
+    "content-hash": "1f6b6426c95df33d613964e8ec59d868",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -104,7 +104,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/0edec79e2acf5df0105046af7f1eebcf31656462",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/87f5d23362b4d5646b73b20ab6e8acdb5e305d25",
                 "reference": "0edec79e2acf5df0105046af7f1eebcf31656462",
                 "shasum": ""
             },
@@ -508,16 +508,16 @@
         },
         {
             "name": "timtegeler/routerunner",
-            "version": "v0.0.9",
+            "version": "v0.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timtegeler/routerunner.git",
-                "reference": "cdb769735052ee6d5caee2912d415078cda0a171"
+                "reference": "a48f751b4dfd02439bcfd0fa502b192a7619a06e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/cdb769735052ee6d5caee2912d415078cda0a171",
-                "reference": "cdb769735052ee6d5caee2912d415078cda0a171",
+                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/a48f751b4dfd02439bcfd0fa502b192a7619a06e",
+                "reference": "a48f751b4dfd02439bcfd0fa502b192a7619a06e",
                 "shasum": ""
             },
             "require": {
@@ -545,7 +545,7 @@
                 }
             ],
             "description": "Routerunner is a router for HTTP-request written in PHP",
-            "time": "2016-03-31 10:30:19"
+            "time": "2016-04-09 19:29:46"
         }
     ],
     "packages-dev": [

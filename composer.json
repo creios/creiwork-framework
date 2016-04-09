@@ -12,7 +12,7 @@
     "codegyre/robo": "^0.7.1"
   },
   "require": {
-    "timtegeler/routerunner": "^0.0.9",
+    "timtegeler/routerunner": "^0.0.10",
     "league/plates": "^3.1",
     "monolog/monolog": "^1.18",
     "filp/whoops": "2.1.0",
