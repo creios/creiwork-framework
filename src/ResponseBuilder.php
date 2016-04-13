@@ -10,6 +10,7 @@ use Creios\Creiwork\Framework\Result\TemplateResult;
 use GuzzleHttp\Psr7\Response;
 use League\Plates\Engine;
 use TimTegeler\Routerunner\PostProcessor\PostProcessorInterface;
+use Zumba\Util\JsonSerializer;
 
 /**
  * Class ResponseBuilder
@@ -20,13 +21,19 @@ class ResponseBuilder implements PostProcessorInterface
 
     /** @var  Engine */
     protected $engine;
+    /**
+     * @var JsonSerializer
+     */
+    protected $jsonSerializer;
 
     /**
      * OutputLayer constructor.
+     * @param JsonSerializer $jsonSerializer
      * @param Engine $engine
      */
-    public function __construct(Engine $engine)
+    public function __construct(JsonSerializer $jsonSerializer, Engine $engine)
     {
+        $this->jsonSerializer = $jsonSerializer;
         $this->engine = $engine;
     }
 
@@ -45,7 +52,10 @@ class ResponseBuilder implements PostProcessorInterface
                 ->withBody($stream);
 
         } else if ($output instanceof JsonResult) {
-            $stream = \GuzzleHttp\Psr7\stream_for(json_encode($output->getData()));
+
+            $json = $this->jsonSerializer->serialize($output->getData());
+
+            $stream = \GuzzleHttp\Psr7\stream_for($json);
 
             $response = $response->withHeader('Content-Type', 'application/json')
                 ->withBody($stream);
