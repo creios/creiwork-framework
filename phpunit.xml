@@ -1,0 +1,16 @@
+<phpunit bootstrap="vendor/autoload.php">
+    <php>
+        <includePath>.</includePath>
+        <ini name="date.timezone" value="Europe/Berlin"/>
+    </php>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
+    <testsuites>
+        <testsuite name="tests">
+            <directory>phpunit/tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
