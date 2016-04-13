@@ -5,6 +5,7 @@ use Creios\Creiwork\Framework\Result\FileDownloadResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\Result;
+use Creios\Creiwork\Framework\Result\StringBufferResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use GuzzleHttp\Psr7\Response;
 use League\Plates\Engine;
@@ -57,6 +58,10 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $response->withHeader('Content-Type', $mimeType)
                 ->withBody(\GuzzleHttp\Psr7\stream_for(fopen($output->getPath(), 'r')));
 
+        } elseif ($output instanceof StringBufferResult) {
+            $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->buffer($output->getBuffer());
+            $response = $response->withHeader('Content-Type', $mimeType)
+                ->withBody(\GuzzleHttp\Psr7\stream_for($output->getBuffer()));
         } else {
             $stream = \GuzzleHttp\Psr7\stream_for($output);
             $response = $response->withHeader('Content-Type', 'text/plain')->withBody($stream);
