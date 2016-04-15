@@ -2,7 +2,11 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
-trait Downloadable 
+/**
+ * Trait Downloadable
+ * @package Creios\Creiwork\Framework\Result
+ */
+trait Downloadable
 {
 
     /**
@@ -12,7 +16,7 @@ trait Downloadable
 
     /**
      * @param string $filename
-     * @return $this
+     * @return DownloadableInterface
      */
     public function asDownload($filename)
     {
