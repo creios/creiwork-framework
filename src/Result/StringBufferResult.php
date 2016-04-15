@@ -6,7 +6,7 @@ namespace Creios\Creiwork\Framework\Result;
  * Class StringBufferResult
  * @package Creios\Creiwork\Framework\Result
  */
-class StringBufferResult
+class StringBufferResult extends DownloadableResult
 {
 
     /**
