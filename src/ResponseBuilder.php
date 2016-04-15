@@ -48,8 +48,8 @@ class ResponseBuilder implements PostProcessorInterface
     {
         $response = (new Response())->withProtocolVersion('1.1');
 
-        if ($output instanceof DownloadableResult && $output->getFilename()) {
-            $response = $response->withHeader('Content-Disposition', 'attachment; filename=' . $output->getFilename());
+        if ($output instanceof DownloadableResult) {
+            $response = $this->modifyResponseForDownloadableResult($response, $output);
         }
 
         if ($output instanceof TemplateResult) {
@@ -67,6 +67,20 @@ class ResponseBuilder implements PostProcessorInterface
         }
 
         return $response;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param DownloadableResult $downloadableResult
+     * @return ResponseInterface
+     */
+    private function modifyResponseForDownloadableResult(ResponseInterface $response, DownloadableResult $downloadableResult)
+    {
+        if ($downloadableResult->getFilename()) {
+            $response = $response->withHeader('Content-Disposition', 'attachment; filename=' . $downloadableResult->getFilename());
+        }
+        return $response;
+
     }
 
     /**
