@@ -2,10 +2,10 @@
 namespace Creios\Creiwork\Framework\Result;
 
 /**
- * Class FileDownloadResult
+ * Class FileResult
  * @package Creios\Creiwork\Framework\Result
  */
-class FileDownloadResult extends Result
+class FileResult extends Result
 {
 
     /**
@@ -29,4 +29,5 @@ class FileDownloadResult extends Result
     {
         return $this->path;
     }
+
 }

@@ -33,4 +33,5 @@ class ErrorPageHandler extends Handler
     {
         echo $this->templates->render('error', ['exception' => $this->getException()]);
     }
+    
 }
