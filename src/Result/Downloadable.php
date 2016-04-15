@@ -2,11 +2,7 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
-/**
- * Class DownloadableResult
- * @package Creios\Creiwork\Framework\Result
- */
-abstract class DownloadableResult extends Result
+trait Downloadable 
 {
 
     /**

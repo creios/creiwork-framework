@@ -6,7 +6,7 @@ namespace Creios\Creiwork\Framework\Result;
  * Class DataResult
  * @package Creios\Creiwork\Util\Results
  */
-abstract class DataResult extends DownloadableResult
+abstract class DataResult extends Result
 {
 
     /**

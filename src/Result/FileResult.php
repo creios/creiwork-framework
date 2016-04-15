@@ -1,13 +1,16 @@
 <?php
+
 namespace Creios\Creiwork\Framework\Result;
 
 /**
  * Class FileResult
  * @package Creios\Creiwork\Framework\Result
  */
-class FileResult extends DownloadableResult
+class FileResult extends Result implements DownloadableInterface
 {
 
+    use Downloadable;
+    
     /**
      * @var string
      */
