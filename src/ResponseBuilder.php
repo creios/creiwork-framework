@@ -2,7 +2,7 @@
 
 namespace Creios\Creiwork\Framework;
 
-use Creios\Creiwork\Framework\Result\DownloadableInterface;
+use Creios\Creiwork\Framework\Result\DownloadableResultInterface;
 use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
@@ -48,7 +48,7 @@ class ResponseBuilder implements PostProcessorInterface
     {
         $response = (new Response())->withProtocolVersion('1.1');
 
-        if ($output instanceof DownloadableInterface) {
+        if ($output instanceof DownloadableResultInterface) {
             $response = $this->modifyResponseForDownloadableResult($response, $output);
         }
 
@@ -71,10 +71,10 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param DownloadableInterface $downloadable
+     * @param DownloadableResultInterface $downloadable
      * @return ResponseInterface
      */
-    private function modifyResponseForDownloadableResult(ResponseInterface $response, DownloadableInterface $downloadable)
+    private function modifyResponseForDownloadableResult(ResponseInterface $response, DownloadableResultInterface $downloadable)
     {
         if ($downloadable->getFilename()) {
             $response = $response->withHeader('Content-Disposition', 'attachment; filename=' . $downloadable->getFilename());

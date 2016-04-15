@@ -6,10 +6,10 @@ namespace Creios\Creiwork\Framework\Result;
  * Class FileResult
  * @package Creios\Creiwork\Framework\Result
  */
-class FileResult extends Result implements DownloadableInterface
+class FileResult extends Result implements DownloadableResultInterface
 {
 
-    use Downloadable;
+    use DownloadableResult;
     
     /**
      * @var string

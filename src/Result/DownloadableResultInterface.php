@@ -6,12 +6,12 @@ namespace Creios\Creiwork\Framework\Result;
  * Interface DownloadableInterface
  * @package Creios\Creiwork\Framework\Result
  */
-interface DownloadableInterface
+interface DownloadableResultInterface
 {
 
     /**
      * @param string $filename
-     * @return DownloadableInterface
+     * @return DownloadableResultInterface
      */
     public function asDownload($filename);
 
@@ -19,5 +19,5 @@ interface DownloadableInterface
      * @return string
      */
     public function getFilename();
-    
+
 }
