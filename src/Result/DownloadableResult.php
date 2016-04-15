@@ -18,7 +18,7 @@ abstract class DownloadableResult extends Result
      * @param string $filename
      * @return $this
      */
-    public function setFilename($filename)
+    public function asDownload($filename)
     {
         $this->filename = $filename;
         return $this;
