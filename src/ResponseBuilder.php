@@ -1,6 +1,8 @@
 <?php
+
 namespace Creios\Creiwork\Framework;
 
+use Creios\Creiwork\Framework\Result\DownloadableResult;
 use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
@@ -9,6 +11,7 @@ use Creios\Creiwork\Framework\Result\StringBufferResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use GuzzleHttp\Psr7\Response;
 use League\Plates\Engine;
+use Psr\Http\Message\ResponseInterface;
 use TimTegeler\Routerunner\PostProcessor\PostProcessorInterface;
 use Zumba\Util\JsonSerializer;
 
@@ -45,39 +48,83 @@ class ResponseBuilder implements PostProcessorInterface
     {
         $response = (new Response())->withProtocolVersion('1.1');
 
+        if ($output instanceof DownloadableResult && $output->getFilename()) {
+            $response = $response->withHeader('Content-Disposition', 'inline; filename=' . $output);
+        }
+
         if ($output instanceof TemplateResult) {
-            $stream = \GuzzleHttp\Psr7\stream_for($this->engine->render($output->getTemplate(), $output->getData()));
-
-            $response = $response->withHeader('Content-Type', 'text/html')
-                ->withBody($stream);
-
+            $response = $this->modifyResponseForTemplateResult($response, $output);
         } else if ($output instanceof JsonResult) {
-
-            $json = $this->jsonSerializer->serialize($output->getData());
-
-            $stream = \GuzzleHttp\Psr7\stream_for($json);
-
-            $response = $response->withHeader('Content-Type', 'application/json')
-                ->withBody($stream);
-
+            $response = $this->modifyResponseForJsonResult($response, $output);
         } else if ($output instanceof RedirectResult) {
             $response = $response->withHeader('Location', $output->getUrl());
-
         } elseif ($output instanceof FileResult) {
-            $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->file($output->getPath());
-            $response = $response->withHeader('Content-Type', $mimeType)
-                ->withBody(\GuzzleHttp\Psr7\stream_for(fopen($output->getPath(), 'r')));
-
+            $response = $this->modifyResponseForFileResult($response, $output);
         } elseif ($output instanceof StringBufferResult) {
-            $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->buffer($output->getBuffer());
-            $response = $response->withHeader('Content-Type', $mimeType)
-                ->withBody(\GuzzleHttp\Psr7\stream_for($output->getBuffer()));
+            $response = $this->modifyResponseForStringBufferResult($response, $output);
         } else {
-            $stream = \GuzzleHttp\Psr7\stream_for($output);
-            $response = $response->withHeader('Content-Type', 'text/plain')->withBody($stream);
+            $response = $this->modifyResponseForPlain($response, $output);
         }
 
         return $response;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param TemplateResult $templateResult
+     * @return ResponseInterface
+     */
+    private function modifyResponseForTemplateResult(ResponseInterface $response, TemplateResult $templateResult)
+    {
+        $stream = \GuzzleHttp\Psr7\stream_for($this->engine->render($templateResult->getTemplate(), $templateResult->getData()));
+        return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param JsonResult $jsonResult
+     * @return ResponseInterface
+     */
+    private function modifyResponseForJsonResult(ResponseInterface $response, JsonResult $jsonResult)
+    {
+        $json = $this->jsonSerializer->serialize($jsonResult->getData());
+        $stream = \GuzzleHttp\Psr7\stream_for($json);
+        return $response->withHeader('Content-Type', 'application/json')->withBody($stream);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param FileResult $fileResult
+     * @return ResponseInterface
+     */
+    private function modifyResponseForFileResult(ResponseInterface $response, FileResult $fileResult)
+    {
+        $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->file($fileResult->getPath());
+        return $response->withHeader('Content-Type', $mimeType)
+            ->withBody(\GuzzleHttp\Psr7\stream_for(fopen($fileResult->getPath(), 'r')));
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param StringBufferResult $stringBufferResult
+     * @return ResponseInterface
+     */
+    private function modifyResponseForStringBufferResult(ResponseInterface $response, StringBufferResult $stringBufferResult)
+    {
+        $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->buffer($stringBufferResult->getBuffer());
+        return $response->withHeader('Content-Type', $mimeType)
+            ->withBody(\GuzzleHttp\Psr7\stream_for($stringBufferResult->getBuffer()));
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param string $output
+     * @return ResponseInterface
+     */
+    private function modifyResponseForPlain(ResponseInterface $response, $output)
+    {
+        $stream = \GuzzleHttp\Psr7\stream_for($output);
+        return $response->withHeader('Content-Type', 'text/plain')->withBody($stream);
     }
 
 }
