@@ -16,7 +16,7 @@
     "league/plates": "^3.1",
     "monolog/monolog": "^1.18",
     "filp/whoops": "2.1.0",
-    "guzzlehttp/psr7": "dev-master#0edec79e2acf5df0105046af7f1eebcf31656462"
+    "guzzlehttp/psr7": "^1.3.0"
   },
   "autoload": {
     "psr-4": {
