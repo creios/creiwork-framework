@@ -49,7 +49,7 @@ class ResponseBuilder implements PostProcessorInterface
         $response = (new Response())->withProtocolVersion('1.1');
 
         if ($output instanceof DownloadableResult && $output->getFilename()) {
-            $response = $response->withHeader('Content-Disposition', 'inline; filename=' . $output->getFilename());
+            $response = $response->withHeader('Content-Disposition', 'attachment; filename=' . $output->getFilename());
         }
 
         if ($output instanceof TemplateResult) {
