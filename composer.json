@@ -13,6 +13,7 @@
     "phpunit/phpunit": "^4.8"
   },
   "require": {
+    "php": ">=5.5.0",
     "timtegeler/routerunner": "^0.0.10",
     "league/plates": "^3.1",
     "monolog/monolog": "^1.18",
