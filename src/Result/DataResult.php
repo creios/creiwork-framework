@@ -16,15 +16,15 @@ abstract class DataResult extends Result
 
     /**
      * Result constructor.
-     * @param array $data
+     * @param mixed $data
      */
-    public function __construct(array $data)
+    public function __construct($data)
     {
         $this->data = $data;
     }
 
     /**
-     * @return array
+     * @return mixed
      */
     public function getData()
     {
