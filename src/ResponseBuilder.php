@@ -12,6 +12,7 @@ use Creios\Creiwork\Framework\Result\TemplateResult;
 use GuzzleHttp\Psr7\Response;
 use League\Plates\Engine;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use TimTegeler\Routerunner\PostProcessor\PostProcessorInterface;
 use Zumba\Util\JsonSerializer;
 
@@ -22,22 +23,31 @@ use Zumba\Util\JsonSerializer;
 class ResponseBuilder implements PostProcessorInterface
 {
 
-    /** @var  Engine */
+    /**
+     * @var Engine
+     */
     protected $engine;
     /**
      * @var JsonSerializer
      */
     protected $jsonSerializer;
+    /**
+     * @var ServerRequestInterface
+     */
+    protected $serverRequest;
 
     /**
      * OutputLayer constructor.
      * @param JsonSerializer $jsonSerializer
      * @param Engine $engine
+     * @param ServerRequestInterface $serverRequest
      */
-    public function __construct(JsonSerializer $jsonSerializer, Engine $engine)
+    public function __construct(JsonSerializer $jsonSerializer, Engine $engine, ServerRequestInterface $serverRequest)
     {
         $this->jsonSerializer = $jsonSerializer;
         $this->engine = $engine;
+        $this->serverRequest = $serverRequest;
+
     }
 
     /**
@@ -90,6 +100,7 @@ class ResponseBuilder implements PostProcessorInterface
      */
     private function modifyResponseForTemplateResult(ResponseInterface $response, TemplateResult $templateResult)
     {
+        $this->engine->addData(['host' => 'http://' . $this->serverRequest->getServerParams()['HTTP_HOST'] . '/']);
         $stream = \GuzzleHttp\Psr7\stream_for($this->engine->render($templateResult->getTemplate(), $templateResult->getData()));
         return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
     }
