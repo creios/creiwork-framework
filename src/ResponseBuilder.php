@@ -101,7 +101,7 @@ class ResponseBuilder implements PostProcessorInterface
     private function modifyResponseForTemplateResult(ResponseInterface $response, TemplateResult $templateResult)
     {
         $this->engine->addData(['host' => 'http://' . $this->serverRequest->getServerParams()['HTTP_HOST'] . '/']);
-        if ($templateResult->getData() == null) {
+        if ($templateResult->getData() === null) {
             $data = [];
         } else {
             $data = $templateResult->getData();
