@@ -2,7 +2,9 @@
 
 namespace Creios\Creiwork\Framework;
 
+use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
+use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
@@ -61,9 +63,32 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
         $assertedResponse = (new Response())->withHeader('Content-Type', 'application/json')
             ->withHeader('Content-Disposition', 'attachment; filename=test.json')
             ->withBody(new Stream($this->stream));
-        $result= (new JsonResult(['key'=>'value']))->asDownload('test.json');
+        $result = (new JsonResult(['key' => 'value']))->asDownload('test.json');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
+    public function testRedirectResult()
+    {
+        $assertedResponse = (new Response())->withHeader('Location', 'http://localhost/redirect');
+        $result = new RedirectResult('http://localhost/redirect');
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
+
+    public function testPlainResult()
+    {
+        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/plain');
+        $result = 'Result is a plaintext';
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
+
+    public function testFileResult()
+    {
+        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/plain');
+        $result = new  FileResult(__DIR__ . '/../asset/textfile.txt');
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
 }
