@@ -51,7 +51,7 @@ class ResponseBuilder implements PostProcessorInterface
     }
 
     /**
-     * @param Result $output
+     * @param Result|DownloadableResultInterface $output
      * @return Response
      */
     public function process($output)

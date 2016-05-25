@@ -2,6 +2,7 @@
 
 namespace Creios\Creiwork\Framework;
 
+use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
@@ -51,6 +52,16 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
         $assertedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withBody(new Stream($this->stream));
         $result = new TemplateResult('test');
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
+
+    public function testJsonResultDownload()
+    {
+        $assertedResponse = (new Response())->withHeader('Content-Type', 'application/json')
+            ->withHeader('Content-Disposition', 'attachment; filename=test.json')
+            ->withBody(new Stream($this->stream));
+        $result= (new JsonResult(['key'=>'value']))->asDownload('test.json');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
     }
