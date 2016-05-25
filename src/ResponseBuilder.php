@@ -15,7 +15,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TimTegeler\Routerunner\PostProcessor\PostProcessorInterface;
 use Zumba\JsonSerializer\JsonSerializer;
-use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * Class ResponseBuilder
@@ -107,7 +106,7 @@ class ResponseBuilder implements PostProcessorInterface
         } else {
             $data = $templateResult->getData();
         }
-        $stream = stream_for($this->engine->render($templateResult->getTemplate(), $data));
+        $stream = \GuzzleHttp\Psr7\stream_for($this->engine->render($templateResult->getTemplate(), $data));
         return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
     }
 
@@ -119,7 +118,7 @@ class ResponseBuilder implements PostProcessorInterface
     private function modifyResponseForJsonResult(ResponseInterface $response, JsonResult $jsonResult)
     {
         $json = $this->jsonSerializer->serialize($jsonResult->getData());
-        $stream = stream_for($json);
+        $stream = \GuzzleHttp\Psr7\stream_for($json);
         return $response->withHeader('Content-Type', 'application/json')->withBody($stream);
     }
 
@@ -132,7 +131,7 @@ class ResponseBuilder implements PostProcessorInterface
     {
         $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->file($fileResult->getPath());
         return $response->withHeader('Content-Type', $mimeType)
-            ->withBody(stream_for(fopen($fileResult->getPath(), 'r')));
+            ->withBody(\GuzzleHttp\Psr7\stream_for(fopen($fileResult->getPath(), 'r')));
     }
 
     /**
@@ -144,7 +143,7 @@ class ResponseBuilder implements PostProcessorInterface
     {
         $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->buffer($stringBufferResult->getBuffer());
         return $response->withHeader('Content-Type', $mimeType)
-            ->withBody(stream_for($stringBufferResult->getBuffer()));
+            ->withBody(\GuzzleHttp\Psr7\stream_for($stringBufferResult->getBuffer()));
     }
 
     /**
@@ -154,7 +153,7 @@ class ResponseBuilder implements PostProcessorInterface
      */
     private function modifyResponseForPlain(ResponseInterface $response, $output)
     {
-        $stream = stream_for($output);
+        $stream = \GuzzleHttp\Psr7\stream_for($output);
         return $response->withHeader('Content-Type', 'text/plain')->withBody($stream);
     }
 
