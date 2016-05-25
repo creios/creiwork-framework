@@ -14,7 +14,7 @@ use League\Plates\Engine;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TimTegeler\Routerunner\PostProcessor\PostProcessorInterface;
-use Zumba\Util\JsonSerializer;
+use Zumba\JsonSerializer\JsonSerializer;
 
 /**
  * Class ResponseBuilder
