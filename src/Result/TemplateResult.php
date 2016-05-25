@@ -19,7 +19,7 @@ class TemplateResult extends DataResult
      * @param array $template
      * @param array $data
      */
-    public function __construct($template, array $data)
+    public function __construct($template, array $data = null)
     {
         $this->template = $template;
         parent::__construct($data);

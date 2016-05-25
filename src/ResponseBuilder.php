@@ -101,7 +101,12 @@ class ResponseBuilder implements PostProcessorInterface
     private function modifyResponseForTemplateResult(ResponseInterface $response, TemplateResult $templateResult)
     {
         $this->engine->addData(['host' => 'http://' . $this->serverRequest->getServerParams()['HTTP_HOST'] . '/']);
-        $stream = \GuzzleHttp\Psr7\stream_for($this->engine->render($templateResult->getTemplate(), $templateResult->getData()));
+        if ($templateResult->getData() == null) {
+            $data = [];
+        } else {
+            $data = $templateResult->getData();
+        }
+        $stream = \GuzzleHttp\Psr7\stream_for($this->engine->render($templateResult->getTemplate(), $data));
         return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
     }
 
