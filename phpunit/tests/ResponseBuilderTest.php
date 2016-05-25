@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use League\Plates\Engine;
 use Psr\Http\Message\ServerRequestInterface;
-use Zumba\Util\JsonSerializer;
+use Zumba\JsonSerializer\JsonSerializer;
 
 /**
  * Class ResponseBuilderTest
