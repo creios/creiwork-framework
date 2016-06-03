@@ -6,11 +6,11 @@ namespace Creios\Creiwork\Framework\Result;
  * Class FileResult
  * @package Creios\Creiwork\Framework\Result
  */
-class FileResult extends Result implements DownloadableResultInterface
+class FileResult extends MimeTypeResult implements DownloadableResultInterface
 {
 
     use DownloadableResult;
-    
+
     /**
      * @var string
      */
@@ -19,10 +19,12 @@ class FileResult extends Result implements DownloadableResultInterface
     /**
      * FileDownloadResult constructor.
      * @param $path
+     * @param $mimeType
      */
-    public function __construct($path)
+    public function __construct($path, $mimeType = null)
     {
         $this->path = $path;
+        $this->mimeType = $mimeType;
     }
 
     /**

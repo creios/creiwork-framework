@@ -8,6 +8,7 @@ use Creios\Creiwork\Framework\Result\HtmlResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\Result;
+use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringBufferResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use GuzzleHttp\Psr7\Response;
@@ -75,7 +76,8 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForStringBufferResult($response, $output);
         } elseif ($output instanceof HtmlResult) {
             $response = $this->modifyResponseForHtmlBufferResult($response, $output);
-
+        } elseif ($output instanceof StreamResult) {
+            $response = $this->modifyResponseForStreamResult($response, $output);
         } else {
             $response = $this->modifyResponseForPlain($response, $output);
         }
@@ -133,7 +135,12 @@ class ResponseBuilder implements PostProcessorInterface
      */
     private function modifyResponseForFileResult(ResponseInterface $response, FileResult $fileResult)
     {
-        $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->file($fileResult->getPath());
+        if ($fileResult->getMimeType() != null) {
+            $mimeType = $fileResult->getMimeType();
+        } else {
+            $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->file($fileResult->getPath());
+        }
+
         return $response->withHeader('Content-Type', $mimeType)
             ->withBody(\GuzzleHttp\Psr7\stream_for(fopen($fileResult->getPath(), 'r')));
     }
@@ -145,7 +152,11 @@ class ResponseBuilder implements PostProcessorInterface
      */
     private function modifyResponseForStringBufferResult(ResponseInterface $response, StringBufferResult $stringBufferResult)
     {
-        $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->buffer($stringBufferResult->getBuffer());
+        if ($stringBufferResult->getMimeType() != null) {
+            $mimeType = $stringBufferResult->getMimeType();
+        } else {
+            $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->buffer($stringBufferResult->getBuffer());
+        }
         return $response->withHeader('Content-Type', $mimeType)
             ->withBody(\GuzzleHttp\Psr7\stream_for($stringBufferResult->getBuffer()));
     }
@@ -159,6 +170,18 @@ class ResponseBuilder implements PostProcessorInterface
     {
         $stream = \GuzzleHttp\Psr7\stream_for($htmlResult->getHtml());
         return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param StreamResult $streamResult
+     * @return static
+     * @internal param HtmlResult $htmlResult
+     */
+    private function modifyResponseForStreamResult(ResponseInterface $response, StreamResult $streamResult)
+    {
+        $stream = \GuzzleHttp\Psr7\stream_for($streamResult->getStream());
+        return $response->withHeader('Content-Type', $streamResult->getMimeType())->withBody($stream);
     }
 
     /**
