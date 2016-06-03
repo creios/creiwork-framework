@@ -3,6 +3,7 @@
 namespace Creios\Creiwork\Framework;
 
 use Creios\Creiwork\Framework\Result\FileResult;
+use Creios\Creiwork\Framework\Result\HtmlResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
@@ -91,4 +92,25 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
     }
+
+    public function testHtmlResult()
+    {
+        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/html');
+        $html = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+HTML;
+        $result = new HtmlResult($html);
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
+
 }

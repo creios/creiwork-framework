@@ -4,6 +4,7 @@ namespace Creios\Creiwork\Framework;
 
 use Creios\Creiwork\Framework\Result\DownloadableResultInterface;
 use Creios\Creiwork\Framework\Result\FileResult;
+use Creios\Creiwork\Framework\Result\HtmlResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\Result;
@@ -72,6 +73,9 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForFileResult($response, $output);
         } elseif ($output instanceof StringBufferResult) {
             $response = $this->modifyResponseForStringBufferResult($response, $output);
+        } elseif ($output instanceof HtmlResult) {
+            $response = $this->modifyResponseForHtmlBufferResult($response, $output);
+
         } else {
             $response = $this->modifyResponseForPlain($response, $output);
         }
@@ -144,6 +148,17 @@ class ResponseBuilder implements PostProcessorInterface
         $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->buffer($stringBufferResult->getBuffer());
         return $response->withHeader('Content-Type', $mimeType)
             ->withBody(\GuzzleHttp\Psr7\stream_for($stringBufferResult->getBuffer()));
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param HtmlResult $htmlResult
+     * @return static
+     */
+    private function modifyResponseForHtmlBufferResult(ResponseInterface $response, HtmlResult $htmlResult)
+    {
+        $stream = \GuzzleHttp\Psr7\stream_for($htmlResult->getHtml());
+        return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
     }
 
     /**

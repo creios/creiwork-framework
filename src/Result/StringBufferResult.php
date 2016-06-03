@@ -32,5 +32,5 @@ class StringBufferResult extends Result implements DownloadableResultInterface
     {
         return $this->buffer;
     }
-    
+
 }
