@@ -23,12 +23,10 @@ class StringBufferResult extends MimeTypeResult implements DownloadableResultInt
     /**
      * Result constructor.
      * @param string $buffer
-     * @param string $mimeType
      */
-    public function __construct($buffer, $mimeType = null)
+    public function __construct($buffer)
     {
         $this->buffer = $buffer;
-        $this->mimeType = $mimeType;
     }
 
     /**
