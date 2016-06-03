@@ -76,7 +76,7 @@ class ResponseBuilder implements PostProcessorInterface
         } elseif ($output instanceof StringBufferResult) {
             $response = $this->modifyResponseForStringBufferResult($response, $output);
         } elseif ($output instanceof HtmlResult) {
-            $response = $this->modifyResponseForHtmlBufferResult($response, $output);
+            $response = $this->modifyResponseForHtmlResult($response, $output);
         } elseif ($output instanceof StreamResult) {
             $response = $this->modifyResponseForStreamResult($response, $output);
         } else {
@@ -171,7 +171,7 @@ class ResponseBuilder implements PostProcessorInterface
      * @param HtmlResult $htmlResult
      * @return static
      */
-    private function modifyResponseForHtmlBufferResult(ResponseInterface $response, HtmlResult $htmlResult)
+    private function modifyResponseForHtmlResult(ResponseInterface $response, HtmlResult $htmlResult)
     {
         $stream = \GuzzleHttp\Psr7\stream_for($htmlResult->getHtml());
         return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
