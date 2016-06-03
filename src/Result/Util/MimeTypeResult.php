@@ -22,10 +22,12 @@ abstract class MimeTypeResult extends StatusCodeResult
 
     /**
      * @param $mimeType
+     * @return $this
      */
     public function withMimeType($mimeType)
     {
         $this->mimeType = $mimeType;
+        return $this;
     }
 
 }
