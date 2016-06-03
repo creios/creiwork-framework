@@ -2,6 +2,10 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
+use Creios\Creiwork\Framework\Result\Util\DownloadableResult;
+use Creios\Creiwork\Framework\Result\Util\DownloadableResultInterface;
+use Creios\Creiwork\Framework\Result\Util\MimeTypeResult;
+
 /**
  * Class StringBufferResult
  * @package Creios\Creiwork\Framework\Result

@@ -2,15 +2,16 @@
 
 namespace Creios\Creiwork\Framework;
 
-use Creios\Creiwork\Framework\Result\DownloadableResultInterface;
 use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\HtmlResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
-use Creios\Creiwork\Framework\Result\Result;
 use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringBufferResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
+use Creios\Creiwork\Framework\Result\Util\DownloadableResultInterface;
+use Creios\Creiwork\Framework\Result\Util\Result;
+use Creios\Creiwork\Framework\Result\Util\StatusCodeResult;
 use GuzzleHttp\Psr7\Response;
 use League\Plates\Engine;
 use Psr\Http\Message\ResponseInterface;
@@ -80,6 +81,10 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForStreamResult($response, $output);
         } else {
             $response = $this->modifyResponseForPlain($response, $output);
+        }
+
+        if ($output instanceof StatusCodeResult) {
+            $response = $this->modifyResponseForStatusCodeResult($response, $output);
         }
 
         return $response;
@@ -193,6 +198,19 @@ class ResponseBuilder implements PostProcessorInterface
     {
         $stream = \GuzzleHttp\Psr7\stream_for($output);
         return $response->withHeader('Content-Type', 'text/plain')->withBody($stream);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param StatusCodeResult $statusCodeResult
+     * @return ResponseInterface
+     */
+    private function modifyResponseForStatusCodeResult(ResponseInterface $response, StatusCodeResult $statusCodeResult)
+    {
+        if ($statusCodeResult->getStatusCode() != null) {
+            $response = $response->withStatus($statusCodeResult->getStatusCode());
+        }
+        return $response;
     }
 
 }

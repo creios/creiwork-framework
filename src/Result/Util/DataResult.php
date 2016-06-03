@@ -1,12 +1,12 @@
 <?php
 
-namespace Creios\Creiwork\Framework\Result;
+namespace Creios\Creiwork\Framework\Result\Util;
 
 /**
  * Class DataResult
  * @package Creios\Creiwork\Util\Results
  */
-abstract class DataResult extends Result
+abstract class DataResult extends StatusCodeResult
 {
 
     /**

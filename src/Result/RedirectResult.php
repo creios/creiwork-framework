@@ -2,6 +2,8 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
+use Creios\Creiwork\Framework\Result\Util\Result;
+
 /**
  * Class RedirectResult
  * @package Creios\Creiwork\Util\Results

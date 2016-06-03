@@ -1,6 +1,6 @@
 <?php
 
-namespace Creios\Creiwork\Framework\Result;
+namespace Creios\Creiwork\Framework\Result\Util;
 
 /**
  * Class Result

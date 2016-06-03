@@ -1,12 +1,12 @@
 <?php
 
-namespace Creios\Creiwork\Framework\Result;
+namespace Creios\Creiwork\Framework\Result\Util;
 
 /**
  * Class MimeTypeResult
  * @package Creios\Creiwork\Framework\Result
  */
-abstract class MimeTypeResult
+abstract class MimeTypeResult extends StatusCodeResult
 {
 
     /** @var string */
