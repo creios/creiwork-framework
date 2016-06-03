@@ -186,7 +186,8 @@ class ResponseBuilder implements PostProcessorInterface
     private function modifyResponseForStreamResult(ResponseInterface $response, StreamResult $streamResult)
     {
         $stream = \GuzzleHttp\Psr7\stream_for($streamResult->getStream());
-        return $response->withHeader('Content-Type', $streamResult->getMimeType())->withBody($stream);
+        return $response->withHeader('Content-Type', $streamResult->getMimeType())
+            ->withHeader('Content-Length', $stream->getSize())->withBody($stream);
     }
 
     /**
