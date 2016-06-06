@@ -51,7 +51,6 @@ class ResponseBuilder implements PostProcessorInterface
         $this->jsonSerializer = $jsonSerializer;
         $this->engine = $engine;
         $this->serverRequest = $serverRequest;
-
     }
 
     /**
@@ -107,7 +106,6 @@ class ResponseBuilder implements PostProcessorInterface
             return $response->withHeader('Content-Disposition', $header);
         }
         return $response;
-
     }
 
     /**
