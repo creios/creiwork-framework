@@ -9,7 +9,7 @@ use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringBufferResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
-use Creios\Creiwork\Framework\Result\Util\DownloadableResultInterface;
+use Creios\Creiwork\Framework\Result\Util\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Util\Result;
 use Creios\Creiwork\Framework\Result\Util\StatusCodeResult;
 use GuzzleHttp\Psr7\Response;
@@ -55,14 +55,14 @@ class ResponseBuilder implements PostProcessorInterface
     }
 
     /**
-     * @param Result|DownloadableResultInterface|string $output
+     * @param Result|DisposableResultInterface|string $output
      * @return Response
      */
     public function process($output)
     {
         $response = (new Response())->withProtocolVersion('1.1');
 
-        if ($output instanceof DownloadableResultInterface) {
+        if ($output instanceof DisposableResultInterface) {
             $response = $this->modifyResponseForDownloadableResult($response, $output);
         }
 
@@ -93,13 +93,18 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param DownloadableResultInterface $downloadable
+     * @param DisposableResultInterface $disposable
      * @return ResponseInterface
      */
-    private function modifyResponseForDownloadableResult(ResponseInterface $response, DownloadableResultInterface $downloadable)
+    private function modifyResponseForDownloadableResult(ResponseInterface $response, DisposableResultInterface $disposable)
     {
-        if ($downloadable->getFilename()) {
-            $response = $response->withHeader('Content-Disposition', 'attachment; filename=' . $downloadable->getFilename());
+        $disposition = $disposable->getDisposition();
+        if ($disposition !== null) {
+            $header = $disposition->getType();
+            if ($disposition->getFilename() !== null) {
+                $header .= "; filename={$disposition->getFilename()}";
+            }
+            return $response->withHeader('Content-Disposition', $header);
         }
         return $response;
 

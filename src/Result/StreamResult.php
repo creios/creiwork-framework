@@ -2,18 +2,18 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
-use Creios\Creiwork\Framework\Result\Util\DownloadableResult;
-use Creios\Creiwork\Framework\Result\Util\DownloadableResultInterface;
+use Creios\Creiwork\Framework\Result\Util\DisposableResult;
+use Creios\Creiwork\Framework\Result\Util\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Util\MimeTypeResult;
 
 /**
  * Class StreamResult
  * @package Creios\Creiwork\Framework\Result
  */
-class StreamResult extends MimeTypeResult implements DownloadableResultInterface
+class StreamResult extends MimeTypeResult implements DisposableResultInterface
 {
 
-    use DownloadableResult;
+    use DisposableResult;
 
     /**
      * @var resource

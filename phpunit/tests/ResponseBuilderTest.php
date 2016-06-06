@@ -7,6 +7,7 @@ use Creios\Creiwork\Framework\Result\HtmlResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
+use Creios\Creiwork\Framework\Result\Util\Disposition;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use League\Plates\Engine;
@@ -72,7 +73,8 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
         $assertedResponse = (new Response())->withHeader('Content-Type', 'application/json')->withHeader('Content-Length', 0)
             ->withHeader('Content-Disposition', 'attachment; filename=test.json')
             ->withBody(new Stream($this->stream));
-        $result = (new JsonResult(['key' => 'value']))->asDownload('test.json');
+        $disposition = (new Disposition(Disposition::ATTACHMENT))->withFilename('test.json');
+        $result = (new JsonResult(['key' => 'value']))->withDisposition($disposition);
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
     }

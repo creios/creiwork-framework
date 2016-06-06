@@ -2,18 +2,18 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
-use Creios\Creiwork\Framework\Result\Util\DownloadableResult;
-use Creios\Creiwork\Framework\Result\Util\DownloadableResultInterface;
+use Creios\Creiwork\Framework\Result\Util\DisposableResult;
+use Creios\Creiwork\Framework\Result\Util\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Util\MimeTypeResult;
 
 /**
  * Class StringBufferResult
  * @package Creios\Creiwork\Framework\Result
  */
-class StringBufferResult extends MimeTypeResult implements DownloadableResultInterface
+class StringBufferResult extends MimeTypeResult implements DisposableResultInterface
 {
 
-    use DownloadableResult;
+    use DisposableResult;
 
     /**
      * @var string

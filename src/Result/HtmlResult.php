@@ -1,18 +1,18 @@
 <?php
 namespace Creios\Creiwork\Framework\Result;
 
-use Creios\Creiwork\Framework\Result\Util\DownloadableResult;
-use Creios\Creiwork\Framework\Result\Util\DownloadableResultInterface;
+use Creios\Creiwork\Framework\Result\Util\DisposableResult;
+use Creios\Creiwork\Framework\Result\Util\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Util\StatusCodeResult;
 
 /**
  * Class HtmlResult
  * @package Creios\Creiwork\Framework\Result
  */
-class HtmlResult extends StatusCodeResult implements DownloadableResultInterface
+class HtmlResult extends StatusCodeResult implements DisposableResultInterface
 {
 
-    use DownloadableResult;
+    use DisposableResult;
 
     /**
      * @var string
