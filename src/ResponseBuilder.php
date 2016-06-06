@@ -63,7 +63,7 @@ class ResponseBuilder implements PostProcessorInterface
         $response = (new Response())->withProtocolVersion('1.1');
 
         if ($output instanceof DisposableResultInterface) {
-            $response = $this->modifyResponseForDownloadableResult($response, $output);
+            $response = $this->modifyResponseForDisposableResult($response, $output);
         }
 
         if ($output instanceof TemplateResult) {
@@ -96,7 +96,7 @@ class ResponseBuilder implements PostProcessorInterface
      * @param DisposableResultInterface $disposable
      * @return ResponseInterface
      */
-    private function modifyResponseForDownloadableResult(ResponseInterface $response, DisposableResultInterface $disposable)
+    private function modifyResponseForDisposableResult(ResponseInterface $response, DisposableResultInterface $disposable)
     {
         $disposition = $disposable->getDisposition();
         if ($disposition !== null) {
