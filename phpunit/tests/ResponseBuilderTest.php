@@ -88,7 +88,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     public function testFileResult()
     {
         $assertedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 40);
-        $result = new  FileResult(__DIR__ . '/../asset/textFile.txt');
+        $result = new  FileResult(__DIR__ . '/../asset/textfile.txt');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
     }
