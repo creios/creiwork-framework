@@ -13,6 +13,7 @@ use Creios\Creiwork\Framework\Result\Util\DownloadableResultInterface;
 use Creios\Creiwork\Framework\Result\Util\Result;
 use Creios\Creiwork\Framework\Result\Util\StatusCodeResult;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Stream;
 use League\Plates\Engine;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -54,7 +55,7 @@ class ResponseBuilder implements PostProcessorInterface
     }
 
     /**
-     * @param Result|DownloadableResultInterface $output
+     * @param Result|DownloadableResultInterface|string $output
      * @return Response
      */
     public function process($output)
@@ -118,6 +119,7 @@ class ResponseBuilder implements PostProcessorInterface
             $data = $templateResult->getData();
         }
         $stream = \GuzzleHttp\Psr7\stream_for($this->engine->render($templateResult->getTemplate(), $data));
+        $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
     }
 
@@ -130,6 +132,7 @@ class ResponseBuilder implements PostProcessorInterface
     {
         $json = $this->jsonSerializer->serialize($jsonResult->getData());
         $stream = \GuzzleHttp\Psr7\stream_for($json);
+        $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', 'application/json')->withBody($stream);
     }
 
@@ -145,9 +148,9 @@ class ResponseBuilder implements PostProcessorInterface
         } else {
             $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->file($fileResult->getPath());
         }
-
-        return $response->withHeader('Content-Type', $mimeType)
-            ->withBody(\GuzzleHttp\Psr7\stream_for(fopen($fileResult->getPath(), 'r')));
+        $stream = \GuzzleHttp\Psr7\stream_for(fopen($fileResult->getPath(), 'r'));
+        $response = $this->modifyResponseWithContentLength($response, $stream);
+        return $response->withHeader('Content-Type', $mimeType)->withBody($stream);
     }
 
     /**
@@ -162,8 +165,9 @@ class ResponseBuilder implements PostProcessorInterface
         } else {
             $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->buffer($stringBufferResult->getBuffer());
         }
-        return $response->withHeader('Content-Type', $mimeType)
-            ->withBody(\GuzzleHttp\Psr7\stream_for($stringBufferResult->getBuffer()));
+        $stream = \GuzzleHttp\Psr7\stream_for($stringBufferResult->getBuffer());
+        $response = $this->modifyResponseWithContentLength($response, $stream);
+        return $response->withHeader('Content-Type', $mimeType)->withBody($stream);
     }
 
     /**
@@ -174,6 +178,7 @@ class ResponseBuilder implements PostProcessorInterface
     private function modifyResponseForHtmlResult(ResponseInterface $response, HtmlResult $htmlResult)
     {
         $stream = \GuzzleHttp\Psr7\stream_for($htmlResult->getHtml());
+        $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
     }
 
@@ -186,8 +191,8 @@ class ResponseBuilder implements PostProcessorInterface
     private function modifyResponseForStreamResult(ResponseInterface $response, StreamResult $streamResult)
     {
         $stream = \GuzzleHttp\Psr7\stream_for($streamResult->getStream());
-        return $response->withHeader('Content-Type', $streamResult->getMimeType())
-            ->withHeader('Content-Length', $stream->getSize())->withBody($stream);
+        $response = $this->modifyResponseWithContentLength($response, $stream);
+        return $response->withHeader('Content-Type', $streamResult->getMimeType())->withBody($stream);
     }
 
     /**
@@ -198,6 +203,7 @@ class ResponseBuilder implements PostProcessorInterface
     private function modifyResponseForPlain(ResponseInterface $response, $output)
     {
         $stream = \GuzzleHttp\Psr7\stream_for($output);
+        $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', 'text/plain')->withBody($stream);
     }
 
@@ -212,6 +218,21 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $response->withStatus($statusCodeResult->getStatusCode());
         }
         return $response;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param Stream $stream
+     * @return ResponseInterface
+     */
+    private function modifyResponseWithContentLength(ResponseInterface $response, Stream $stream)
+    {
+        $size = $stream->getSize();
+        if ($size !== null) {
+            return $response->withHeader('Content-Length', $stream->getSize());
+        } else {
+            return $response;
+        }
     }
 
 }

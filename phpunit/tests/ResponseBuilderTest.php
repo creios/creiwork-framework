@@ -44,7 +44,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testTemplateResult()
     {
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withBody(new Stream($this->stream));
+        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
         $result = new TemplateResult('test', []);
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
@@ -53,7 +53,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     public function testTemplateResultWithNullData()
     {
 
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withBody(new Stream($this->stream));
+        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
         $result = new TemplateResult('test');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
@@ -61,7 +61,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testJsonResultDownload()
     {
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'application/json')
+        $assertedResponse = (new Response())->withHeader('Content-Type', 'application/json')->withHeader('Content-Length', 0)
             ->withHeader('Content-Disposition', 'attachment; filename=test.json')
             ->withBody(new Stream($this->stream));
         $result = (new JsonResult(['key' => 'value']))->asDownload('test.json');
@@ -79,7 +79,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testPlainResult()
     {
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/plain');
+        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 21);
         $result = 'Result is a plaintext';
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
@@ -87,15 +87,15 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testFileResult()
     {
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/plain');
-        $result = new  FileResult(__DIR__ . '/../asset/textfile.txt');
+        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 40);
+        $result = new  FileResult(__DIR__ . '/../asset/textFile.txt');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
     public function testHtmlResult()
     {
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/html');
+        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 123);
         $html = <<<HTML
 <!DOCTYPE html>
 <html lang="en">
