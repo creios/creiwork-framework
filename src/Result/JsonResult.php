@@ -14,5 +14,5 @@ class JsonResult extends DataResult implements DisposableResultInterface
 {
 
     use DisposableResult;
-    
+
 }

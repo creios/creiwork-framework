@@ -8,6 +8,7 @@ namespace Creios\Creiwork\Framework\Result\Util;
  */
 interface DisposableResultInterface
 {
+
     /**
      * @param Disposition $disposition
      * @return $this

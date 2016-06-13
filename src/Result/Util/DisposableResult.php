@@ -8,6 +8,7 @@ namespace Creios\Creiwork\Framework\Result\Util;
  */
 trait DisposableResult
 {
+
     /**
      * @var Disposition
      */

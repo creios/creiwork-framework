@@ -3,6 +3,7 @@ namespace Creios\Creiwork\Framework\Result\Util;
 
 class Disposition
 {
+
     const INLINE = 'inline';
     const ATTACHMENT = 'attachment';
     const FORM_DATA = 'form-data';
