@@ -12,6 +12,7 @@ use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Util\Result;
 use Creios\Creiwork\Framework\Result\Util\StatusCodeResult;
+use Creios\Creiwork\Framework\Result\XmlResult;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use League\Plates\Engine;
@@ -77,6 +78,8 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForStringBufferResult($response, $output);
         } elseif ($output instanceof HtmlResult) {
             $response = $this->modifyResponseForHtmlResult($response, $output);
+        } elseif ($output instanceof XmlResult) {
+            $response = $this->modifyResponseForXmlResult($response, $output);
         } elseif ($output instanceof StreamResult) {
             $response = $this->modifyResponseForStreamResult($response, $output);
         } else {
@@ -183,6 +186,18 @@ class ResponseBuilder implements PostProcessorInterface
         $stream = \GuzzleHttp\Psr7\stream_for($htmlResult->getHtml());
         $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param XmlResult $xmlResult
+     * @return ResponseInterface
+     */
+    private function modifyResponseForXmlResult(ResponseInterface $response, XmlResult $xmlResult)
+    {
+        $stream = \GuzzleHttp\Psr7\stream_for($xmlResult->getXml());
+        $response = $this->modifyResponseWithContentLength($response, $stream);
+        return $response->withHeader('Content-Type', 'text/xml')->withBody($stream);
     }
 
     /**
