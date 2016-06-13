@@ -2,18 +2,18 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
-use Creios\Creiwork\Framework\Result\Util\DownloadableResult;
-use Creios\Creiwork\Framework\Result\Util\DownloadableResultInterface;
+use Creios\Creiwork\Framework\Result\Util\DisposableResult;
+use Creios\Creiwork\Framework\Result\Util\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Util\StatusCodeResult;
 
 /**
  * Class XmlResult
  * @package Creios\Creiwork\Framework\Result
  */
-class XmlResult extends StatusCodeResult implements DownloadableResultInterface
+class XmlResult extends StatusCodeResult implements DisposableResultInterface
 {
 
-    use DownloadableResult;
+    use DisposableResult;
 
     /**
      * @var string
@@ -37,5 +37,4 @@ class XmlResult extends StatusCodeResult implements DownloadableResultInterface
         return $this->xml;
     }
 
-    
 }

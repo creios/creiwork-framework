@@ -8,6 +8,7 @@ use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Disposition;
+use Creios\Creiwork\Framework\Result\XmlResult;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use League\Plates\Engine;
@@ -119,6 +120,21 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 </html>
 HTML;
         $result = new HtmlResult($html);
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
+
+    public function testXmlResult()
+    {
+        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/xml')->withHeader('Content-Length', 82);
+        $xml = <<<XML
+<user>
+    <id>1</id>
+    <firstname>john</firstname>
+    <name>doe</name>
+</user>
+XML;
+        $result = new XmlResult($xml);
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
     }
