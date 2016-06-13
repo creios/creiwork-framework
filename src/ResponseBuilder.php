@@ -173,7 +173,7 @@ class ResponseBuilder implements PostProcessorInterface
     /**
      * @param ResponseInterface $response
      * @param HtmlResult $htmlResult
-     * @return static
+     * @return ResponseInterface
      */
     private function modifyResponseForHtmlResult(ResponseInterface $response, HtmlResult $htmlResult)
     {
@@ -185,8 +185,7 @@ class ResponseBuilder implements PostProcessorInterface
     /**
      * @param ResponseInterface $response
      * @param StreamResult $streamResult
-     * @return static
-     * @internal param HtmlResult $htmlResult
+     * @return ResponseInterface
      */
     private function modifyResponseForStreamResult(ResponseInterface $response, StreamResult $streamResult)
     {
