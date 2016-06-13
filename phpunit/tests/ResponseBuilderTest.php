@@ -50,6 +50,14 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
+    public function testTemplateResultWithStatusCode()
+    {
+        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withStatus(200)->withBody(new Stream($this->stream));
+        $result = (new TemplateResult('test', []))->withStatusCode(200);
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
+
     public function testTemplateResultWithNullData()
     {
 
