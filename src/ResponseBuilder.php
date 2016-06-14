@@ -31,7 +31,7 @@ class ResponseBuilder implements PostProcessorInterface
     /**
      * @var Engine
      */
-    protected $engine;
+    protected $templateEngine;
     /**
      * @var JsonSerializer
      */
@@ -44,13 +44,13 @@ class ResponseBuilder implements PostProcessorInterface
     /**
      * OutputLayer constructor.
      * @param JsonSerializer $jsonSerializer
-     * @param Engine $engine
+     * @param Engine $templateEngine
      * @param ServerRequestInterface $serverRequest
      */
-    public function __construct(JsonSerializer $jsonSerializer, Engine $engine, ServerRequestInterface $serverRequest)
+    public function __construct(JsonSerializer $jsonSerializer, Engine $templateEngine, ServerRequestInterface $serverRequest)
     {
         $this->jsonSerializer = $jsonSerializer;
-        $this->engine = $engine;
+        $this->templateEngine = $templateEngine;
         $this->serverRequest = $serverRequest;
     }
 
@@ -118,13 +118,13 @@ class ResponseBuilder implements PostProcessorInterface
      */
     private function modifyResponseForTemplateResult(ResponseInterface $response, TemplateResult $templateResult)
     {
-        $this->engine->addData(['host' => 'http://' . $this->serverRequest->getServerParams()['HTTP_HOST'] . '/']);
+        $this->templateEngine->addData(['host' => 'http://' . $this->serverRequest->getServerParams()['HTTP_HOST'] . '/']);
         if ($templateResult->getData() === null) {
             $data = [];
         } else {
             $data = $templateResult->getData();
         }
-        $stream = \GuzzleHttp\Psr7\stream_for($this->engine->render($templateResult->getTemplate(), $data));
+        $stream = \GuzzleHttp\Psr7\stream_for($this->templateEngine->render($templateResult->getTemplate(), $data));
         $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
     }
