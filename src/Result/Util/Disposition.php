@@ -1,6 +1,10 @@
 <?php
 namespace Creios\Creiwork\Framework\Result\Util;
 
+/**
+ * Class Disposition
+ * @package Creios\Creiwork\Framework\Result\Util
+ */
 class Disposition
 {
 
@@ -26,6 +30,10 @@ class Disposition
     /** @var string */
     private $filename = null;
 
+    /**
+     * Disposition constructor.
+     * @param string $type
+     */
     public function __construct($type = self::INLINE)
     {
         $this->type = $type;
@@ -56,4 +64,5 @@ class Disposition
     {
         return $this->filename;
     }
+    
 }
