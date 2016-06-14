@@ -18,7 +18,7 @@ class TemplateResult extends DataResult
 
     /**
      * TemplateResult constructor.
-     * @param array $template
+     * @param string $template
      * @param array $data
      */
     public function __construct($template, array $data = null)
