@@ -5,6 +5,7 @@ namespace Creios\Creiwork\Framework;
 use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\HtmlResult;
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
+use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
@@ -226,10 +227,10 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param \Creios\Creiwork\Framework\Result\Interfaces\\Creios\Creiwork\Framework\Result\Traits\StatusCodeResult $statusCodeResult
+     * @param StatusCodeResultInterface $statusCodeResult
      * @return ResponseInterface
      */
-    private function modifyResponseForStatusCodeResult(ResponseInterface $response, StatusCodeResult $statusCodeResult)
+    private function modifyResponseForStatusCodeResult(ResponseInterface $response, StatusCodeResultInterface $statusCodeResult)
     {
         if ($statusCodeResult->getStatusCode() != null) {
             $response = $response->withStatus($statusCodeResult->getStatusCode());
