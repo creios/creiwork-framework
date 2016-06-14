@@ -23,11 +23,11 @@ class JsonResult extends Result implements DataResultInterface, StatusCodeResult
 
     /**
      * JsonResult constructor.
-     * @param $data
+     * @param mixed $data
      */
     public function __construct($data)
     {
         $this->data = $data;
     }
-    
+
 }
