@@ -56,7 +56,7 @@ class ResponseBuilder implements PostProcessorInterface
     }
 
     /**
-     * @param Result|\Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface|string $output
+     * @param Result|string $output
      * @return Response
      */
     public function process($output)

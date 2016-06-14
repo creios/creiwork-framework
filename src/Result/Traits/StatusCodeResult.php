@@ -13,7 +13,7 @@ trait StatusCodeResult
     protected $statusCode;
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getStatusCode()
     {
@@ -21,7 +21,7 @@ trait StatusCodeResult
     }
 
     /**
-     * @param $statusCode
+     * @param int $statusCode
      * @return $this
      */
     public function withStatusCode($statusCode)

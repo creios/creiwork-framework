@@ -20,6 +20,7 @@ class FileResult extends Result implements StatusCodeResultInterface, MimeTypeRe
     use StatusCodeResult;
     use MimeTypeResult;
     use DisposableResult;
+    
     /**
      * @var string
      */
@@ -27,8 +28,8 @@ class FileResult extends Result implements StatusCodeResultInterface, MimeTypeRe
 
     /**
      * FileDownloadResult constructor.
-     * @param $path
-     * @param $mimeType
+     * @param string $path
+     * @param string $mimeType
      */
     public function __construct($path, $mimeType = null)
     {
@@ -37,7 +38,7 @@ class FileResult extends Result implements StatusCodeResultInterface, MimeTypeRe
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPath()
     {

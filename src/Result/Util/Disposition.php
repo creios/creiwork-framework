@@ -58,7 +58,7 @@ class Disposition
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getFilename()
     {

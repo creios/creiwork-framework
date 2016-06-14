@@ -18,7 +18,7 @@ class RedirectResult extends Result
 
     /**
      * RedirectResult constructor.
-     * @param $url
+     * @param string $url
      */
     public function __construct($url)
     {
@@ -26,7 +26,7 @@ class RedirectResult extends Result
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getUrl()
     {
