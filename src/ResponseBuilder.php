@@ -4,14 +4,14 @@ namespace Creios\Creiwork\Framework;
 
 use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\HtmlResult;
+use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringBufferResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
-use Creios\Creiwork\Framework\Result\Util\DisposableResultInterface;
+use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
-use Creios\Creiwork\Framework\Result\Util\StatusCodeResult;
 use Creios\Creiwork\Framework\Result\XmlResult;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
@@ -55,7 +55,7 @@ class ResponseBuilder implements PostProcessorInterface
     }
 
     /**
-     * @param Result|DisposableResultInterface|string $output
+     * @param Result|\Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface|string $output
      * @return Response
      */
     public function process($output)
@@ -226,7 +226,7 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param StatusCodeResult $statusCodeResult
+     * @param \Creios\Creiwork\Framework\Result\Interfaces\\Creios\Creiwork\Framework\Result\Traits\StatusCodeResult $statusCodeResult
      * @return ResponseInterface
      */
     private function modifyResponseForStatusCodeResult(ResponseInterface $response, StatusCodeResult $statusCodeResult)

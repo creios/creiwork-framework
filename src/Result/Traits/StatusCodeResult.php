@@ -1,10 +1,10 @@
 <?php
 
-namespace Creios\Creiwork\Framework\Result\Util;
+namespace Creios\Creiwork\Framework\Result\Traits;
 
 /**
  * Class StatusCodeResult
- * @package Creios\Creiwork\Framework\Result\Util
+ * @package Creios\Creiwork\Framework\Result\Traits
  */
 trait StatusCodeResult
 {

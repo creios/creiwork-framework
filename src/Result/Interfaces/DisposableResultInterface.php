@@ -1,10 +1,12 @@
 <?php
 
-namespace Creios\Creiwork\Framework\Result\Util;
+namespace Creios\Creiwork\Framework\Result\Interfaces;
+
+use Creios\Creiwork\Framework\Result\Util\Disposition;
 
 /**
- * Interface DownloadableInterface
- * @package Creios\Creiwork\Framework\Result
+ * Interface DisposableResultInterface
+ * @package Creios\Creiwork\Framework\Result\Interfaces
  */
 interface DisposableResultInterface
 {

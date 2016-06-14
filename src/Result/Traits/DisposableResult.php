@@ -1,10 +1,12 @@
 <?php
 
-namespace Creios\Creiwork\Framework\Result\Util;
+namespace Creios\Creiwork\Framework\Result\Traits;
+
+use Creios\Creiwork\Framework\Result\Util\Disposition;
 
 /**
- * Trait DownloadableResult
- * @package Creios\Creiwork\Framework\Result
+ * Class DisposableResult
+ * @package Creios\Creiwork\Framework\Result\Traits
  */
 trait DisposableResult
 {

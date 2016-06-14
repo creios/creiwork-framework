@@ -2,13 +2,13 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
-use Creios\Creiwork\Framework\Result\Util\DisposableResult;
-use Creios\Creiwork\Framework\Result\Util\DisposableResultInterface;
-use Creios\Creiwork\Framework\Result\Util\MimeTypeResult;
-use Creios\Creiwork\Framework\Result\Util\MimeTypeResultInterface;
+use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
+use Creios\Creiwork\Framework\Result\Interfaces\MimeTypeResultInterface;
+use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
+use Creios\Creiwork\Framework\Result\Traits\DisposableResult;
+use Creios\Creiwork\Framework\Result\Traits\MimeTypeResult;
+use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
-use Creios\Creiwork\Framework\Result\Util\StatusCodeResult;
-use Creios\Creiwork\Framework\Result\Util\StatusCodeResultInterface;
 
 /**
  * Class FileResult
@@ -20,7 +20,6 @@ class FileResult extends Result implements StatusCodeResultInterface, MimeTypeRe
     use StatusCodeResult;
     use MimeTypeResult;
     use DisposableResult;
-
     /**
      * @var string
      */
