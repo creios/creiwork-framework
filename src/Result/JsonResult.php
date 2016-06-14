@@ -21,4 +21,13 @@ class JsonResult extends Result implements DataResultInterface, StatusCodeResult
     use StatusCodeResult;
     use DisposableResult;
 
+    /**
+     * JsonResult constructor.
+     * @param $data
+     */
+    public function __construct($data)
+    {
+        $this->data = $data;
+    }
+    
 }
