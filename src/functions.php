@@ -3,6 +3,7 @@
 namespace Creios\Creiwork\Framework {
 
     use GuzzleHttp\Psr7\Response;
+    use GuzzleHttp\Psr7\StreamWrapper;
 
     /**
      * @param Response $response
@@ -17,7 +18,7 @@ namespace Creios\Creiwork\Framework {
             }
         }
 
-        stream_copy_to_stream(\GuzzleHttp\Psr7\StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
+        stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
     }
-    
+
 }
