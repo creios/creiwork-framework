@@ -4,9 +4,9 @@ namespace Creios\Creiwork\Framework\Result\Util;
 
 /**
  * Class MimeTypeResult
- * @package Creios\Creiwork\Framework\Result
+ * @package Creios\Creiwork\Framework\Result\Util
  */
-abstract class MimeTypeResult extends StatusCodeResult
+trait MimeTypeResult
 {
 
     /** @var string */

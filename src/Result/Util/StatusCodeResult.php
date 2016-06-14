@@ -4,9 +4,9 @@ namespace Creios\Creiwork\Framework\Result\Util;
 
 /**
  * Class StatusCodeResult
- * @package Creios\Creiwork\Framework\Result
+ * @package Creios\Creiwork\Framework\Result\Util
  */
-abstract class StatusCodeResult extends Result
+trait StatusCodeResult
 {
 
     /** @var int */

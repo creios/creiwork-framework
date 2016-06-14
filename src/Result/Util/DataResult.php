@@ -4,24 +4,15 @@ namespace Creios\Creiwork\Framework\Result\Util;
 
 /**
  * Class DataResult
- * @package Creios\Creiwork\Util\Results
+ * @package Creios\Creiwork\Framework\Result\Util
  */
-abstract class DataResult extends StatusCodeResult
+trait DataResult
 {
 
     /**
      * @var array
      */
     protected $data;
-
-    /**
-     * Result constructor.
-     * @param mixed $data
-     */
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
 
     /**
      * @return mixed
