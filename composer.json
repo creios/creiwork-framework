@@ -14,7 +14,7 @@
   },
   "require": {
     "php": ">=5.5.0",
-    "timtegeler/routerunner": "^0.0.10",
+    "timtegeler/routerunner": "dev-develop@dev",
     "league/plates": "^3.1",
     "monolog/monolog": "^1.18",
     "filp/whoops": "2.1.0",
