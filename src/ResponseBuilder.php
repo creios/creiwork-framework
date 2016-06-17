@@ -13,7 +13,6 @@ use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringBufferResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
-use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
 use Creios\Creiwork\Framework\Result\XmlRawResult;
 use GuzzleHttp\Psr7\Response;
@@ -93,7 +92,7 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForPlainTextResult($response, new PlainTextResult($output));
         }
 
-        if ($output instanceof StatusCodeResult) {
+        if ($output instanceof StatusCodeResultInterface) {
             $response = $this->modifyResponseForStatusCodeResult($response, $output);
         }
 

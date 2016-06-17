@@ -5,6 +5,7 @@ namespace Creios\Creiwork\Framework;
 use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\HtmlRawResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
+use Creios\Creiwork\Framework\Result\PlainTextResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Disposition;
@@ -57,6 +58,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
         $assertedResponse = (new Response())->withStatus(200)->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
         $result = (new TemplateResult('test', []))->withStatusCode(200);
         $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($assertedResponse->getStatusCode(), $actualResponse->getStatusCode());
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -93,6 +95,15 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
         $assertedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 21);
         $result = 'Result is a plaintext';
         $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
+
+    public function testPlainTextResult()
+    {
+        $assertedResponse = (new Response())->withStatus(400)->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 21);
+        $result = (new PlainTextResult('Result is a plaintext'))->withStatusCode(400);
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($assertedResponse->getStatusCode(), $actualResponse->getStatusCode());
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
