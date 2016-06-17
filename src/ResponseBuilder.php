@@ -6,6 +6,7 @@ use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\HtmlRawResult;
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
+use Creios\Creiwork\Framework\Result\JsonRawResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
@@ -71,6 +72,8 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForTemplateResult($response, $output);
         } else if ($output instanceof JsonResult) {
             $response = $this->modifyResponseForJsonResult($response, $output);
+        } else if ($output instanceof JsonRawResult) {
+            $response = $this->modifyResponseForJsonRawResult($response, $output);
         } else if ($output instanceof RedirectResult) {
             $response = $response->withHeader('Location', $output->getUrl());
         } elseif ($output instanceof FileResult) {
@@ -133,12 +136,24 @@ class ResponseBuilder implements PostProcessorInterface
     /**
      * @param ResponseInterface $response
      * @param JsonResult $jsonResult
-     * @return ResponseInterface
+     * @return static
      */
     private function modifyResponseForJsonResult(ResponseInterface $response, JsonResult $jsonResult)
     {
         $json = $this->jsonSerializer->serialize($jsonResult->getData());
         $stream = \GuzzleHttp\Psr7\stream_for($json);
+        $response = $this->modifyResponseWithContentLength($response, $stream);
+        return $response->withHeader('Content-Type', 'application/json')->withBody($stream);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param JsonRawResult $jsonRawResult
+     * @return ResponseInterface
+     */
+    private function modifyResponseForJsonRawResult(ResponseInterface $response, JsonRawResult $jsonRawResult)
+    {
+        $stream = \GuzzleHttp\Psr7\stream_for($jsonRawResult->getJson());
         $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', 'application/json')->withBody($stream);
     }
