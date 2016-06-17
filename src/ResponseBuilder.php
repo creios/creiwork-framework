@@ -3,7 +3,7 @@
 namespace Creios\Creiwork\Framework;
 
 use Creios\Creiwork\Framework\Result\FileResult;
-use Creios\Creiwork\Framework\Result\HtmlResult;
+use Creios\Creiwork\Framework\Result\HtmlRawResult;
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
 use Creios\Creiwork\Framework\Result\JsonResult;
@@ -13,7 +13,7 @@ use Creios\Creiwork\Framework\Result\StringBufferResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
-use Creios\Creiwork\Framework\Result\XmlResult;
+use Creios\Creiwork\Framework\Result\XmlRawResult;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use League\Plates\Engine;
@@ -77,9 +77,9 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForFileResult($response, $output);
         } elseif ($output instanceof StringBufferResult) {
             $response = $this->modifyResponseForStringBufferResult($response, $output);
-        } elseif ($output instanceof HtmlResult) {
+        } elseif ($output instanceof HtmlRawResult) {
             $response = $this->modifyResponseForHtmlResult($response, $output);
-        } elseif ($output instanceof XmlResult) {
+        } elseif ($output instanceof XmlRawResult) {
             $response = $this->modifyResponseForXmlResult($response, $output);
         } elseif ($output instanceof StreamResult) {
             $response = $this->modifyResponseForStreamResult($response, $output);
@@ -179,10 +179,10 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param HtmlResult $htmlResult
+     * @param HtmlRawResult $htmlResult
      * @return ResponseInterface
      */
-    private function modifyResponseForHtmlResult(ResponseInterface $response, HtmlResult $htmlResult)
+    private function modifyResponseForHtmlResult(ResponseInterface $response, HtmlRawResult $htmlResult)
     {
         $stream = \GuzzleHttp\Psr7\stream_for($htmlResult->getHtml());
         $response = $this->modifyResponseWithContentLength($response, $stream);
@@ -191,10 +191,10 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param XmlResult $xmlResult
+     * @param XmlRawResult $xmlResult
      * @return ResponseInterface
      */
-    private function modifyResponseForXmlResult(ResponseInterface $response, XmlResult $xmlResult)
+    private function modifyResponseForXmlResult(ResponseInterface $response, XmlRawResult $xmlResult)
     {
         $stream = \GuzzleHttp\Psr7\stream_for($xmlResult->getXml());
         $response = $this->modifyResponseWithContentLength($response, $stream);

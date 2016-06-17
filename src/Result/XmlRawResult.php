@@ -9,10 +9,10 @@ use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
 
 /**
- * Class XmlResult
+ * Class XmlRawResult
  * @package Creios\Creiwork\Framework\Result
  */
-class XmlResult extends Result implements StatusCodeResultInterface, DisposableResultInterface
+class XmlRawResult extends Result implements StatusCodeResultInterface, DisposableResultInterface
 {
 
     use StatusCodeResult;
@@ -24,7 +24,7 @@ class XmlResult extends Result implements StatusCodeResultInterface, DisposableR
     private $xml;
 
     /**
-     * XmlResult constructor.
+     * XmlRawResult constructor.
      * @param string $xml
      */
     public function __construct($xml)

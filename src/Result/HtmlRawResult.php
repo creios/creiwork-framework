@@ -8,10 +8,10 @@ use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
 
 /**
- * Class HtmlResult
+ * Class HtmlRawResult
  * @package Creios\Creiwork\Framework\Result
  */
-class HtmlResult extends Result implements StatusCodeResultInterface, DisposableResultInterface
+class HtmlRawResult extends Result implements StatusCodeResultInterface, DisposableResultInterface
 {
 
     use StatusCodeResult;
@@ -23,7 +23,7 @@ class HtmlResult extends Result implements StatusCodeResultInterface, Disposable
     private $html;
 
     /**
-     * HtmlResult constructor.
+     * HtmlRawResult constructor.
      * @param string $html
      */
     public function __construct($html)

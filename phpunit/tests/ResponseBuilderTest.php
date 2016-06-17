@@ -3,12 +3,12 @@
 namespace Creios\Creiwork\Framework;
 
 use Creios\Creiwork\Framework\Result\FileResult;
-use Creios\Creiwork\Framework\Result\HtmlResult;
+use Creios\Creiwork\Framework\Result\HtmlRawResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Disposition;
-use Creios\Creiwork\Framework\Result\XmlResult;
+use Creios\Creiwork\Framework\Result\XmlRawResult;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use League\Plates\Engine;
@@ -119,7 +119,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 </body>
 </html>
 HTML;
-        $result = new HtmlResult($html);
+        $result = new HtmlRawResult($html);
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
     }
@@ -134,7 +134,7 @@ HTML;
     <name>doe</name>
 </user>
 XML;
-        $result = new XmlResult($xml);
+        $result = new XmlRawResult($xml);
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
     }
