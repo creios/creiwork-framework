@@ -75,7 +75,7 @@ class ResponseBuilder implements PostProcessorInterface
         } else if ($output instanceof JsonRawResult) {
             $response = $this->modifyResponseForJsonRawResult($response, $output);
         } else if ($output instanceof RedirectResult) {
-            $response = $response->withHeader('Location', $output->getUrl());
+            $response = $this->modifyResponseForRedirectResult($response, $output);
         } elseif ($output instanceof FileResult) {
             $response = $this->modifyResponseForFileResult($response, $output);
         } elseif ($output instanceof StringBufferResult) {
@@ -156,6 +156,20 @@ class ResponseBuilder implements PostProcessorInterface
         $stream = \GuzzleHttp\Psr7\stream_for($jsonRawResult->getJson());
         $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', 'application/json')->withBody($stream);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param RedirectResult $redirectResult
+     * @return ResponseInterface
+     */
+    private function modifyResponseForRedirectResult(ResponseInterface $response, RedirectResult $redirectResult)
+    {
+        if ($redirectResult->getUrl() == null) {
+            return $response->withHeader('Location', $this->serverRequest->getServerParams()['REQUEST_URI']);
+        } else {
+            return $response->withHeader('Location', $redirectResult->getUrl());
+        }
     }
 
     /**

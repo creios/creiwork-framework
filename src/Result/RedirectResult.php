@@ -18,9 +18,9 @@ class RedirectResult extends Result
 
     /**
      * RedirectResult constructor.
-     * @param string $url
+     * @param string|null $url
      */
-    public function __construct($url)
+    public function __construct($url = null)
     {
         $this->url = $url;
     }
