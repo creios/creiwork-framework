@@ -78,9 +78,9 @@ class ResponseBuilder implements PostProcessorInterface
         } elseif ($output instanceof StringBufferResult) {
             $response = $this->modifyResponseForStringBufferResult($response, $output);
         } elseif ($output instanceof HtmlRawResult) {
-            $response = $this->modifyResponseForHtmlResult($response, $output);
+            $response = $this->modifyResponseForHtmlRawResult($response, $output);
         } elseif ($output instanceof XmlRawResult) {
-            $response = $this->modifyResponseForXmlResult($response, $output);
+            $response = $this->modifyResponseForXmlRawResult($response, $output);
         } elseif ($output instanceof StreamResult) {
             $response = $this->modifyResponseForStreamResult($response, $output);
         } else {
@@ -182,7 +182,7 @@ class ResponseBuilder implements PostProcessorInterface
      * @param HtmlRawResult $htmlResult
      * @return ResponseInterface
      */
-    private function modifyResponseForHtmlResult(ResponseInterface $response, HtmlRawResult $htmlResult)
+    private function modifyResponseForHtmlRawResult(ResponseInterface $response, HtmlRawResult $htmlResult)
     {
         $stream = \GuzzleHttp\Psr7\stream_for($htmlResult->getHtml());
         $response = $this->modifyResponseWithContentLength($response, $stream);
@@ -194,7 +194,7 @@ class ResponseBuilder implements PostProcessorInterface
      * @param XmlRawResult $xmlResult
      * @return ResponseInterface
      */
-    private function modifyResponseForXmlResult(ResponseInterface $response, XmlRawResult $xmlResult)
+    private function modifyResponseForXmlRawResult(ResponseInterface $response, XmlRawResult $xmlResult)
     {
         $stream = \GuzzleHttp\Psr7\stream_for($xmlResult->getXml());
         $response = $this->modifyResponseWithContentLength($response, $stream);
