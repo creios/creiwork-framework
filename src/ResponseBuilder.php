@@ -8,6 +8,7 @@ use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
 use Creios\Creiwork\Framework\Result\JsonRawResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
+use Creios\Creiwork\Framework\Result\PlainTextResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringBufferResult;
@@ -86,8 +87,10 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForXmlRawResult($response, $output);
         } elseif ($output instanceof StreamResult) {
             $response = $this->modifyResponseForStreamResult($response, $output);
+        } elseif ($output instanceof PlainTextResult) {
+            $response = $this->modifyResponseForPlainTextResult($response, $output);
         } else {
-            $response = $this->modifyResponseForPlain($response, $output);
+            $response = $this->modifyResponseForPlainTextResult($response, new PlainTextResult($output));
         }
 
         if ($output instanceof StatusCodeResult) {
@@ -244,12 +247,12 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param string $output
+     * @param PlainTextResult $plainTextResult
      * @return ResponseInterface
      */
-    private function modifyResponseForPlain(ResponseInterface $response, $output)
+    private function modifyResponseForPlainTextResult(ResponseInterface $response, PlainTextResult $plainTextResult)
     {
-        $stream = \GuzzleHttp\Psr7\stream_for($output);
+        $stream = \GuzzleHttp\Psr7\stream_for($plainTextResult->getPlainText());
         $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', 'text/plain')->withBody($stream);
     }
