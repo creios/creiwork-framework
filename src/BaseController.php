@@ -2,7 +2,7 @@
 
 namespace Creios\Creiwork\Framework;
 
-use Aura\Session\Session;
+use Aura\Session\SegmentInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use TimTegeler\Routerunner\Controller\ControllerInterface;
@@ -23,7 +23,7 @@ abstract class BaseController implements ControllerInterface
      */
     protected $logger;
     /**
-     * @var Session
+     * @var SegmentInterface
      */
     protected $session;
     /**
@@ -35,9 +35,9 @@ abstract class BaseController implements ControllerInterface
      * BaseController constructor.
      * @param ServerRequestInterface $serverRequest
      * @param LoggerInterface $logger
-     * @param Session $session
+     * @param SegmentInterface $session
      */
-    public function __construct(ServerRequestInterface $serverRequest, LoggerInterface $logger, Session $session)
+    public function __construct(ServerRequestInterface $serverRequest, LoggerInterface $logger, SegmentInterface $session)
     {
         $this->request = $serverRequest;
         $this->logger = $logger;
