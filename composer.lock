@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "12300ec505734f35561347d2308bb0d6",
-    "content-hash": "5dde396dfde5d5038b00fcc7da92661b",
+    "hash": "c4e45f57d31289929e221d0db592f747",
+    "content-hash": "531ff70b03809e89cfa7275743e00f4c",
     "packages": [
         {
             "name": "aura/session",
@@ -695,16 +695,16 @@
         },
         {
             "name": "timtegeler/routerunner",
-            "version": "dev-develop",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timtegeler/routerunner.git",
-                "reference": "f258e4945324004ce3c4f4146a90a124414d8c98"
+                "reference": "d46bd0373a528b8d35f4ec6d0a7de0dfb6d801b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/f258e4945324004ce3c4f4146a90a124414d8c98",
-                "reference": "f258e4945324004ce3c4f4146a90a124414d8c98",
+                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/d46bd0373a528b8d35f4ec6d0a7de0dfb6d801b9",
+                "reference": "d46bd0373a528b8d35f4ec6d0a7de0dfb6d801b9",
                 "shasum": ""
             },
             "require": {
@@ -714,7 +714,6 @@
                 "symfony/yaml": "^3.0"
             },
             "require-dev": {
-                "codegyre/robo": "^0.7.1",
                 "phpunit/phpunit": "4.8.*"
             },
             "type": "library",
@@ -734,7 +733,7 @@
                 }
             ],
             "description": "Routerunner is a router for HTTP-request written in PHP",
-            "time": "2016-06-17 22:12:59"
+            "time": "2016-06-22 14:49:14"
         },
         {
             "name": "zumba/json-serializer",
@@ -2335,9 +2334,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "timtegeler/routerunner": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
