@@ -21,6 +21,7 @@ use GuzzleHttp\Psr7\Stream;
 use League\Plates\Engine;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use TimTegeler\Routerunner\PostProcessor\PostProcessorInterface;
 use Zumba\JsonSerializer\JsonSerializer;
 
@@ -289,10 +290,10 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param Stream $stream
+     * @param StreamInterface $stream
      * @return ResponseInterface
      */
-    private function modifyResponseWithContentLength(ResponseInterface $response, Stream $stream)
+    private function modifyResponseWithContentLength(ResponseInterface $response, StreamInterface $stream)
     {
         $size = $stream->getSize();
         if ($size !== null) {
