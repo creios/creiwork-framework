@@ -2,6 +2,7 @@
 
 namespace Creios\Creiwork\Framework;
 
+use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\HtmlRawResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
@@ -47,77 +48,77 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testTemplateResult()
     {
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
+        $expectedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
         $result = new TemplateResult('test', []);
         $actualResponse = $this->responseBuilder->process($result);
-        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
     public function testTemplateResultWithStatusCode()
     {
-        $assertedResponse = (new Response())->withStatus(200)->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
+        $expectedResponse = (new Response())->withStatus(200)->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
         $result = (new TemplateResult('test', []))->withStatusCode(200);
         $actualResponse = $this->responseBuilder->process($result);
-        $this->assertEquals($assertedResponse->getStatusCode(), $actualResponse->getStatusCode());
-        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+        $this->assertEquals($expectedResponse->getStatusCode(), $actualResponse->getStatusCode());
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
     public function testTemplateResultWithNullData()
     {
 
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
+        $expectedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
         $result = new TemplateResult('test');
         $actualResponse = $this->responseBuilder->process($result);
-        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
     public function testJsonResultDownload()
     {
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'application/json')->withHeader('Content-Length', 0)
+        $expectedResponse = (new Response())->withHeader('Content-Type', 'application/json')->withHeader('Content-Length', 0)
             ->withHeader('Content-Disposition', 'attachment; filename=test.json')
             ->withBody(new Stream($this->stream));
         $disposition = (new Disposition(Disposition::ATTACHMENT))->withFilename('test.json');
         $result = (new JsonResult(['key' => 'value']))->withDisposition($disposition);
         $actualResponse = $this->responseBuilder->process($result);
-        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
     public function testRedirectResult()
     {
-        $assertedResponse = (new Response())->withHeader('Location', 'http://localhost/redirect');
+        $expectedResponse = (new Response())->withHeader('Location', 'http://localhost/redirect');
         $result = new RedirectResult('http://localhost/redirect');
         $actualResponse = $this->responseBuilder->process($result);
-        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
     public function testPlainResult()
     {
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 21);
+        $expectedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 21);
         $result = 'Result is a plaintext';
         $actualResponse = $this->responseBuilder->process($result);
-        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
     public function testPlainTextResult()
     {
-        $assertedResponse = (new Response())->withStatus(400)->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 21);
+        $expectedResponse = (new Response())->withStatus(400)->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 21);
         $result = (new PlainTextResult('Result is a plaintext'))->withStatusCode(400);
         $actualResponse = $this->responseBuilder->process($result);
-        $this->assertEquals($assertedResponse->getStatusCode(), $actualResponse->getStatusCode());
-        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+        $this->assertEquals($expectedResponse->getStatusCode(), $actualResponse->getStatusCode());
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
     public function testFileResult()
     {
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 40);
+        $expectedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 40);
         $result = new  FileResult(__DIR__ . '/../asset/textfile.txt');
         $actualResponse = $this->responseBuilder->process($result);
-        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
     public function testHtmlResult()
     {
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 123);
+        $expectedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 123);
         $html = <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -132,12 +133,12 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 HTML;
         $result = new HtmlRawResult($html);
         $actualResponse = $this->responseBuilder->process($result);
-        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
     public function testXmlResult()
     {
-        $assertedResponse = (new Response())->withHeader('Content-Type', 'text/xml')->withHeader('Content-Length', 82);
+        $expectedResponse = (new Response())->withHeader('Content-Type', 'text/xml')->withHeader('Content-Length', 82);
         $xml = <<<XML
 <user>
     <id>1</id>
@@ -147,7 +148,27 @@ HTML;
 XML;
         $result = new XmlRawResult($xml);
         $actualResponse = $this->responseBuilder->process($result);
-        $this->assertEquals($assertedResponse->getHeaders(), $actualResponse->getHeaders());
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
+    public function testCsvResult()
+    {
+        $csvResult = (new CsvResult([
+            ['A', 'B', 'C'],
+            [1, 2, 3],
+        ]))->withDisposition(
+            (new Disposition(Disposition::ATTACHMENT))
+                ->withFilename('foobar.csv'));
+        $response = $this->responseBuilder->process($csvResult);
+        $this->assertEquals(['text/csv'], $response->getHeader('Content-Type'));
+        $this->assertEquals(
+            ['attachment; filename=foobar.csv'],
+            $response->getHeader('Content-Disposition'));
+        $csv = <<<CSV
+A,B,C
+1,2,3
+
+CSV;
+        $this->assertEquals($csv, $response->getBody()->getContents());
+    }
 }

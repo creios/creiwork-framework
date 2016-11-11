@@ -2,6 +2,7 @@
 
 namespace Creios\Creiwork\Framework;
 
+use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\HtmlRawResult;
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
@@ -88,6 +89,8 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForStreamResult($response, $output);
         } elseif ($output instanceof PlainTextResult) {
             $response = $this->modifyResponseForPlainTextResult($response, $output);
+        } elseif ($output instanceof CsvResult) {
+            $response = $this->modifyResponseForCsvResult($response, $output);
         } else {
             $response = $this->modifyResponseForPlainTextResult($response, new PlainTextResult($output));
         }
@@ -254,6 +257,21 @@ class ResponseBuilder implements PostProcessorInterface
         $stream = \GuzzleHttp\Psr7\stream_for($plainTextResult->getPlainText());
         $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', 'text/plain')->withBody($stream);
+    }
+
+    private function modifyResponseForCsvResult(
+        ResponseInterface $response,
+        CsvResult $csvResult
+    ) {
+        $resource = fopen('php://temp', 'r+');
+        foreach ($csvResult->getData() as $row) {
+            fputcsv($resource, $row);
+        }
+        rewind($resource);
+        $stream = \GuzzleHttp\Psr7\stream_for($resource);
+        return $response
+            ->withHeader('Content-Type', 'text/csv')
+            ->withBody($stream);
     }
 
     /**
