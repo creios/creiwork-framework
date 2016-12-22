@@ -148,7 +148,7 @@ class ResponseBuilder implements PostProcessorInterface
     /**
      * @param ResponseInterface $response
      * @param JsonResult $jsonResult
-     * @return static
+     * @return ResponseInterface
      */
     private function modifyResponseForJsonResult(ResponseInterface $response, JsonResult $jsonResult)
     {
