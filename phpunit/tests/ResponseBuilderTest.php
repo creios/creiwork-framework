@@ -178,14 +178,16 @@ CSV;
     {
         $expectedResponse = (new Response())
             ->withHeader('Content-Type', 'application/octet-stream')
-            ->withHeader('X-Sendfile', __DIR__ . '/../asset/textfile.txt');
+            ->withHeader('X-Sendfile', __DIR__ . '/../asset/textfile.txt')
+            ->withHeader('Content-Disposition', 'attachment; filename="textfile.txt"');
         $result = new ApacheFileResult(__DIR__ . '/../asset/textfile.txt');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
 
         $expectedResponse = (new Response())
             ->withHeader('Content-Type', 'text/plain')
-            ->withHeader('X-Sendfile', __DIR__ . '/../asset/textfile.txt');
+            ->withHeader('X-Sendfile', __DIR__ . '/../asset/textfile.txt')
+            ->withHeader('Content-Disposition', 'attachment; filename="textfile.txt"');
         $result = (new ApacheFileResult(__DIR__ . '/../asset/textfile.txt'))->withMimeType('text/plain');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
@@ -195,14 +197,16 @@ CSV;
     {
         $expectedResponse = (new Response())
             ->withHeader('Content-Type', 'application/octet-stream')
-            ->withHeader('X-Accel-Redirect', __DIR__ . '/../asset/textfile.txt');
+            ->withHeader('X-Accel-Redirect', __DIR__ . '/../asset/textfile.txt')
+            ->withHeader('Content-Disposition', 'attachment; filename="textfile.txt"');
         $result = new NginxFileResult(__DIR__ . '/../asset/textfile.txt');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
 
         $expectedResponse = (new Response())
             ->withHeader('Content-Type', 'text/plain')
-            ->withHeader('X-Accel-Redirect', __DIR__ . '/../asset/textfile.txt');
+            ->withHeader('X-Accel-Redirect', __DIR__ . '/../asset/textfile.txt')
+            ->withHeader('Content-Disposition', 'attachment; filename="textfile.txt"');
         $result = (new NginxFileResult(__DIR__ . '/../asset/textfile.txt'))->withMimeType('text/plain');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());

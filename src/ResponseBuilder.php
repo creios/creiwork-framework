@@ -329,6 +329,9 @@ class ResponseBuilder implements PostProcessorInterface
         } else {
             $mimeType = 'application/octet-stream';
         }
+        if ($result->getDisposition() === null) {
+            $response = $response->withHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($result->getPath())));
+        }
         return $response->withHeader($redirectHeaderKey, $result->getPath())->withHeader('Content-Type', $mimeType);
     }
 
