@@ -2,7 +2,9 @@
 
 namespace Creios\Creiwork\Framework;
 
+use Creios\Creiwork\Framework\Result\AbstractFileResult;
 use Creios\Creiwork\Framework\Result\CsvResult;
+use Creios\Creiwork\Framework\Result\ApacheFileResult;
 use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\HtmlRawResult;
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
@@ -10,6 +12,7 @@ use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
 use Creios\Creiwork\Framework\Result\JsonRawResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\PlainTextResult;
+use Creios\Creiwork\Framework\Result\NginxFileResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringBufferResult;
@@ -17,13 +20,12 @@ use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
 use Creios\Creiwork\Framework\Result\XmlRawResult;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Stream;
 use League\Plates\Engine;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use TimTegeler\Routerunner\PostProcessor\PostProcessorInterface;
-use Zumba\JsonSerializer\JsonSerializer;
+use Zumba\Util\JsonSerializer;
 
 /**
  * Class ResponseBuilder
@@ -60,7 +62,7 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param Result|string $output
-     * @return Response
+     * @return ResponseInterface
      */
     public function process($output)
     {
@@ -80,6 +82,10 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForRedirectResult($response, $output);
         } elseif ($output instanceof FileResult) {
             $response = $this->modifyResponseForFileResult($response, $output);
+        } elseif ($output instanceof ApacheFileResult) {
+            $response = $this->modifyResponseForWebServerFileResult($response, $output, 'X-Sendfile');
+        } elseif ($output instanceof NginxFileResult) {
+            $response = $this->modifyResponseForWebServerFileResult($response, $output, 'X-Accel-Redirect');
         } elseif ($output instanceof StringBufferResult) {
             $response = $this->modifyResponseForStringBufferResult($response, $output);
         } elseif ($output instanceof HtmlRawResult) {
@@ -260,10 +266,16 @@ class ResponseBuilder implements PostProcessorInterface
         return $response->withHeader('Content-Type', 'text/plain')->withBody($stream);
     }
 
+    /**
+     * @param ResponseInterface $response
+     * @param CsvResult $csvResult
+     * @return ResponseInterface
+     */
     private function modifyResponseForCsvResult(
         ResponseInterface $response,
         CsvResult $csvResult
-    ) {
+    )
+    {
         $resource = fopen('php://temp', 'r+');
         foreach ($csvResult->getData() as $row) {
             fputcsv($resource, $row);
@@ -286,6 +298,7 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $response->withStatus($statusCodeResult->getStatusCode());
         }
         return $response;
+
     }
 
     /**
@@ -301,6 +314,22 @@ class ResponseBuilder implements PostProcessorInterface
         } else {
             return $response;
         }
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param AbstractFileResult $result
+     * @param string $redirectHeaderKey
+     * @return ResponseInterface
+     */
+    private function modifyResponseForWebServerFileResult(ResponseInterface $response, AbstractFileResult $result, $redirectHeaderKey)
+    {
+        if ($result->getMimeType() != null) {
+            $mimeType = $result->getMimeType();
+        } else {
+            $mimeType = 'application/octet-stream';
+        }
+        return $response->withHeader($redirectHeaderKey, $result->getPath())->withHeader('Content-Type', $mimeType);
     }
 
 }

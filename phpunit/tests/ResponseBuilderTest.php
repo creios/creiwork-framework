@@ -2,10 +2,12 @@
 
 namespace Creios\Creiwork\Framework;
 
+use Creios\Creiwork\Framework\Result\ApacheFileResult;
 use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\HtmlRawResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
+use Creios\Creiwork\Framework\Result\NginxFileResult;
 use Creios\Creiwork\Framework\Result\PlainTextResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
@@ -15,7 +17,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use League\Plates\Engine;
 use Psr\Http\Message\ServerRequestInterface;
-use Zumba\JsonSerializer\JsonSerializer;
+use Zumba\Util\JsonSerializer;
 
 /**
  * Class ResponseBuilderTest
@@ -37,9 +39,9 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->engine = $this->getMock(Engine::class);
-        $this->serializer = $this->getMock(JsonSerializer::class);
-        $this->serverRequest = $this->getMock(ServerRequestInterface::class);
+        $this->engine = $this->createMock(Engine::class);
+        $this->serializer = $this->createMock(JsonSerializer::class);
+        $this->serverRequest = $this->createMock(ServerRequestInterface::class);
         $this->responseBuilder = new ResponseBuilder($this->serializer, $this->engine, $this->serverRequest);
         $this->stream = fopen('php://temp', 'r+');
         fwrite($this->stream, '');
@@ -111,7 +113,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     public function testFileResult()
     {
         $expectedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 40);
-        $result = new  FileResult(__DIR__ . '/../asset/textfile.txt');
+        $result = new FileResult(__DIR__ . '/../asset/textfile.txt');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
@@ -170,5 +172,39 @@ A,B,C
 
 CSV;
         $this->assertEquals($csv, $response->getBody()->getContents());
+    }
+
+    public function testApacheFileResult()
+    {
+        $expectedResponse = (new Response())
+            ->withHeader('Content-Type', 'application/octet-stream')
+            ->withHeader('X-Sendfile', __DIR__ . '/../asset/textfile.txt');
+        $result = new ApacheFileResult(__DIR__ . '/../asset/textfile.txt');
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
+
+        $expectedResponse = (new Response())
+            ->withHeader('Content-Type', 'text/plain')
+            ->withHeader('X-Sendfile', __DIR__ . '/../asset/textfile.txt');
+        $result = (new ApacheFileResult(__DIR__ . '/../asset/textfile.txt'))->withMimeType('text/plain');
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
+
+    public function testNginxFileResult()
+    {
+        $expectedResponse = (new Response())
+            ->withHeader('Content-Type', 'application/octet-stream')
+            ->withHeader('X-Accel-Redirect', __DIR__ . '/../asset/textfile.txt');
+        $result = new NginxFileResult(__DIR__ . '/../asset/textfile.txt');
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
+
+        $expectedResponse = (new Response())
+            ->withHeader('Content-Type', 'text/plain')
+            ->withHeader('X-Accel-Redirect', __DIR__ . '/../asset/textfile.txt');
+        $result = (new NginxFileResult(__DIR__ . '/../asset/textfile.txt'))->withMimeType('text/plain');
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 }

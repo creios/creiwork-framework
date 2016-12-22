@@ -3,10 +3,10 @@
 namespace Creios\Creiwork\Framework\Result;
 
 /**
- * Class FileResult
+ * Class NginxFileResult
  * @package Creios\Creiwork\Framework\Result
  */
-class FileResult extends AbstractFileResult
+class NginxFileResult extends AbstractFileResult
 {
 
 }
