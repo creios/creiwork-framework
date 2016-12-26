@@ -2,6 +2,8 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
+use Creios\Creiwork\Framework\Result\Util\Result;
+
 /**
  * Class RedirectResult
  * @package Creios\Creiwork\Util\Results
@@ -16,15 +18,15 @@ class RedirectResult extends Result
 
     /**
      * RedirectResult constructor.
-     * @param $url
+     * @param string|null $url
      */
-    public function __construct($url)
+    public function __construct($url = null)
     {
         $this->url = $url;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getUrl()
     {

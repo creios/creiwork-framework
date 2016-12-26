@@ -2,32 +2,42 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
-use Creios\Creiwork\Framework\Result\Interfaces\DataResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
-use Creios\Creiwork\Framework\Result\Traits\DataResult;
 use Creios\Creiwork\Framework\Result\Traits\DisposableResult;
 use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
 
 /**
- * Class JsonResult
- * @package Creios\Creiwork\Util\Results
+ * Class XmlRawResult
+ * @package Creios\Creiwork\Framework\Result
  */
-class JsonResult extends Result implements DataResultInterface, StatusCodeResultInterface, DisposableResultInterface
+class XmlRawResult extends Result implements StatusCodeResultInterface, DisposableResultInterface
 {
 
-    use DataResult;
     use StatusCodeResult;
     use DisposableResult;
 
     /**
-     * JsonResult constructor.
-     * @param mixed $data
+     * @var string
      */
-    public function __construct($data)
+    private $xml;
+
+    /**
+     * XmlRawResult constructor.
+     * @param string $xml
+     */
+    public function __construct($xml)
     {
-        $this->data = $data;
+        $this->xml = $xml;
+    }
+
+    /**
+     * @return string
+     */
+    public function getXml()
+    {
+        return $this->xml;
     }
 
 }

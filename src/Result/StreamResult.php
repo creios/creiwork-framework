@@ -8,13 +8,12 @@ use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
 use Creios\Creiwork\Framework\Result\Traits\DisposableResult;
 use Creios\Creiwork\Framework\Result\Traits\MimeTypeResult;
 use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
-use Creios\Creiwork\Framework\Result\Util\Result;
 
 /**
- * Class StringBufferResult
+ * Class StreamResult
  * @package Creios\Creiwork\Framework\Result
  */
-class StringBufferResult extends Result implements MimeTypeResultInterface, StatusCodeResultInterface, DisposableResultInterface
+class StreamResult implements MimeTypeResultInterface, StatusCodeResultInterface, DisposableResultInterface
 {
 
     use MimeTypeResult;
@@ -22,25 +21,27 @@ class StringBufferResult extends Result implements MimeTypeResultInterface, Stat
     use DisposableResult;
     
     /**
-     * @var string
+     * @var resource
      */
-    protected $buffer;
+    private $stream;
 
     /**
-     * Result constructor.
-     * @param string $buffer
+     * StreamResult constructor.
+     * @param resource $stream
+     * @param string $mimeType
      */
-    public function __construct($buffer)
+    public function __construct($stream, $mimeType)
     {
-        $this->buffer = $buffer;
+        $this->stream = $stream;
+        $this->mimeType = $mimeType;
     }
 
     /**
-     * @return string
+     * @return resource
      */
-    public function getBuffer()
+    public function getStream()
     {
-        return $this->buffer;
+        return $this->stream;
     }
 
 }

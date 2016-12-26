@@ -1,6 +1,6 @@
 <?php
 
-namespace Creios\Creiwork\Framework\Result;
+namespace Creios\Creiwork\Framework\Result\Abstracts;
 
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\MimeTypeResultInterface;
@@ -11,36 +11,38 @@ use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
 
 /**
- * Class StringBufferResult
+ * Class AbstractFileResult
  * @package Creios\Creiwork\Framework\Result
  */
-class StringBufferResult extends Result implements MimeTypeResultInterface, StatusCodeResultInterface, DisposableResultInterface
+class AbstractFileResult extends Result implements StatusCodeResultInterface, MimeTypeResultInterface, DisposableResultInterface
 {
 
-    use MimeTypeResult;
     use StatusCodeResult;
+    use MimeTypeResult;
     use DisposableResult;
-    
+
     /**
      * @var string
      */
-    protected $buffer;
+    private $path;
 
     /**
-     * Result constructor.
-     * @param string $buffer
+     * FileDownloadResult constructor.
+     * @param string $path
+     * @param string $mimeType
      */
-    public function __construct($buffer)
+    public function __construct($path, $mimeType = null)
     {
-        $this->buffer = $buffer;
+        $this->path = $path;
+        $this->mimeType = $mimeType;
     }
 
     /**
      * @return string
      */
-    public function getBuffer()
+    public function getPath()
     {
-        return $this->buffer;
+        return $this->path;
     }
 
 }
