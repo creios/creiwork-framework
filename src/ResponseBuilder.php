@@ -2,7 +2,7 @@
 
 namespace Creios\Creiwork\Framework;
 
-use Creios\Creiwork\Framework\Result\AbstractFileResult;
+use Creios\Creiwork\Framework\Result\Abstracts\AbstractFileResult;
 use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\ApacheFileResult;
 use Creios\Creiwork\Framework\Result\FileResult;
