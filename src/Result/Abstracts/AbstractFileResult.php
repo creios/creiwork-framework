@@ -1,6 +1,6 @@
 <?php
 
-namespace Creios\Creiwork\Framework\Result;
+namespace Creios\Creiwork\Framework\Result\Abstracts;
 
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\MimeTypeResultInterface;
