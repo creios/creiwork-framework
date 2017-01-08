@@ -296,6 +296,8 @@ class ResponseBuilder implements PostProcessorInterface
     {
         if ($statusCodeResult->getStatusCode() != null) {
             $response = $response->withStatus($statusCodeResult->getStatusCode());
+        }else{
+            $response = $response->withStatus(StatusCodes::HTTP_OK);
         }
         return $response;
 
