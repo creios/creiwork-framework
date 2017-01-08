@@ -58,8 +58,8 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testTemplateResultWithStatusCode()
     {
-        $expectedResponse = (new Response())->withStatus(200)->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
-        $result = (new TemplateResult('test', []))->withStatusCode(200);
+        $expectedResponse = (new Response())->withStatus(StatusCodes::HTTP_OK)->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
+        $result = (new TemplateResult('test', []))->withStatusCode(StatusCodes::HTTP_OK);
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getStatusCode(), $actualResponse->getStatusCode());
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
@@ -87,10 +87,11 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testRedirectResult()
     {
-        $expectedResponse = (new Response())->withHeader('Location', 'http://localhost/redirect');
+        $expectedResponse = (new Response())->withStatus(StatusCodes::HTTP_FOUND)->withHeader('Location', 'http://localhost/redirect');
         $result = new RedirectResult('http://localhost/redirect');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
+        $this->assertEquals($expectedResponse->getStatusCode(), $actualResponse->getStatusCode());
     }
 
     public function testPlainResult()
@@ -103,8 +104,8 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testPlainTextResult()
     {
-        $expectedResponse = (new Response())->withStatus(400)->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 21);
-        $result = (new PlainTextResult('Result is a plaintext'))->withStatusCode(400);
+        $expectedResponse = (new Response())->withStatus(StatusCodes::HTTP_NOT_FOUND)->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 21);
+        $result = (new PlainTextResult('Result is a plaintext'))->withStatusCode(StatusCodes::HTTP_NOT_FOUND);
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getStatusCode(), $actualResponse->getStatusCode());
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());

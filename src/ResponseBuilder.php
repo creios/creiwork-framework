@@ -178,10 +178,11 @@ class ResponseBuilder implements PostProcessorInterface
     private function modifyResponseForRedirectResult(ResponseInterface $response, RedirectResult $redirectResult)
     {
         if ($redirectResult->getUrl() == null) {
-            return $response->withHeader('Location', $this->serverRequest->getServerParams()['REQUEST_URI']);
+            $response = $response->withHeader('Location', $this->serverRequest->getServerParams()['REQUEST_URI']);
         } else {
-            return $response->withHeader('Location', $redirectResult->getUrl());
+            $response = $response->withHeader('Location', $redirectResult->getUrl());
         }
+        return $response->withStatus(StatusCodes::HTTP_FOUND);
     }
 
     /**
@@ -296,7 +297,7 @@ class ResponseBuilder implements PostProcessorInterface
     {
         if ($statusCodeResult->getStatusCode() != null) {
             $response = $response->withStatus($statusCodeResult->getStatusCode());
-        }else{
+        } else {
             $response = $response->withStatus(StatusCodes::HTTP_OK);
         }
         return $response;
