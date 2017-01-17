@@ -26,9 +26,6 @@
   "autoload": {
     "psr-4": {
       "Creios\\Creiwork\\Framework\\": "src"
-    },
-    "files": [
-      "src/functions.php"
-    ]
+    }
   }
 }
