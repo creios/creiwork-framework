@@ -47,23 +47,46 @@ class Creiwork
         $this->container = $this->buildContainer();
     }
 
-    /**
-     * @return Container
-     */
-    private function buildContainer()
+    private function pre()
     {
-        $containerBuilder = new ContainerBuilder();
-        $containerBuilder->addDefinitions($this->di());
-        return $containerBuilder->build();
+        date_default_timezone_set('UTC');
+        session_start();
+    }
+
+    public function start()
+    {
+        $this->pre();
+
+        $config = $this->container->get(Config::class);
+
+        if ($config->get('debug')) {
+            $whoops = $this->container->get(Run::class);
+            $whoops->pushHandler($this->container->get(PrettyPageHandler::class));
+            $whoops->register();
+        }
+
+        $request = $this->container->get(ServerRequestInterface::class);
+        $router = $this->container->get(Routerunner::class);
+        $response = $router->process($request);
+
+        ob_end_clean();
+        $this->out($response);
     }
 
     /**
-     * @param $filePath
-     * @return string
+     * @param Response $response
      */
-    private function generateFilePath($filePath)
+    private function out(Response $response)
     {
-        return $this->configDirectory . $filePath;
+        header(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase()));
+
+        foreach ($response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header(sprintf('%s: %s', $name, $value), false);
+            }
+        }
+
+        stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
     }
 
     /**
@@ -109,45 +132,23 @@ class Creiwork
         ];
     }
 
-    private function pre()
+    /**
+     * @return Container
+     */
+    private function buildContainer()
     {
-        date_default_timezone_set('UTC');
-        session_start();
-    }
-
-    public function start()
-    {
-        $this->pre();
-
-        $config = $this->container->get(Config::class);
-
-        if ($config->get('debug')) {
-            $whoops = $this->container->get(Run::class);
-            $whoops->pushHandler($this->container->get(PrettyPageHandler::class));
-            $whoops->register();
-        }
-
-        $request = $this->container->get(ServerRequestInterface::class);
-        $router = $this->container->get(Routerunner::class);
-        $response = $router->process($request);
-
-        ob_end_clean();
-        $this->out($response);
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->addDefinitions($this->di());
+        return $containerBuilder->build();
     }
 
     /**
-     * @param Response $response
+     * @param $filePath
+     * @return string
      */
-    private function out(Response $response)
+    private function generateFilePath($filePath)
     {
-        header(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase()));
-
-        foreach ($response->getHeaders() as $name => $values) {
-            foreach ($values as $value) {
-                header(sprintf('%s: %s', $name, $value), false);
-            }
-        }
-
-        stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
+        return $this->configDirectory . $filePath;
     }
+
 }
