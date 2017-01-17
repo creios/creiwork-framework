@@ -29,7 +29,7 @@ abstract class BaseController implements ControllerInterface
     /**
      * @var String
      */
-    protected $reroutedUri;
+    protected $reroutedPath;
 
     /**
      * BaseController constructor.
@@ -45,11 +45,11 @@ abstract class BaseController implements ControllerInterface
     }
 
     /**
-     * @param String $reroutedUri
+     * @param String $reroutedPath
      */
-    public function setReroutedUri($reroutedUri)
+    public function setReroutedPath($reroutedPath)
     {
-        $this->reroutedUri = $reroutedUri;
+        $this->reroutedPath = $reroutedPath;
     }
 
 }
