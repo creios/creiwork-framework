@@ -127,9 +127,9 @@ class Creiwork
             $whoops->register();
         }
 
-        $routerunner = $this->container->get(Routerunner::class);
-        /** @var Response $response */
-        $response = $routerunner->execute($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+        $request = $this->container->get(ServerRequestInterface::class);
+        $router = $this->container->get(Routerunner::class);
+        $response = $router->process($request);
 
         ob_end_clean();
         $this->out($response);
