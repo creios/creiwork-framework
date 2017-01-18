@@ -26,9 +26,6 @@ class ErrorPageHandler extends Handler
         $this->templates = $templates;
     }
 
-    /**
-     * @return int|null A handler may return nothing, or a Handler::HANDLE_* constant
-     */
     public function handle()
     {
         echo $this->templates->render('error', ['exception' => $this->getException()]);

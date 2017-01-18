@@ -3,18 +3,21 @@
 namespace Creios\Creiwork\Framework\Result;
 
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
+use Creios\Creiwork\Framework\Result\Interfaces\MimeTypeResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
 use Creios\Creiwork\Framework\Result\Traits\DisposableResult;
+use Creios\Creiwork\Framework\Result\Traits\MimeTypeResult;
 use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
 
 /**
- * Class PlainTextResult
+ * Class StringResult
  * @package Creios\Creiwork\Framework\Result
  */
-class PlainTextResult extends Result implements StatusCodeResultInterface, DisposableResultInterface
+class StringResult extends Result implements MimeTypeResultInterface, StatusCodeResultInterface, DisposableResultInterface
 {
 
+    use MimeTypeResult;
     use StatusCodeResult;
     use DisposableResult;
 
@@ -37,6 +40,5 @@ class PlainTextResult extends Result implements StatusCodeResultInterface, Dispo
     {
         return $this->plainText;
     }
-    
 
 }

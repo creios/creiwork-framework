@@ -3,22 +3,19 @@
 namespace Creios\Creiwork\Framework;
 
 use Creios\Creiwork\Framework\Result\Abstracts\AbstractFileResult;
-use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\ApacheFileResult;
+use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\FileResult;
-use Creios\Creiwork\Framework\Result\HtmlRawResult;
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
-use Creios\Creiwork\Framework\Result\JsonRawResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
-use Creios\Creiwork\Framework\Result\PlainTextResult;
 use Creios\Creiwork\Framework\Result\NginxFileResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringBufferResult;
+use Creios\Creiwork\Framework\Result\StringResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
-use Creios\Creiwork\Framework\Result\XmlRawResult;
 use GuzzleHttp\Psr7\Response;
 use League\Plates\Engine;
 use Psr\Http\Message\ResponseInterface;
@@ -76,8 +73,6 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForTemplateResult($response, $output);
         } else if ($output instanceof JsonResult) {
             $response = $this->modifyResponseForJsonResult($response, $output);
-        } else if ($output instanceof JsonRawResult) {
-            $response = $this->modifyResponseForJsonRawResult($response, $output);
         } else if ($output instanceof RedirectResult) {
             $response = $this->modifyResponseForRedirectResult($response, $output);
         } elseif ($output instanceof FileResult) {
@@ -88,18 +83,14 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForWebServerFileResult($response, $output, 'X-Accel-Redirect');
         } elseif ($output instanceof StringBufferResult) {
             $response = $this->modifyResponseForStringBufferResult($response, $output);
-        } elseif ($output instanceof HtmlRawResult) {
-            $response = $this->modifyResponseForHtmlRawResult($response, $output);
-        } elseif ($output instanceof XmlRawResult) {
-            $response = $this->modifyResponseForXmlRawResult($response, $output);
         } elseif ($output instanceof StreamResult) {
             $response = $this->modifyResponseForStreamResult($response, $output);
-        } elseif ($output instanceof PlainTextResult) {
-            $response = $this->modifyResponseForPlainTextResult($response, $output);
+        } elseif ($output instanceof StringResult) {
+            $response = $this->modifyResponseForStringResult($response, $output);
         } elseif ($output instanceof CsvResult) {
             $response = $this->modifyResponseForCsvResult($response, $output);
         } else {
-            $response = $this->modifyResponseForPlainTextResult($response, new PlainTextResult($output));
+            $response = $this->modifyResponseForStringResult($response, ResultFactory::createPlainTextResult($output));
         }
 
         if ($output instanceof StatusCodeResultInterface) {
@@ -160,18 +151,6 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param JsonRawResult $jsonRawResult
-     * @return ResponseInterface
-     */
-    private function modifyResponseForJsonRawResult(ResponseInterface $response, JsonRawResult $jsonRawResult)
-    {
-        $stream = \GuzzleHttp\Psr7\stream_for($jsonRawResult->getJson());
-        $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', 'application/json')->withBody($stream);
-    }
-
-    /**
-     * @param ResponseInterface $response
      * @param RedirectResult $redirectResult
      * @return ResponseInterface
      */
@@ -221,30 +200,6 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param HtmlRawResult $htmlResult
-     * @return ResponseInterface
-     */
-    private function modifyResponseForHtmlRawResult(ResponseInterface $response, HtmlRawResult $htmlResult)
-    {
-        $stream = \GuzzleHttp\Psr7\stream_for($htmlResult->getHtml());
-        $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
-    }
-
-    /**
-     * @param ResponseInterface $response
-     * @param XmlRawResult $xmlResult
-     * @return ResponseInterface
-     */
-    private function modifyResponseForXmlRawResult(ResponseInterface $response, XmlRawResult $xmlResult)
-    {
-        $stream = \GuzzleHttp\Psr7\stream_for($xmlResult->getXml());
-        $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', 'text/xml')->withBody($stream);
-    }
-
-    /**
-     * @param ResponseInterface $response
      * @param StreamResult $streamResult
      * @return ResponseInterface
      */
@@ -257,14 +212,14 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param PlainTextResult $plainTextResult
+     * @param StringResult $stringResult
      * @return ResponseInterface
      */
-    private function modifyResponseForPlainTextResult(ResponseInterface $response, PlainTextResult $plainTextResult)
+    private function modifyResponseForStringResult(ResponseInterface $response, StringResult $stringResult)
     {
-        $stream = \GuzzleHttp\Psr7\stream_for($plainTextResult->getPlainText());
+        $stream = \GuzzleHttp\Psr7\stream_for($stringResult->getPlainText());
         $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', 'text/plain')->withBody($stream);
+        return $response->withHeader('Content-Type', $stringResult->getMimeType())->withBody($stream);
     }
 
     /**
