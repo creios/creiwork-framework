@@ -25,7 +25,7 @@ class StringResult extends Result implements MimeTypeResultInterface, StatusCode
     private $plainText;
 
     /**
-     * PlainTextResult constructor.
+     * StringResult constructor.
      * @param string $plainText
      */
     public function __construct($plainText)
