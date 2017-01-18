@@ -5,14 +5,11 @@ namespace Creios\Creiwork\Framework;
 use Creios\Creiwork\Framework\Result\ApacheFileResult;
 use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\FileResult;
-use Creios\Creiwork\Framework\Result\HtmlRawResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\NginxFileResult;
-use Creios\Creiwork\Framework\Result\PlainTextResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Disposition;
-use Creios\Creiwork\Framework\Result\XmlRawResult;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use League\Plates\Engine;
@@ -105,7 +102,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     public function testPlainTextResult()
     {
         $expectedResponse = (new Response())->withStatus(StatusCodes::HTTP_NOT_FOUND)->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 21);
-        $result = (new PlainTextResult('Result is a plaintext'))->withStatusCode(StatusCodes::HTTP_NOT_FOUND);
+        $result = ResultFactory::createPlainTextResult('Result is a plaintext')->withStatusCode(StatusCodes::HTTP_NOT_FOUND);
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getStatusCode(), $actualResponse->getStatusCode());
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
@@ -134,7 +131,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 </body>
 </html>
 HTML;
-        $result = new HtmlRawResult($html);
+        $result = ResultFactory::createHtmlResult($html);
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
@@ -149,7 +146,7 @@ HTML;
     <name>doe</name>
 </user>
 XML;
-        $result = new XmlRawResult($xml);
+        $result = ResultFactory::createXmlResult($xml);
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
