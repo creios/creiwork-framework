@@ -117,6 +117,8 @@ class Creiwork
 
     public function start()
     {
+        ob_start();
+
         $this->pre();
 
         $config = $this->container->get(Config::class);
@@ -132,6 +134,7 @@ class Creiwork
         $response = $routerunner->execute($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 
         ob_end_clean();
+        
         $this->out($response);
     }
 
