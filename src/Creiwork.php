@@ -44,6 +44,7 @@ class Creiwork
     {
         $this->configPath = $configPath;
         $this->configDirectory = dirname($this->configPath) . '/';
+        $this->config = new Config($configPath);
         $this->container = $this->buildContainer();
     }
 
@@ -96,14 +97,14 @@ class Creiwork
     {
         return [
 
-            Routerunner::class => function (ContainerInterface $container, Config $config) {
-                $routerunner = new Routerunner($this->generateFilePath($config->get('router-config')), $container);
+            Routerunner::class => function (ContainerInterface $container) {
+                $routerunner = new Routerunner($this->getRouterConfigFile(), $container);
                 $routerunner->setPostProcessor($container->get(ResponseBuilder::class));
                 return $routerunner;
             },
 
-            Plates\Engine::class => function (Config $config) {
-                return new Plates\Engine($this->generateFilePath($config->get('template-dir')));
+            Plates\Engine::class => function () {
+                return new Plates\Engine($this->getTemplateDirectory());
             },
 
             LoggerInterface::class => function (StreamHandler $streamHandler) {
@@ -112,8 +113,8 @@ class Creiwork
                 return $logger;
             },
 
-            StreamHandler::class => function (Config $config) {
-                return new StreamHandler($this->generateFilePath($config->get('logger-dir') . '/info.log'), Logger::INFO);
+            StreamHandler::class => function () {
+                return new StreamHandler($this->getLoggerDirectory() . '/info.log', Logger::INFO);
             },
 
             ServerRequestInterface::class => factory([ServerRequest::class, 'fromGlobals']),
@@ -128,7 +129,6 @@ class Creiwork
                 return $session->getSegment('Creios\Creiwork');
             },
 
-            Config::class => object()->constructor($this->configPath)
         ];
     }
 
@@ -149,6 +149,30 @@ class Creiwork
     private function generateFilePath($filePath)
     {
         return $this->configDirectory . $filePath;
+    }
+
+    /**
+     * @return string
+     */
+    private function getLoggerDirectory()
+    {
+        return $this->generateFilePath($this->config->get('logger-dir'));
+    }
+
+    /**
+     * @return string
+     */
+    private function getTemplateDirectory()
+    {
+        return $this->generateFilePath($this->config->get('template-dir'));
+    }
+
+    /**
+     * @return string
+     */
+    private function getRouterConfigFile()
+    {
+        return $this->generateFilePath($this->config->get('router-config'));
     }
 
 }
