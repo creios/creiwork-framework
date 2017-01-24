@@ -51,7 +51,6 @@ class Creiwork
     private function pre()
     {
         date_default_timezone_set('UTC');
-        session_start();
     }
 
     public function start()
@@ -148,7 +147,7 @@ class Creiwork
      */
     private function generateFilePath($filePath)
     {
-        return $this->configDirectory . $filePath;
+        return realpath($this->configDirectory . $filePath);
     }
 
     /**
