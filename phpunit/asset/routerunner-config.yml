@@ -1,0 +1,6 @@
+routes:
+  - [GET, /, TestController->test]
+
+fallback: TestController->test
+
+baseNamespace: Creios\Creiwork\Framework
