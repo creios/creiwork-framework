@@ -57,9 +57,9 @@ class Creiwork
     {
         $this->pre();
 
-        $config = $this->container->get(Config::class);
+        ob_start();
 
-        if ($config->get('debug')) {
+        if ($this->config->get('debug')) {
             $whoops = $this->container->get(Run::class);
             $whoops->pushHandler($this->container->get(PrettyPageHandler::class));
             $whoops->register();
@@ -70,6 +70,7 @@ class Creiwork
         $response = $router->process($request);
 
         ob_end_clean();
+
         $this->out($response);
     }
 
