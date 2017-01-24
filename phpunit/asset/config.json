@@ -1,3 +1,4 @@
 {
+  "debug": "true",
   "router-config": "routerunner-config.yml"
 }
