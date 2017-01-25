@@ -138,6 +138,21 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
+     * @param StreamInterface $stream
+     * @return ResponseInterface
+     */
+    private function modifyResponseWithContentLength(ResponseInterface $response, StreamInterface $stream)
+    {
+        $size = $stream->getSize();
+        if ($size !== null) {
+            return $response->withHeader('Content-Length', $stream->getSize());
+        } else {
+            return $response;
+        }
+    }
+
+    /**
+     * @param ResponseInterface $response
      * @param JsonResult $jsonResult
      * @return ResponseInterface
      */
@@ -179,6 +194,25 @@ class ResponseBuilder implements PostProcessorInterface
         $stream = \GuzzleHttp\Psr7\stream_for(fopen($fileResult->getPath(), 'r'));
         $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', $mimeType)->withBody($stream);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param AbstractFileResult $result
+     * @param string $redirectHeaderKey
+     * @return ResponseInterface
+     */
+    private function modifyResponseForWebServerFileResult(ResponseInterface $response, AbstractFileResult $result, $redirectHeaderKey)
+    {
+        if ($result->getMimeType() != null) {
+            $mimeType = $result->getMimeType();
+        } else {
+            $mimeType = 'application/octet-stream';
+        }
+        if ($result->getDisposition() === null) {
+            $response = $response->withHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($result->getPath())));
+        }
+        return $response->withHeader($redirectHeaderKey, $result->getPath())->withHeader('Content-Type', $mimeType);
     }
 
     /**
@@ -257,40 +291,6 @@ class ResponseBuilder implements PostProcessorInterface
         }
         return $response;
 
-    }
-
-    /**
-     * @param ResponseInterface $response
-     * @param StreamInterface $stream
-     * @return ResponseInterface
-     */
-    private function modifyResponseWithContentLength(ResponseInterface $response, StreamInterface $stream)
-    {
-        $size = $stream->getSize();
-        if ($size !== null) {
-            return $response->withHeader('Content-Length', $stream->getSize());
-        } else {
-            return $response;
-        }
-    }
-
-    /**
-     * @param ResponseInterface $response
-     * @param AbstractFileResult $result
-     * @param string $redirectHeaderKey
-     * @return ResponseInterface
-     */
-    private function modifyResponseForWebServerFileResult(ResponseInterface $response, AbstractFileResult $result, $redirectHeaderKey)
-    {
-        if ($result->getMimeType() != null) {
-            $mimeType = $result->getMimeType();
-        } else {
-            $mimeType = 'application/octet-stream';
-        }
-        if ($result->getDisposition() === null) {
-            $response = $response->withHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($result->getPath())));
-        }
-        return $response->withHeader($redirectHeaderKey, $result->getPath())->withHeader('Content-Type', $mimeType);
     }
 
 }

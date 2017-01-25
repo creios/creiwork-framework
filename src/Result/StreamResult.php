@@ -19,7 +19,7 @@ class StreamResult implements MimeTypeResultInterface, StatusCodeResultInterface
     use MimeTypeResult;
     use StatusCodeResult;
     use DisposableResult;
-    
+
     /**
      * @var resource
      */

@@ -48,46 +48,14 @@ class Creiwork
         $this->container = $this->buildContainer();
     }
 
-    private function pre()
-    {
-        date_default_timezone_set('UTC');
-    }
-
-    public function start()
-    {
-        $this->pre();
-
-        ob_start();
-
-        if ($this->config->get('debug')) {
-            $whoops = $this->container->get(Run::class);
-            $whoops->pushHandler($this->container->get(PrettyPageHandler::class));
-            $whoops->register();
-        }
-
-        $request = $this->container->get(ServerRequestInterface::class);
-        $router = $this->container->get(Routerunner::class);
-        $response = $router->process($request);
-
-        ob_end_clean();
-
-        $this->out($response);
-    }
-
     /**
-     * @param Response $response
+     * @return Container
      */
-    private function out(Response $response)
+    private function buildContainer()
     {
-        header(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase()));
-
-        foreach ($response->getHeaders() as $name => $values) {
-            foreach ($values as $value) {
-                header(sprintf('%s: %s', $name, $value), false);
-            }
-        }
-
-        stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->addDefinitions($this->di());
+        return $containerBuilder->build();
     }
 
     /**
@@ -133,13 +101,11 @@ class Creiwork
     }
 
     /**
-     * @return Container
+     * @return string
      */
-    private function buildContainer()
+    private function getRouterConfigFile()
     {
-        $containerBuilder = new ContainerBuilder();
-        $containerBuilder->addDefinitions($this->di());
-        return $containerBuilder->build();
+        return $this->generateFilePath($this->config->get('router-config'));
     }
 
     /**
@@ -154,14 +120,6 @@ class Creiwork
     /**
      * @return string
      */
-    private function getLoggerDirectory()
-    {
-        return $this->generateFilePath($this->config->get('logger-dir'));
-    }
-
-    /**
-     * @return string
-     */
     private function getTemplateDirectory()
     {
         return $this->generateFilePath($this->config->get('template-dir'));
@@ -170,9 +128,51 @@ class Creiwork
     /**
      * @return string
      */
-    private function getRouterConfigFile()
+    private function getLoggerDirectory()
     {
-        return $this->generateFilePath($this->config->get('router-config'));
+        return $this->generateFilePath($this->config->get('logger-dir'));
+    }
+
+    public function start()
+    {
+        $this->pre();
+
+        ob_start();
+
+        if ($this->config->get('debug')) {
+            $whoops = $this->container->get(Run::class);
+            $whoops->pushHandler($this->container->get(PrettyPageHandler::class));
+            $whoops->register();
+        }
+
+        $request = $this->container->get(ServerRequestInterface::class);
+        $router = $this->container->get(Routerunner::class);
+        $response = $router->process($request);
+
+        ob_end_clean();
+
+        $this->out($response);
+    }
+
+    private function pre()
+    {
+        date_default_timezone_set('UTC');
+    }
+
+    /**
+     * @param Response $response
+     */
+    private function out(Response $response)
+    {
+        header(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase()));
+
+        foreach ($response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header(sprintf('%s: %s', $name, $value), false);
+            }
+        }
+
+        stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
     }
 
 }

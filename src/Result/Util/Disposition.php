@@ -64,5 +64,5 @@ class Disposition
     {
         return $this->filename;
     }
-    
+
 }
