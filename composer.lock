@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b3b84f4664b41eda717a071bb698773a",
-    "content-hash": "a808074318339ea289532c469cc11538",
+    "hash": "81f1e9c0758525bad1f16fb83ebcaba7",
+    "content-hash": "931641c431e0c21837610e020ba563f1",
     "packages": [
         {
             "name": "aura/session",
@@ -900,16 +900,16 @@
         },
         {
             "name": "timtegeler/routerunner",
-            "version": "dev-feature/psr15",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timtegeler/routerunner.git",
-                "reference": "c4df4a87bed6ae961b4f11e1556e5f173e858505"
+                "reference": "2915b693a468af240aa296cd511358d8b5e30866"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/c4df4a87bed6ae961b4f11e1556e5f173e858505",
-                "reference": "c4df4a87bed6ae961b4f11e1556e5f173e858505",
+                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/2915b693a468af240aa296cd511358d8b5e30866",
+                "reference": "2915b693a468af240aa296cd511358d8b5e30866",
                 "shasum": ""
             },
             "require": {
@@ -940,7 +940,7 @@
                 }
             ],
             "description": "Routerunner is a router for HTTP-request written in PHP",
-            "time": "2017-01-26 09:34:22"
+            "time": "2017-01-26 13:59:50"
         },
         {
             "name": "zumba/json-serializer",
