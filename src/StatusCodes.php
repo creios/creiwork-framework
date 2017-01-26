@@ -60,7 +60,6 @@ class StatusCodes
     const HTTP_GATEWAY_TIMEOUT = 504;
     const HTTP_VERSION_NOT_SUPPORTED = 505;
 
-
     /**
      * @var array
      */

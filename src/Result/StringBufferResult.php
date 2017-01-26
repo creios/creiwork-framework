@@ -20,7 +20,7 @@ class StringBufferResult extends Result implements MimeTypeResultInterface, Stat
     use MimeTypeResult;
     use StatusCodeResult;
     use DisposableResult;
-    
+
     /**
      * @var string
      */

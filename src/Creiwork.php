@@ -7,14 +7,16 @@ use Aura\Session\Session;
 use Aura\Session\SessionFactory;
 use DI\Container;
 use DI\ContainerBuilder;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Interop\Container\ContainerInterface;
 use League\Plates;
+use mindplay\middleman\ContainerResolver;
+use mindplay\middleman\Dispatcher;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Noodlehaus\Config;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use TimTegeler\Routerunner\Routerunner;
@@ -44,6 +46,7 @@ class Creiwork
     {
         $this->configPath = $configPath;
         $this->configDirectory = dirname($this->configPath) . '/';
+        $this->config = new Config($configPath);
         $this->container = $this->buildContainer();
     }
 
@@ -58,29 +61,20 @@ class Creiwork
     }
 
     /**
-     * @param $filePath
-     * @return string
-     */
-    private function generateFilePath($filePath)
-    {
-        return $this->configDirectory . $filePath;
-    }
-
-    /**
      * @return array
      */
     private function di()
     {
         return [
 
-            Routerunner::class => function (ContainerInterface $container, Config $config) {
-                $routerunner = new Routerunner($this->generateFilePath($config->get('router-config')), $container);
+            Routerunner::class => function (ContainerInterface $container) {
+                $routerunner = new Routerunner($this->getRouterConfigFile(), $container);
                 $routerunner->setPostProcessor($container->get(ResponseBuilder::class));
                 return $routerunner;
             },
 
-            Plates\Engine::class => function (Config $config) {
-                return new Plates\Engine($this->generateFilePath($config->get('template-dir')));
+            Plates\Engine::class => function () {
+                return new Plates\Engine($this->getTemplateDirectory());
             },
 
             LoggerInterface::class => function (StreamHandler $streamHandler) {
@@ -89,8 +83,8 @@ class Creiwork
                 return $logger;
             },
 
-            StreamHandler::class => function (Config $config) {
-                return new StreamHandler($this->generateFilePath($config->get('logger-dir') . '/info.log'), Logger::INFO);
+            StreamHandler::class => function () {
+                return new StreamHandler($this->getLoggerDirectory() . '/info.log', Logger::INFO);
             },
 
             ServerRequestInterface::class => factory([ServerRequest::class, 'fromGlobals']),
@@ -105,43 +99,69 @@ class Creiwork
                 return $session->getSegment('Creios\Creiwork');
             },
 
-            Config::class => object()->constructor($this->configPath)
         ];
     }
 
-    private function pre()
+    private function configure()
     {
         date_default_timezone_set('UTC');
-        session_start();
     }
 
     public function start()
     {
         ob_start();
 
-        $this->pre();
+        $this->configure();
 
-        $config = $this->container->get(Config::class);
+        $this->registerWhoops();
 
-        if ($config->get('debug')) {
-            $whoops = $this->container->get(Run::class);
-            $whoops->pushHandler($this->container->get(PrettyPageHandler::class));
-            $whoops->register();
-        }
-
-        $routerunner = $this->container->get(Routerunner::class);
-        /** @var Response $response */
-        $response = $routerunner->execute($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+        $response = $this->dispatch();
 
         ob_end_clean();
-        
+
         $this->out($response);
     }
 
     /**
-     * @param Response $response
+     * Method should be replaced to appropriated Middleware
+     *
+     * @deprecated
      */
-    private function out(Response $response)
+    private function registerWhoops()
+    {
+        $whoops = $this->container->get(Run::class);
+
+        if ($this->config->get('debug')) {
+            $whoops->pushHandler($this->container->get(PrettyPageHandler::class));
+        } else {
+            $whoops->pushHandler($this->container->get(ErrorPageHandler::class));
+        }
+
+        $whoops->register();
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    private function dispatch()
+    {
+        $request = $this->container->get(ServerRequestInterface::class);
+
+        $response = (new Dispatcher(
+            [
+                //Add new middleware here
+                Routerunner::class
+            ],
+            new ContainerResolver($this->container))
+        )->dispatch($request);
+
+        return $response;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     */
+    private function out(ResponseInterface $response)
     {
         header(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase()));
 
@@ -152,5 +172,38 @@ class Creiwork
         }
 
         stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
+    }
+
+    /**
+     * @return string
+     */
+    private function getRouterConfigFile()
+    {
+        return $this->generateFilePath($this->config->get('router-config'));
+    }
+
+    /**
+     * @param $filePath
+     * @return string
+     */
+    private function generateFilePath($filePath)
+    {
+        return realpath($this->configDirectory . $filePath);
+    }
+
+    /**
+     * @return string
+     */
+    private function getTemplateDirectory()
+    {
+        return $this->generateFilePath($this->config->get('template-dir'));
+    }
+
+    /**
+     * @return string
+     */
+    private function getLoggerDirectory()
+    {
+        return $this->generateFilePath($this->config->get('logger-dir'));
     }
 }
