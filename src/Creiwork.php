@@ -32,6 +32,12 @@ use function DI\object;
  */
 class Creiwork
 {
+    /** @var string */
+    const routerConfigKey = 'router-config';
+    /** @var string */
+    const loggerDirKey = 'logger-dir';
+    /** @var string */
+    const templateDirKey = 'template-dir';
     /** @var Container */
     private $container;
     /** @var string */
@@ -40,12 +46,6 @@ class Creiwork
     private $configDirectoryPath;
     /** @var Config */
     private $config;
-    /** @var string */
-    const routerConfigKey = 'router-config';
-    /** @var string */
-    const loggerDirKey = 'logger-dir';
-    /** @var string */
-    const templateDirKey = 'template-dir';
 
     /**
      * Creiwork constructor.
@@ -127,9 +127,37 @@ class Creiwork
         ];
     }
 
-    private function configure()
+    /**
+     * @return string
+     */
+    private function getRouterConfigFile()
     {
-        date_default_timezone_set('UTC');
+        return $this->generateFilePath($this->config->get(self::routerConfigKey));
+    }
+
+    /**
+     * @param $filePath
+     * @return string
+     */
+    private function generateFilePath($filePath)
+    {
+        return realpath($this->configDirectoryPath . $filePath);
+    }
+
+    /**
+     * @return string
+     */
+    private function getTemplateDirectory()
+    {
+        return $this->generateFilePath($this->config->get(self::templateDirKey));
+    }
+
+    /**
+     * @return string
+     */
+    private function getLoggerDirectory()
+    {
+        return $this->generateFilePath($this->config->get(self::loggerDirKey));
     }
 
     public function start()
@@ -145,6 +173,11 @@ class Creiwork
         ob_end_clean();
 
         $this->out($response);
+    }
+
+    private function configure()
+    {
+        date_default_timezone_set('UTC');
     }
 
     /**
@@ -197,38 +230,5 @@ class Creiwork
         }
 
         stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
-    }
-
-    /**
-     * @param $filePath
-     * @return string
-     */
-    private function generateFilePath($filePath)
-    {
-        return realpath($this->configDirectoryPath . $filePath);
-    }
-
-    /**
-     * @return string
-     */
-    private function getRouterConfigFile()
-    {
-        return $this->generateFilePath($this->config->get(self::routerConfigKey));
-    }
-
-    /**
-     * @return string
-     */
-    private function getTemplateDirectory()
-    {
-        return $this->generateFilePath($this->config->get(self::templateDirKey));
-    }
-
-    /**
-     * @return string
-     */
-    private function getLoggerDirectory()
-    {
-        return $this->generateFilePath($this->config->get(self::loggerDirKey));
     }
 }
