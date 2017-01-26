@@ -7,14 +7,16 @@ use Aura\Session\Session;
 use Aura\Session\SessionFactory;
 use DI\Container;
 use DI\ContainerBuilder;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Interop\Container\ContainerInterface;
 use League\Plates;
+use mindplay\middleman\ContainerResolver;
+use mindplay\middleman\Dispatcher;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Noodlehaus\Config;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use TimTegeler\Routerunner\Routerunner;
@@ -146,8 +148,12 @@ class Creiwork
         }
 
         $request = $this->container->get(ServerRequestInterface::class);
-        $router = $this->container->get(Routerunner::class);
-        $response = $router->process($request);
+        $response = (new Dispatcher(
+            [
+                Routerunner::class
+            ],
+            new ContainerResolver($this->container))
+        )->dispatch($request);
 
         ob_end_clean();
 
@@ -160,9 +166,9 @@ class Creiwork
     }
 
     /**
-     * @param Response $response
+     * @param ResponseInterface $response
      */
-    private function out(Response $response)
+    private function out(ResponseInterface $response)
     {
         header(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase()));
 
