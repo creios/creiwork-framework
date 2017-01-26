@@ -1,4 +1,6 @@
 {
   "debug": "true",
-  "router-config": "routerunner-config.yml"
+  "router-config": "routerunner-config.yml",
+  "logger-dir": ".",
+  "template-dir": "."
 }

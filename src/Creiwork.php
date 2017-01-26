@@ -5,6 +5,7 @@ namespace Creios\Creiwork\Framework;
 use Aura\Session\SegmentInterface;
 use Aura\Session\Session;
 use Aura\Session\SessionFactory;
+use Creios\Creiwork\Framework\Exception\ConfigException;
 use DI\Container;
 use DI\ContainerBuilder;
 use GuzzleHttp\Psr7\ServerRequest;
@@ -34,9 +35,17 @@ class Creiwork
     /** @var Container */
     private $container;
     /** @var string */
-    private $configPath;
+    private $configFilePath;
     /** @var string */
-    private $configDirectory;
+    private $configDirectoryPath;
+    /** @var Config */
+    private $config;
+    /** @var string */
+    const routerConfigKey = 'router-config';
+    /** @var string */
+    const loggerDirKey = 'logger-dir';
+    /** @var string */
+    const templateDirKey = 'template-dir';
 
     /**
      * Creiwork constructor.
@@ -44,20 +53,36 @@ class Creiwork
      */
     public function __construct($configPath)
     {
-        $this->configPath = $configPath;
-        $this->configDirectory = dirname($this->configPath) . '/';
+        $this->prepareConfig($configPath);
+        $this->buildContainer();
+    }
+
+    private function prepareConfig($configPath)
+    {
+        $this->configFilePath = $configPath;
+        $this->configDirectoryPath = dirname($configPath) . '/';
         $this->config = new Config($configPath);
-        $this->container = $this->buildContainer();
+        $this->checkConfigKey(self::routerConfigKey);
+        $this->checkConfigKey(self::loggerDirKey);
+        $this->checkConfigKey(self::templateDirKey);
     }
 
     /**
-     * @return Container
+     * @param string $key
+     * @throws ConfigException
      */
+    private function checkConfigKey($key)
+    {
+        if (!$this->config->has($key)) {
+            throw new ConfigException("Config file doesn't contain '${key}''");
+        }
+    }
+
     private function buildContainer()
     {
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->addDefinitions($this->di());
-        return $containerBuilder->build();
+        $this->container = $containerBuilder->build();
     }
 
     /**
@@ -175,20 +200,20 @@ class Creiwork
     }
 
     /**
-     * @return string
-     */
-    private function getRouterConfigFile()
-    {
-        return $this->generateFilePath($this->config->get('router-config'));
-    }
-
-    /**
      * @param $filePath
      * @return string
      */
     private function generateFilePath($filePath)
     {
-        return realpath($this->configDirectory . $filePath);
+        return realpath($this->configDirectoryPath . $filePath);
+    }
+
+    /**
+     * @return string
+     */
+    private function getRouterConfigFile()
+    {
+        return $this->generateFilePath($this->config->get(self::routerConfigKey));
     }
 
     /**
@@ -196,7 +221,7 @@ class Creiwork
      */
     private function getTemplateDirectory()
     {
-        return $this->generateFilePath($this->config->get('template-dir'));
+        return $this->generateFilePath($this->config->get(self::templateDirKey));
     }
 
     /**
@@ -204,6 +229,6 @@ class Creiwork
      */
     private function getLoggerDirectory()
     {
-        return $this->generateFilePath($this->config->get('logger-dir'));
+        return $this->generateFilePath($this->config->get(self::loggerDirKey));
     }
 }
