@@ -102,6 +102,64 @@ class Creiwork
         ];
     }
 
+    private function configure()
+    {
+        date_default_timezone_set('UTC');
+    }
+
+    public function start()
+    {
+        ob_start();
+
+        $this->configure();
+
+        if ($this->config->get('debug')) {
+            $whoops = $this->container->get(Run::class);
+            $whoops->pushHandler($this->container->get(PrettyPageHandler::class));
+            $whoops->register();
+        }
+
+        $response = $this->dispatch();
+
+        ob_end_clean();
+
+        $this->out($response);
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    private function dispatch()
+    {
+        $request = $this->container->get(ServerRequestInterface::class);
+
+        $response = (new Dispatcher(
+            [
+                //Add new middleware here
+                Routerunner::class
+            ],
+            new ContainerResolver($this->container))
+        )->dispatch($request);
+
+        return $response;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     */
+    private function out(ResponseInterface $response)
+    {
+        header(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase()));
+
+        foreach ($response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header(sprintf('%s: %s', $name, $value), false);
+            }
+        }
+
+        stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
+    }
+
     /**
      * @return string
      */
@@ -134,51 +192,4 @@ class Creiwork
     {
         return $this->generateFilePath($this->config->get('logger-dir'));
     }
-
-    public function start()
-    {
-        $this->pre();
-
-        ob_start();
-
-        if ($this->config->get('debug')) {
-            $whoops = $this->container->get(Run::class);
-            $whoops->pushHandler($this->container->get(PrettyPageHandler::class));
-            $whoops->register();
-        }
-
-        $request = $this->container->get(ServerRequestInterface::class);
-        $response = (new Dispatcher(
-            [
-                Routerunner::class
-            ],
-            new ContainerResolver($this->container))
-        )->dispatch($request);
-
-        ob_end_clean();
-
-        $this->out($response);
-    }
-
-    private function pre()
-    {
-        date_default_timezone_set('UTC');
-    }
-
-    /**
-     * @param ResponseInterface $response
-     */
-    private function out(ResponseInterface $response)
-    {
-        header(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase()));
-
-        foreach ($response->getHeaders() as $name => $values) {
-            foreach ($values as $value) {
-                header(sprintf('%s: %s', $name, $value), false);
-            }
-        }
-
-        stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
-    }
-
 }
