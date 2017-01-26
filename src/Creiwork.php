@@ -113,17 +113,31 @@ class Creiwork
 
         $this->configure();
 
-        if ($this->config->get('debug')) {
-            $whoops = $this->container->get(Run::class);
-            $whoops->pushHandler($this->container->get(PrettyPageHandler::class));
-            $whoops->register();
-        }
+        $this->registerWhoops();
 
         $response = $this->dispatch();
 
         ob_end_clean();
 
         $this->out($response);
+    }
+
+    /**
+     * Method should be replaced to appropriated Middleware
+     *
+     * @deprecated
+     */
+    private function registerWhoops()
+    {
+        $whoops = $this->container->get(Run::class);
+
+        if ($this->config->get('debug')) {
+            $whoops->pushHandler($this->container->get(PrettyPageHandler::class));
+        } else {
+            $whoops->pushHandler($this->container->get(ErrorPageHandler::class));
+        }
+
+        $whoops->register();
     }
 
     /**
