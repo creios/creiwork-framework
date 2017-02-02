@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "407bfe20e312b233b7bfa8eae9acd1b4",
-    "content-hash": "9313ef04e05dc3b373aec9514bfec313",
+    "hash": "4189d15dfe82de8495df71d420f35baa",
+    "content-hash": "645457db15d944f9c0290f261ae42ba4",
     "packages": [
         {
             "name": "aura/session",
@@ -1335,7 +1335,7 @@
         },
         {
             "name": "timtegeler/routerunner",
-            "version": "1.1.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timtegeler/routerunner.git",
