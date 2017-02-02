@@ -3,6 +3,7 @@
 namespace Creios\Creiwork\Framework;
 
 use Aura\Session\SegmentInterface;
+use Noodlehaus\Config;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use TimTegeler\Routerunner\Controller\ControllerInterface;
@@ -27,6 +28,10 @@ abstract class BaseController implements ControllerInterface
      */
     protected $session;
     /**
+     * @var Config
+     */
+    protected $config;
+    /**
      * @var String
      */
     protected $reroutedPath;
@@ -36,12 +41,17 @@ abstract class BaseController implements ControllerInterface
      * @param ServerRequestInterface $serverRequest
      * @param LoggerInterface $logger
      * @param SegmentInterface $session
+     * @param Config $config
      */
-    public function __construct(ServerRequestInterface $serverRequest, LoggerInterface $logger, SegmentInterface $session)
+    public function __construct(ServerRequestInterface $serverRequest,
+                                LoggerInterface $logger,
+                                SegmentInterface $session,
+                                Config $config)
     {
         $this->request = $serverRequest;
         $this->logger = $logger;
         $this->session = $session;
+        $this->config = $config;
     }
 
     /**

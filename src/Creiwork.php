@@ -11,6 +11,8 @@ use DI\ContainerBuilder;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Interop\Container\ContainerInterface;
+use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializerBuilder;
 use League\Plates;
 use mindplay\middleman\ContainerResolver;
 use mindplay\middleman\Dispatcher;
@@ -53,29 +55,8 @@ class Creiwork
      */
     public function __construct($configPath)
     {
-        $this->prepareConfig($configPath);
         $this->buildContainer();
-    }
-
-    private function prepareConfig($configPath)
-    {
-        $this->configFilePath = $configPath;
-        $this->configDirectoryPath = dirname($configPath) . '/';
-        $this->config = new Config($configPath);
-        $this->checkConfigKey(self::routerConfigKey);
-        $this->checkConfigKey(self::loggerDirKey);
-        $this->checkConfigKey(self::templateDirKey);
-    }
-
-    /**
-     * @param string $key
-     * @throws ConfigException
-     */
-    private function checkConfigKey($key)
-    {
-        if (!$this->config->has($key)) {
-            throw new ConfigException("Config file doesn't contain '${key}''");
-        }
+        $this->prepareConfig($configPath);
     }
 
     private function buildContainer()
@@ -91,6 +72,10 @@ class Creiwork
     private function di()
     {
         return [
+
+            Config::class => function () {
+                return new Config($this->configFilePath);
+            },
 
             Routerunner::class => function (ContainerInterface $container) {
                 $routerunner = new Routerunner($this->getRouterConfigFile(), $container);
@@ -122,6 +107,12 @@ class Creiwork
 
             SegmentInterface::class => function (Session $session) {
                 return $session->getSegment('Creios\Creiwork');
+            },
+
+            SerializerBuilder::class => factory([SerializerBuilder::class, 'create']),
+
+            Serializer::class => function (SerializerBuilder $serializerBuilder) {
+                return $serializerBuilder->build();
             },
 
         ];
@@ -158,6 +149,27 @@ class Creiwork
     private function getLoggerDirectory()
     {
         return $this->generateFilePath($this->config->get(self::loggerDirKey));
+    }
+
+    private function prepareConfig($configPath)
+    {
+        $this->configFilePath = $configPath;
+        $this->configDirectoryPath = dirname($configPath) . '/';
+        $this->config = $this->container->get(Config::class);
+        $this->checkConfigKey(self::routerConfigKey);
+        $this->checkConfigKey(self::loggerDirKey);
+        $this->checkConfigKey(self::templateDirKey);
+    }
+
+    /**
+     * @param string $key
+     * @throws ConfigException
+     */
+    private function checkConfigKey($key)
+    {
+        if (!$this->config->has($key)) {
+            throw new ConfigException("Config file doesn't contain '${key}''");
+        }
     }
 
     public function start()

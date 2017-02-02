@@ -17,12 +17,12 @@ use Creios\Creiwork\Framework\Result\StringResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
 use GuzzleHttp\Psr7\Response;
+use JMS\Serializer\Serializer;
 use League\Plates\Engine;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use TimTegeler\Routerunner\PostProcessor\PostProcessorInterface;
-use Zumba\Util\JsonSerializer;
 
 /**
  * Class ResponseBuilder
@@ -36,9 +36,9 @@ class ResponseBuilder implements PostProcessorInterface
      */
     protected $templateEngine;
     /**
-     * @var JsonSerializer
+     * @var Serializer
      */
-    protected $jsonSerializer;
+    protected $serializer;
     /**
      * @var ServerRequestInterface
      */
@@ -46,13 +46,13 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * OutputLayer constructor.
-     * @param JsonSerializer $jsonSerializer
+     * @param Serializer $serializer
      * @param Engine $templateEngine
      * @param ServerRequestInterface $serverRequest
      */
-    public function __construct(JsonSerializer $jsonSerializer, Engine $templateEngine, ServerRequestInterface $serverRequest)
+    public function __construct(Serializer $serializer, Engine $templateEngine, ServerRequestInterface $serverRequest)
     {
-        $this->jsonSerializer = $jsonSerializer;
+        $this->serializer = $serializer;
         $this->templateEngine = $templateEngine;
         $this->serverRequest = $serverRequest;
     }
@@ -158,7 +158,7 @@ class ResponseBuilder implements PostProcessorInterface
      */
     private function modifyResponseForJsonResult(ResponseInterface $response, JsonResult $jsonResult)
     {
-        $json = $this->jsonSerializer->serialize($jsonResult->getData());
+        $json = $this->serializer->serialize($jsonResult->getData(), 'json');
         $stream = \GuzzleHttp\Psr7\stream_for($json);
         $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', 'application/json')->withBody($stream);

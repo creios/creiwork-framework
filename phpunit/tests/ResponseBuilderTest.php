@@ -12,6 +12,7 @@ use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Disposition;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
+use JMS\Serializer\Serializer;
 use League\Plates\Engine;
 use Psr\Http\Message\ServerRequestInterface;
 use Zumba\Util\JsonSerializer;
@@ -27,7 +28,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     private $responseBuilder;
     /** @var \PHPUnit_Framework_MockObject_MockObject|Engine */
     private $engine;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|JsonSerializer */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|Serializer */
     private $serializer;
     /** @var \PHPUnit_Framework_MockObject_MockObject|ServerRequestInterface */
     private $serverRequest;
@@ -37,7 +38,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->engine = $this->createMock(Engine::class);
-        $this->serializer = $this->createMock(JsonSerializer::class);
+        $this->serializer = $this->createMock(Serializer::class);
         $this->serverRequest = $this->createMock(ServerRequestInterface::class);
         $this->responseBuilder = new ResponseBuilder($this->serializer, $this->engine, $this->serverRequest);
         $this->stream = fopen('php://temp', 'r+');
