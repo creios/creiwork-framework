@@ -3,55 +3,39 @@
 namespace Creios\Creiwork\Framework;
 
 use Aura\Session\SegmentInterface;
+use JMS\Serializer\Serializer;
 use Noodlehaus\Config;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use TimTegeler\Routerunner\Controller\ControllerInterface;
 
 /**
- * Class BaseController
- * @package Creios\Creiwork\Controller
+ * Class BaseRestController
+ * @package Creios\Creiwork\Framework
  */
-abstract class BaseController implements ControllerInterface
+abstract class BaseRestController extends BaseController
 {
 
     /**
-     * @var ServerRequestInterface
+     * @var Serializer
      */
     protected $serializer;
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-    /**
-     * @var SegmentInterface
-     */
-    protected $session;
-    /**
-     * @var Config
-     */
-    protected $config;
-    /**
-     * @var String
-     */
-    protected $reroutedPath;
 
     /**
-     * BaseController constructor.
+     * BaseRestController constructor.
      * @param ServerRequestInterface $serverRequest
      * @param LoggerInterface $logger
      * @param SegmentInterface $session
      * @param Config $config
+     * @param Serializer $serializer
      */
     public function __construct(ServerRequestInterface $serverRequest,
                                 LoggerInterface $logger,
                                 SegmentInterface $session,
-                                Config $config)
+                                Config $config,
+                                Serializer $serializer)
     {
-        $this->serializer = $serverRequest;
-        $this->logger = $logger;
-        $this->session = $session;
-        $this->config = $config;
+        parent::__construct($serverRequest, $logger, $session, $config);
+        $this->serializer = $serializer;
     }
 
     /**
