@@ -16,10 +16,6 @@ abstract class BaseController implements ControllerInterface
 {
 
     /**
-     * @var ServerRequestInterface
-     */
-    protected $serializer;
-    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -35,6 +31,10 @@ abstract class BaseController implements ControllerInterface
      * @var String
      */
     protected $reroutedPath;
+    /**
+     * @var ServerRequestInterface
+     */
+    private $request;
 
     /**
      * BaseController constructor.
@@ -48,7 +48,7 @@ abstract class BaseController implements ControllerInterface
                                 SegmentInterface $session,
                                 Config $config)
     {
-        $this->serializer = $serverRequest;
+        $this->request = $serverRequest;
         $this->logger = $logger;
         $this->session = $session;
         $this->config = $config;
