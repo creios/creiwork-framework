@@ -122,6 +122,39 @@ class Creiwork
     }
 
     /**
+     * @return string
+     */
+    private function getRouterConfigFile()
+    {
+        return $this->generateFilePath($this->config->get(self::routerConfigKey));
+    }
+
+    /**
+     * @param $filePath
+     * @return string
+     */
+    private function generateFilePath($filePath)
+    {
+        return realpath($this->configDirectoryPath . $filePath);
+    }
+
+    /**
+     * @return string
+     */
+    private function getTemplateDirectory()
+    {
+        return $this->generateFilePath($this->config->get(self::templateDirKey));
+    }
+
+    /**
+     * @return string
+     */
+    private function getLoggerDirectory()
+    {
+        return $this->generateFilePath($this->config->get(self::loggerDirKey));
+    }
+
+    /**
      * @return array
      */
     private function standardMiddlewareStack()
@@ -158,6 +191,17 @@ class Creiwork
         $this->checkConfigKey(self::routerConfigKey);
         $this->checkConfigKey(self::loggerDirKey);
         $this->checkConfigKey(self::templateDirKey);
+    }
+
+    /**
+     * @param string $key
+     * @throws ConfigException
+     */
+    private function checkConfigKey($key)
+    {
+        if (!$this->config->has($key)) {
+            throw new ConfigException("Config file doesn't contain '${key}''");
+        }
     }
 
     /**
@@ -205,50 +249,6 @@ class Creiwork
         }
 
         stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
-    }
-
-    /**
-     * @return string
-     */
-    private function getRouterConfigFile()
-    {
-        return $this->generateFilePath($this->config->get(self::routerConfigKey));
-    }
-
-    /**
-     * @param $filePath
-     * @return string
-     */
-    private function generateFilePath($filePath)
-    {
-        return realpath($this->configDirectoryPath . $filePath);
-    }
-
-    /**
-     * @return string
-     */
-    private function getTemplateDirectory()
-    {
-        return $this->generateFilePath($this->config->get(self::templateDirKey));
-    }
-
-    /**
-     * @return string
-     */
-    private function getLoggerDirectory()
-    {
-        return $this->generateFilePath($this->config->get(self::loggerDirKey));
-    }
-
-    /**
-     * @param string $key
-     * @throws ConfigException
-     */
-    private function checkConfigKey($key)
-    {
-        if (!$this->config->has($key)) {
-            throw new ConfigException("Config file doesn't contain '${key}''");
-        }
     }
 
     /**

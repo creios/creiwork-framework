@@ -34,6 +34,42 @@ class StringResult extends Result implements MimeTypeResultInterface, StatusCode
     }
 
     /**
+     * @param $string
+     * @return StringResult
+     */
+    public static function createPlainTextResult($string)
+    {
+        return (new StringResult($string))->withMimeType('text/plain');
+    }
+
+    /**
+     * @param $string
+     * @return StringResult
+     */
+    public static function createJsonResult($string)
+    {
+        return (new StringResult($string))->withMimeType('application/json');
+    }
+
+    /**
+     * @param $string
+     * @return StringResult
+     */
+    public static function createXmlResult($string)
+    {
+        return (new StringResult($string))->withMimeType('text/xml');
+    }
+
+    /**
+     * @param $string
+     * @return StringResult
+     */
+    public static function createHtmlResult($string)
+    {
+        return (new StringResult($string))->withMimeType('text/html');
+    }
+
+    /**
      * @return string
      */
     public function getPlainText()

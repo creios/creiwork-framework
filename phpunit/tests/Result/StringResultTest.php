@@ -1,15 +1,13 @@
 <?php
 
-namespace Creios\Creiwork\Framework;
+namespace Creios\Creiwork\Framework\Result;
 
-use Creios\Creiwork\Framework\Result\StringResult;
-
-class ResultFactoryTest extends \PHPUnit_Framework_TestCase
+class StringResultTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testCreatePlainTextResult()
     {
-        $result = ResultFactory::createPlainTextResult('test');
+        $result = StringResult::createPlainTextResult('test');
         $this->assertInstanceOf(StringResult::class, $result);
         $this->assertEquals('test', $result->getPlainText());
         $this->assertEquals('text/plain', $result->getMimeType());
@@ -41,7 +39,7 @@ class ResultFactoryTest extends \PHPUnit_Framework_TestCase
 </Kreditkarte>
 XML;
 
-        $result = ResultFactory::createXmlResult($xml);
+        $result = StringResult::createXmlResult($xml);
         $this->assertInstanceOf(StringResult::class, $result);
         $this->assertEquals($xml, $result->getPlainText());
         $this->assertEquals('text/xml', $result->getMimeType());
@@ -65,7 +63,7 @@ XML;
 </html>
 HTML;
 
-        $result = ResultFactory::createHtmlResult($html);
+        $result = StringResult::createHtmlResult($html);
         $this->assertInstanceOf(StringResult::class, $result);
         $this->assertEquals($html, $result->getPlainText());
         $this->assertEquals('text/html', $result->getMimeType());
@@ -93,7 +91,7 @@ HTML;
   }
 }
 JSON;
-        $result = ResultFactory::createJsonResult($json);
+        $result = StringResult::createJsonResult($json);
         $this->assertInstanceOf(StringResult::class, $result);
         $this->assertEquals($json, $result->getPlainText());
         $this->assertEquals('application/json', $result->getMimeType());

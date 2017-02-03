@@ -2,6 +2,8 @@
 
 namespace Creios\Creiwork\Framework;
 
+use Creios\Creiwork\Framework\Result\StringResult;
+
 class TestController extends BaseController
 {
     /**
@@ -9,7 +11,7 @@ class TestController extends BaseController
      */
     public function test()
     {
-        return ResultFactory::createPlainTextResult('Controller has been executed');
+        return StringResult::createPlainTextResult('Controller has been executed');
     }
 }
 

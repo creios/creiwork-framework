@@ -90,7 +90,7 @@ class ResponseBuilder implements PostProcessorInterface
         } elseif ($output instanceof CsvResult) {
             $response = $this->modifyResponseForCsvResult($response, $output);
         } else {
-            $response = $this->modifyResponseForStringResult($response, ResultFactory::createPlainTextResult($output));
+            $response = $this->modifyResponseForStringResult($response, StringResult::createPlainTextResult($output));
         }
 
         if ($output instanceof StatusCodeResultInterface) {
