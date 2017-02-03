@@ -269,7 +269,7 @@ class Creiwork
      */
     public function pushMiddleware($middleware)
     {
-        array_push($this->middlewareStack, $middleware);
+        array_unshift($this->middlewareStack, $middleware);
         return $this;
     }
 }
