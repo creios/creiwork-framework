@@ -12,7 +12,6 @@ use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\NginxFileResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
-use Creios\Creiwork\Framework\Result\StringBufferResult;
 use Creios\Creiwork\Framework\Result\StringResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
@@ -81,8 +80,6 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForWebServerFileResult($response, $output, 'X-Sendfile');
         } elseif ($output instanceof NginxFileResult) {
             $response = $this->modifyResponseForWebServerFileResult($response, $output, 'X-Accel-Redirect');
-        } elseif ($output instanceof StringBufferResult) {
-            $response = $this->modifyResponseForStringBufferResult($response, $output);
         } elseif ($output instanceof StreamResult) {
             $response = $this->modifyResponseForStreamResult($response, $output);
         } elseif ($output instanceof StringResult) {
@@ -213,23 +210,6 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $response->withHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($result->getPath())));
         }
         return $response->withHeader($redirectHeaderKey, $result->getPath())->withHeader('Content-Type', $mimeType);
-    }
-
-    /**
-     * @param ResponseInterface $response
-     * @param StringBufferResult $stringBufferResult
-     * @return ResponseInterface
-     */
-    private function modifyResponseForStringBufferResult(ResponseInterface $response, StringBufferResult $stringBufferResult)
-    {
-        if ($stringBufferResult->getMimeType() != null) {
-            $mimeType = $stringBufferResult->getMimeType();
-        } else {
-            $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->buffer($stringBufferResult->getBuffer());
-        }
-        $stream = \GuzzleHttp\Psr7\stream_for($stringBufferResult->getBuffer());
-        $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', $mimeType)->withBody($stream);
     }
 
     /**

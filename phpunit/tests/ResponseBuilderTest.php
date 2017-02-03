@@ -8,6 +8,7 @@ use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\NginxFileResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
+use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Disposition;
@@ -16,7 +17,6 @@ use GuzzleHttp\Psr7\Stream;
 use JMS\Serializer\Serializer;
 use League\Plates\Engine;
 use Psr\Http\Message\ServerRequestInterface;
-use Zumba\Util\JsonSerializer;
 
 /**
  * Class ResponseBuilderTest
@@ -91,6 +91,13 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
         $this->assertEquals($expectedResponse->getStatusCode(), $actualResponse->getStatusCode());
+
+        $this->serverRequest->method('getServerParams')->willReturn(['REQUEST_URI' => 'http://localhost/redirect2']);
+        $expectedResponse = (new Response())->withStatus(StatusCodes::HTTP_FOUND)->withHeader('Location', 'http://localhost/redirect2');
+        $result = new RedirectResult();
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
+        $this->assertEquals($expectedResponse->getStatusCode(), $actualResponse->getStatusCode());
     }
 
     public function testPlainResult()
@@ -114,6 +121,11 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 40);
         $result = new FileResult(__DIR__ . '/../asset/textfile.txt');
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
+
+        $expectedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 40);
+        $result = (new FileResult(__DIR__ . '/../asset/textfile.txt'))->withMimeType('text/plain');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
@@ -210,5 +222,19 @@ CSV;
         $result = (new NginxFileResult(__DIR__ . '/../asset/textfile.txt'))->withMimeType('text/plain');
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
+
+    public function testStreamResult()
+    {
+        $expectedResponse = (new Response())
+            ->withHeader('Content-Type', 'text/plain')
+            ->withHeader('Content-Length', 11);
+        $testResource = fopen('php://memory', 'rw');
+        fwrite($testResource, 'Test string');
+        fseek($testResource, 0);
+        $result = (new StreamResult($testResource, 'text/plain'));
+        $response = $this->responseBuilder->process($result);
+        $this->assertEquals($expectedResponse->getHeaders(), $response->getHeaders());
+        $this->assertEquals('Test string', $response->getBody()->getContents());
     }
 }
