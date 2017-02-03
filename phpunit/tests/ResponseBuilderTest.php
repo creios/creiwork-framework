@@ -7,6 +7,7 @@ use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\NginxFileResult;
+use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringResult;
@@ -237,4 +238,13 @@ CSV;
         $this->assertEquals($expectedResponse->getHeaders(), $response->getHeaders());
         $this->assertEquals('Test string', $response->getBody()->getContents());
     }
+
+    public function testNoContentResult()
+    {
+        $expectedResponse = (new Response())->withStatus(StatusCodes::HTTP_NO_CONTENT);
+        $result = new NoContentResult();
+        $response = $this->responseBuilder->process($result);
+        $this->assertEquals($expectedResponse->getStatusCode(), $response->getStatusCode());
+    }
+
 }
