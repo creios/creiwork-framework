@@ -34,7 +34,7 @@ abstract class BaseController implements ControllerInterface
     /**
      * @var ServerRequestInterface
      */
-    private $request;
+    protected $request;
 
     /**
      * BaseController constructor.
