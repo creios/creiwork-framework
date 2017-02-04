@@ -114,6 +114,20 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
+    public function testSerializableHtmlResultDownload()
+    {
+        $expectedResponse = (new Response())
+            ->withHeader('Content-Type', 'text/html')
+            // Using 0 because serializer is not fully mocked
+            ->withHeader('Content-Length', 0)
+            ->withHeader('Content-Disposition', 'attachment; filename=test.html')
+            ->withBody(new Stream($this->stream));
+        $disposition = (new Disposition(Disposition::ATTACHMENT))->withFilename('test.html');
+        $result = SerializableResult::createHtmlResult(['key' => 'value'])->withDisposition($disposition);
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
+
     public function testRedirectResult()
     {
         $expectedResponse = (new Response())->withStatus(StatusCodes::HTTP_FOUND)->withHeader('Location', 'http://localhost/redirect');
