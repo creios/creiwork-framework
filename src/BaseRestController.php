@@ -17,10 +17,10 @@ use Psr\Log\LoggerInterface;
 abstract class BaseRestController extends BaseController
 {
 
-//    /**
-//     * @var Serializer
-//     */
-//    protected $serializer;
+    /**
+     * @var Serializer
+     */
+    protected $serializer;
 //    protected $repository;
 //    protected $model;
     protected $mimeType = "application/json";
