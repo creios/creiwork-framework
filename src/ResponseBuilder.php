@@ -158,9 +158,19 @@ class ResponseBuilder implements PostProcessorInterface
      */
     private function modifyResponseForSerializableResult(ResponseInterface $response, SerializableResult $serializableResult)
     {
-        $json = $this->serializer->serialize($serializableResult->getData(),
-            str_replace(['application/json', 'text/xml'], ['json', 'xml'], $serializableResult->getMimeType()));
-        $stream = \GuzzleHttp\Psr7\stream_for($json);
+        switch ($serializableResult->getMimeType()) {
+            case 'text/plain':
+                $data = print_r($serializableResult->getData(), true);
+                break;
+            case 'text/xml':
+                $data = $this->serializer->serialize($serializableResult->getData(), 'xml');
+                break;
+            case 'application/json':
+            default:
+                $data = $this->serializer->serialize($serializableResult->getData(), 'json');
+                break;
+        }
+        $stream = \GuzzleHttp\Psr7\stream_for($data);
         $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', $serializableResult->getMimeType())->withBody($stream);
     }

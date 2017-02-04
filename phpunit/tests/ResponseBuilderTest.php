@@ -5,7 +5,6 @@ namespace Creios\Creiwork\Framework;
 use Creios\Creiwork\Framework\Result\ApacheFileResult;
 use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\FileResult;
-use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\NginxFileResult;
 use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
@@ -77,7 +76,9 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSerializableJsonResultDownload()
     {
-        $expectedResponse = (new Response())->withHeader('Content-Type', 'application/json')->withHeader('Content-Length', 0)
+        $expectedResponse = (new Response())->withHeader('Content-Type', 'application/json')
+            // Using 0 because serializer is not fully mocked
+            ->withHeader('Content-Length', 0)
             ->withHeader('Content-Disposition', 'attachment; filename=test.json')
             ->withBody(new Stream($this->stream));
         $disposition = (new Disposition(Disposition::ATTACHMENT))->withFilename('test.json');
@@ -88,11 +89,27 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSerializableXmlResultDownload()
     {
-        $expectedResponse = (new Response())->withHeader('Content-Type', 'text/xml')->withHeader('Content-Length', 0)
+        $expectedResponse = (new Response())
+            ->withHeader('Content-Type', 'text/xml')
+            // Using 0 because serializer is not fully mocked
+            ->withHeader('Content-Length', 0)
             ->withHeader('Content-Disposition', 'attachment; filename=test.xml')
             ->withBody(new Stream($this->stream));
         $disposition = (new Disposition(Disposition::ATTACHMENT))->withFilename('test.xml');
         $result = SerializableResult::createXmlResult(['key' => 'value'])->withDisposition($disposition);
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
+
+    public function testSerializablePlainTextResultDownload()
+    {
+        $expectedResponse = (new Response())
+            ->withHeader('Content-Type', 'text/plain')
+            ->withHeader('Content-Length', 29)
+            ->withHeader('Content-Disposition', 'attachment; filename=test.txt')
+            ->withBody(new Stream($this->stream));
+        $disposition = (new Disposition(Disposition::ATTACHMENT))->withFilename('test.txt');
+        $result = SerializableResult::createPlainTextResult(['key' => 'value'])->withDisposition($disposition);
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
