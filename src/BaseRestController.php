@@ -81,7 +81,7 @@ abstract class BaseRestController extends BaseController
     }
 
     /**
-     * @return Result
+     * @return NoContentResult
      */
     protected function standardDelete()
     {
