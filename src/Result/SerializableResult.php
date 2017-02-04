@@ -25,7 +25,7 @@ class SerializableResult extends Result implements
 
     /**
      * SerializableResult constructor.
-     * @param $data
+     * @param mixed $data
      */
     public function __construct($data)
     {
@@ -33,7 +33,7 @@ class SerializableResult extends Result implements
     }
 
     /**
-     * @param $data
+     * @param mixed $data
      * @return SerializableResult
      */
     public static function createJsonResult($data)
@@ -42,7 +42,7 @@ class SerializableResult extends Result implements
     }
 
     /**
-     * @param $data
+     * @param mixed $data
      * @return SerializableResult
      */
     public static function createXmlResult($data)
@@ -51,11 +51,20 @@ class SerializableResult extends Result implements
     }
 
     /**
-     * @param $data
+     * @param mixed $data
      * @return SerializableResult
      */
     public static function createPlainTextResult($data)
     {
         return (new SerializableResult($data))->withMimeType('text/plain');
+    }
+
+    /**
+     * @param mixed $data
+     * @return SerializableResult
+     */
+    public static function createHtmlResult($data)
+    {
+        return (new SerializableResult($data))->withMimeType('text/html');
     }
 }

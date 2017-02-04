@@ -160,17 +160,22 @@ class ResponseBuilder implements PostProcessorInterface
     {
         switch ($serializableResult->getMimeType()) {
             case 'text/plain':
-                $data = print_r($serializableResult->getData(), true);
+                $payload = print_r($serializableResult->getData(), true);
                 break;
             case 'text/xml':
-                $data = $this->serializer->serialize($serializableResult->getData(), 'xml');
+                $payload = $this->serializer->serialize($serializableResult->getData(), 'xml');
+                break;
+            case 'text/html':
+                $data = $this->serializer->serialize($serializableResult->getData(), 'json');
+                $this->templateEngine->addFolder('creiwork', __DIR__ . '/Template');
+                $payload = $this->templateEngine->render('creiwork::serializableResult', ['data' => $data]);
                 break;
             case 'application/json':
             default:
-                $data = $this->serializer->serialize($serializableResult->getData(), 'json');
+                $payload = $this->serializer->serialize($serializableResult->getData(), 'json');
                 break;
         }
-        $stream = \GuzzleHttp\Psr7\stream_for($data);
+        $stream = \GuzzleHttp\Psr7\stream_for($payload);
         $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', $serializableResult->getMimeType())->withBody($stream);
     }
