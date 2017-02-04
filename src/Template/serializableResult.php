@@ -1,3 +1,7 @@
+<?php
+/** @var \Psr\Http\Message\ServerRequestInterface $request */
+/** @var string $data */
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,11 +13,16 @@
 <div class="container">
     <h1>Creiwork</h1>
     <ol class="breadcrumb">
-        <li class="active"><?php /** @var \Psr\Http\Message\ServerRequestInterface $request */
-            echo $this->e($request->getUri()->getPath()) ?></li>
+        <li>
+            <a href="http://<?= $request->getUri()->getHost() ?>">
+                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+            </a>
+        </li>
+        <li>
+            <a href="http://<?= $request->getUri() ?>"><?= trim($request->getUri()->getPath(),'/'); ?></a>
+        </li>
     </ol>
-    <pre><?php /** @var string $data */
-        echo $this->e($data) ?></pre>
+    <pre><?php echo $this->e($data) ?></pre>
 </div>
 </body>
 </html>
