@@ -2,19 +2,26 @@
 namespace Creios\Creiwork\Framework\Result;
 
 use Creios\Creiwork\Framework\Result\Interfaces\DataResultInterface;
+use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\MimeTypeResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
 use Creios\Creiwork\Framework\Result\Traits\DataResult;
+use Creios\Creiwork\Framework\Result\Traits\DisposableResult;
 use Creios\Creiwork\Framework\Result\Traits\MimeTypeResult;
 use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
 
-class SerializableResult extends Result implements DataResultInterface, MimeTypeResultInterface, StatusCodeResultInterface
+class SerializableResult extends Result implements
+    DataResultInterface,
+    MimeTypeResultInterface,
+    DisposableResultInterface,
+    StatusCodeResultInterface
 {
 
     use DataResult;
     use MimeTypeResult;
     use StatusCodeResult;
+    use DisposableResult;
 
     /**
      * SerializableResult constructor.

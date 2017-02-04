@@ -3,8 +3,8 @@
 namespace Creios\Creiwork\Framework;
 
 use Aura\Session\SegmentInterface;
-use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\NoContentResult;
+use Creios\Creiwork\Framework\Result\SerializableResult;
 use JMS\Serializer\Serializer;
 use Monolog\Logger;
 use Noodlehaus\Config;
@@ -73,19 +73,19 @@ class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $result = $this->controller->_create();
-        $this->assertInstanceOf(JsonResult::class, $result);
+        $this->assertInstanceOf(SerializableResult::class, $result);
     }
 
     public function testRetrieve()
     {
         $result = $this->controller->_retrieve();
-        $this->assertInstanceOf(JsonResult::class, $result);
+        $this->assertInstanceOf(SerializableResult::class, $result);
     }
 
     public function testUpdate()
     {
         $result = $this->controller->_update();
-        $this->assertInstanceOf(JsonResult::class, $result);
+        $this->assertInstanceOf(SerializableResult::class, $result);
     }
 
     public function testDelete()
@@ -97,6 +97,6 @@ class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
     public function testList()
     {
         $result = $this->controller->_list();
-        $this->assertInstanceOf(JsonResult::class, $result);
+        $this->assertInstanceOf(SerializableResult::class, $result);
     }
 }

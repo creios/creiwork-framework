@@ -3,8 +3,8 @@
 namespace Creios\Creiwork\Framework;
 
 use Aura\Session\SegmentInterface;
-use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\NoContentResult;
+use Creios\Creiwork\Framework\Result\SerializableResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
 use JMS\Serializer\Serializer;
 use Noodlehaus\Config;
@@ -45,7 +45,7 @@ abstract class BaseRestController extends BaseController
     }
 
     /**
-     * @return JsonResult
+     * @return SerializableResult
      */
     protected function standardCreate()
     {
@@ -54,21 +54,21 @@ abstract class BaseRestController extends BaseController
         //  self::class,
         //  self::type);
         //$this->repository->insert($userModel);
-        return new JsonResult([]);
+        return new SerializableResult([]);
     }
 
     /**
-     * @return JsonResult
+     * @return SerializableResult
      */
     protected function standardRetrieve()
     {
         //$id = $this->request->getQueryParams()['id'];
         //$model = $this->repository->get($id);
-        return new JsonResult([]);
+        return new SerializableResult([]);
     }
 
     /**
-     * @return JsonResult
+     * @return SerializableResult
      */
     protected function standardUpdate()
     {
@@ -77,7 +77,7 @@ abstract class BaseRestController extends BaseController
         //  self::class,
         //  self::type);
         //$this->repository->update($userModel);
-        return new JsonResult([]);
+        return new SerializableResult([]);
     }
 
     /**
@@ -91,12 +91,12 @@ abstract class BaseRestController extends BaseController
     }
 
     /**
-     * @return JsonResult
+     * @return SerializableResult
      */
     protected function standardList()
     {
         //$model = $this->repository->all();
-        return new JsonResult([]);
+        return new SerializableResult([]);
     }
 
 }

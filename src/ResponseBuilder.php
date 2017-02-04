@@ -8,10 +8,10 @@ use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\FileResult;
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
-use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\NginxFileResult;
 use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
+use Creios\Creiwork\Framework\Result\SerializableResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
@@ -71,8 +71,8 @@ class ResponseBuilder implements PostProcessorInterface
 
         if ($output instanceof TemplateResult) {
             $response = $this->modifyResponseForTemplateResult($response, $output);
-        } else if ($output instanceof JsonResult) {
-            $response = $this->modifyResponseForJsonResult($response, $output);
+        } else if ($output instanceof SerializableResult) {
+            $response = $this->modifyResponseForSerializableResult($response, $output);
         } else if ($output instanceof NoContentResult) {
             $response = $this->modifyResponseForNoContentResult($response, $output);
         } else if ($output instanceof RedirectResult) {
@@ -153,15 +153,16 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param JsonResult $jsonResult
+     * @param SerializableResult $serializableResult
      * @return ResponseInterface
      */
-    private function modifyResponseForJsonResult(ResponseInterface $response, JsonResult $jsonResult)
+    private function modifyResponseForSerializableResult(ResponseInterface $response, SerializableResult $serializableResult)
     {
-        $json = $this->serializer->serialize($jsonResult->getData(), 'json');
+        $json = $this->serializer->serialize($serializableResult->getData(),
+            str_replace(['application/json', 'text/xml'], ['json', 'xml'], $serializableResult->getMimeType()));
         $stream = \GuzzleHttp\Psr7\stream_for($json);
         $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', 'application/json')->withBody($stream);
+        return $response->withHeader('Content-Type', $serializableResult->getMimeType())->withBody($stream);
     }
 
     /**

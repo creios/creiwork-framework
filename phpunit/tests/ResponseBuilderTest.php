@@ -9,6 +9,7 @@ use Creios\Creiwork\Framework\Result\JsonResult;
 use Creios\Creiwork\Framework\Result\NginxFileResult;
 use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
+use Creios\Creiwork\Framework\Result\SerializableResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
@@ -74,13 +75,24 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
-    public function testJsonResultDownload()
+    public function testSerializableJsonResultDownload()
     {
         $expectedResponse = (new Response())->withHeader('Content-Type', 'application/json')->withHeader('Content-Length', 0)
             ->withHeader('Content-Disposition', 'attachment; filename=test.json')
             ->withBody(new Stream($this->stream));
         $disposition = (new Disposition(Disposition::ATTACHMENT))->withFilename('test.json');
-        $result = (new JsonResult(['key' => 'value']))->withDisposition($disposition);
+        $result = SerializableResult::createJsonResult(['key' => 'value'])->withDisposition($disposition);
+        $actualResponse = $this->responseBuilder->process($result);
+        $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
+    }
+
+    public function testSerializableXmlResultDownload()
+    {
+        $expectedResponse = (new Response())->withHeader('Content-Type', 'text/xml')->withHeader('Content-Length', 0)
+            ->withHeader('Content-Disposition', 'attachment; filename=test.xml')
+            ->withBody(new Stream($this->stream));
+        $disposition = (new Disposition(Disposition::ATTACHMENT))->withFilename('test.xml');
+        $result = SerializableResult::createXmlResult(['key' => 'value'])->withDisposition($disposition);
         $actualResponse = $this->responseBuilder->process($result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
