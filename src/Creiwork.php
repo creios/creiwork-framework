@@ -21,7 +21,6 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Noodlehaus\Config;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use TimTegeler\Routerunner\Routerunner;
 use Whoops\Handler\PrettyPageHandler;
@@ -99,8 +98,6 @@ class Creiwork
             StreamHandler::class => function () {
                 return new StreamHandler($this->getLoggerDirectory() . '/info.log', Logger::INFO);
             },
-
-            ServerRequestInterface::class => factory([ServerRequest::class, 'fromGlobals']),
 
             SessionFactory::class => object()->constructor(),
 
@@ -227,7 +224,7 @@ class Creiwork
      */
     private function dispatch()
     {
-        $request = $this->container->get(ServerRequestInterface::class);
+        $request = ServerRequest::fromGlobals();
 
         $response = (new Dispatcher($this->middlewareStack, new ContainerResolver($this->container)))
             ->dispatch($request);
