@@ -48,21 +48,22 @@ class ResponseBuilder implements PostProcessorInterface
      * OutputLayer constructor.
      * @param Serializer $serializer
      * @param Engine $templateEngine
-     * @param ServerRequestInterface $serverRequest
      */
-    public function __construct(Serializer $serializer, Engine $templateEngine, ServerRequestInterface $serverRequest)
+    public function __construct(Serializer $serializer, Engine $templateEngine)
     {
         $this->serializer = $serializer;
         $this->templateEngine = $templateEngine;
-        $this->serverRequest = $serverRequest;
     }
 
     /**
+     * @param ServerRequestInterface $serverRequest
      * @param Result|string $output
      * @return ResponseInterface
      */
-    public function process($output)
+    public function process(ServerRequestInterface $serverRequest, $output)
     {
+        $this->serverRequest = $serverRequest;
+
         $response = (new Response())->withProtocolVersion('1.1');
 
         if ($output instanceof DisposableResultInterface) {

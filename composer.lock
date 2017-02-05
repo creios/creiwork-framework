@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4189d15dfe82de8495df71d420f35baa",
-    "content-hash": "645457db15d944f9c0290f261ae42ba4",
+    "hash": "94e8e6542ee8a4bef98340e1d9a24950",
+    "content-hash": "d1fd20d53178d54bce7124185b377bf9",
     "packages": [
         {
             "name": "aura/session",
@@ -1335,16 +1335,16 @@
         },
         {
             "name": "timtegeler/routerunner",
-            "version": "2.0.0",
+            "version": "dev-feature/psr7-only",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timtegeler/routerunner.git",
-                "reference": "9b8ff4e91c9b25bab58e3c905fc05c883e01e823"
+                "reference": "e5560c9799946bbe681856d7dd7d948253b9e5bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/9b8ff4e91c9b25bab58e3c905fc05c883e01e823",
-                "reference": "9b8ff4e91c9b25bab58e3c905fc05c883e01e823",
+                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/e5560c9799946bbe681856d7dd7d948253b9e5bc",
+                "reference": "e5560c9799946bbe681856d7dd7d948253b9e5bc",
                 "shasum": ""
             },
             "require": {
@@ -1356,7 +1356,7 @@
                 "symfony/yaml": "^3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.8.*"
+                "phpunit/phpunit": "^5.7"
             },
             "type": "library",
             "autoload": {
@@ -1375,22 +1375,22 @@
                 }
             ],
             "description": "Routerunner is a router for HTTP-request written in PHP",
-            "time": "2017-02-02 12:22:02"
+            "time": "2017-02-05 13:28:45"
         }
     ],
     "packages-dev": [
         {
             "name": "consolidation/annotated-command",
-            "version": "2.3.3",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/consolidation/annotated-command.git",
-                "reference": "c23ebfa81cb8c06dcea63afde98f444e818bceb2"
+                "reference": "80afffd362bd1cf83bef60db690a8c50d8390803"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/consolidation/annotated-command/zipball/c23ebfa81cb8c06dcea63afde98f444e818bceb2",
-                "reference": "c23ebfa81cb8c06dcea63afde98f444e818bceb2",
+                "url": "https://api.github.com/repos/consolidation/annotated-command/zipball/80afffd362bd1cf83bef60db690a8c50d8390803",
+                "reference": "80afffd362bd1cf83bef60db690a8c50d8390803",
                 "shasum": ""
             },
             "require": {
@@ -1429,7 +1429,7 @@
                 }
             ],
             "description": "Initialize Symfony Console commands from annotated command class methods.",
-            "time": "2017-01-30 22:46:53"
+            "time": "2017-02-04 06:13:54"
         },
         {
             "name": "consolidation/log",
@@ -2165,16 +2165,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.9",
+            "version": "5.7.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "69f832b87c731d5cacad7f91948778fe98335fdd"
+                "reference": "bf0804199f516fe80ffcc48ac6d4741c49baeb6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/69f832b87c731d5cacad7f91948778fe98335fdd",
-                "reference": "69f832b87c731d5cacad7f91948778fe98335fdd",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/bf0804199f516fe80ffcc48ac6d4741c49baeb6e",
+                "reference": "bf0804199f516fe80ffcc48ac6d4741c49baeb6e",
                 "shasum": ""
             },
             "require": {
@@ -2191,11 +2191,11 @@
                 "phpunit/php-text-template": "~1.2",
                 "phpunit/php-timer": "^1.0.6",
                 "phpunit/phpunit-mock-objects": "^3.2",
-                "sebastian/comparator": "~1.2.2",
+                "sebastian/comparator": "^1.2.4",
                 "sebastian/diff": "~1.2",
                 "sebastian/environment": "^1.3.4 || ^2.0",
                 "sebastian/exporter": "~2.0",
-                "sebastian/global-state": "^1.0 || ^2.0",
+                "sebastian/global-state": "^1.1",
                 "sebastian/object-enumerator": "~2.0",
                 "sebastian/resource-operations": "~1.0",
                 "sebastian/version": "~1.0|~2.0",
@@ -2243,7 +2243,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-01-28 06:14:33"
+            "time": "2017-02-04 09:03:53"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -3257,6 +3257,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "timtegeler/routerunner": 20,
         "mindplay/middleman": 20
     },
     "prefer-stable": false,
