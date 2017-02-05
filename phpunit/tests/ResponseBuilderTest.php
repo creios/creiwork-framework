@@ -52,7 +52,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
         $result = new TemplateResult('test', []);
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -60,7 +60,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = (new Response())->withStatus(StatusCodes::HTTP_OK)->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
         $result = (new TemplateResult('test', []))->withStatusCode(StatusCodes::HTTP_OK);
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getStatusCode(), $actualResponse->getStatusCode());
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
@@ -70,7 +70,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
         $expectedResponse = (new Response())->withHeader('Content-Type', 'text/html')->withHeader('Content-Length', 0)->withBody(new Stream($this->stream));
         $result = new TemplateResult('test');
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -83,7 +83,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
             ->withBody(new Stream($this->stream));
         $disposition = (new Disposition(Disposition::ATTACHMENT))->withFilename('test.json');
         $result = SerializableResult::createJsonResult(['key' => 'value'])->withDisposition($disposition);
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -97,7 +97,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
             ->withBody(new Stream($this->stream));
         $disposition = (new Disposition(Disposition::ATTACHMENT))->withFilename('test.xml');
         $result = SerializableResult::createXmlResult(['key' => 'value'])->withDisposition($disposition);
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -110,7 +110,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
             ->withBody(new Stream($this->stream));
         $disposition = (new Disposition(Disposition::ATTACHMENT))->withFilename('test.txt');
         $result = SerializableResult::createPlainTextResult(['key' => 'value'])->withDisposition($disposition);
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -124,7 +124,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
             ->withBody(new Stream($this->stream));
         $disposition = (new Disposition(Disposition::ATTACHMENT))->withFilename('test.html');
         $result = SerializableResult::createHtmlResult(['key' => 'value'])->withDisposition($disposition);
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -132,14 +132,14 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = (new Response())->withStatus(StatusCodes::HTTP_FOUND)->withHeader('Location', 'http://localhost/redirect');
         $result = new RedirectResult('http://localhost/redirect');
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
         $this->assertEquals($expectedResponse->getStatusCode(), $actualResponse->getStatusCode());
 
         $this->serverRequest->method('getServerParams')->willReturn(['REQUEST_URI' => 'http://localhost/redirect2']);
         $expectedResponse = (new Response())->withStatus(StatusCodes::HTTP_FOUND)->withHeader('Location', 'http://localhost/redirect2');
         $result = new RedirectResult();
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
         $this->assertEquals($expectedResponse->getStatusCode(), $actualResponse->getStatusCode());
     }
@@ -148,7 +148,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 21);
         $result = 'Result is a plaintext';
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -156,7 +156,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = (new Response())->withStatus(StatusCodes::HTTP_NOT_FOUND)->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 21);
         $result = StringResult::createPlainTextResult('Result is a plaintext')->withStatusCode(StatusCodes::HTTP_NOT_FOUND);
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getStatusCode(), $actualResponse->getStatusCode());
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
@@ -165,12 +165,12 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 40);
         $result = new FileResult(__DIR__ . '/../asset/textfile.txt');
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
 
         $expectedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 40);
         $result = (new FileResult(__DIR__ . '/../asset/textfile.txt'))->withMimeType('text/plain');
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -190,7 +190,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 </html>
 HTML;
         $result = StringResult::createHtmlResult($html);
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -205,7 +205,7 @@ HTML;
 </user>
 XML;
         $result = StringResult::createXmlResult($xml);
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -217,7 +217,7 @@ XML;
         ]))->withDisposition(
             (new Disposition(Disposition::ATTACHMENT))
                 ->withFilename('foobar.csv'));
-        $response = $this->responseBuilder->process($csvResult);
+        $response = $this->responseBuilder->process($this->serverRequest, $csvResult);
         $this->assertEquals(['text/csv'], $response->getHeader('Content-Type'));
         $this->assertEquals(
             ['attachment; filename=foobar.csv'],
@@ -237,7 +237,7 @@ CSV;
             ->withHeader('X-Sendfile', __DIR__ . '/../asset/textfile.txt')
             ->withHeader('Content-Disposition', 'attachment; filename="textfile.txt"');
         $result = new ApacheFileResult(__DIR__ . '/../asset/textfile.txt');
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
 
         $expectedResponse = (new Response())
@@ -245,7 +245,7 @@ CSV;
             ->withHeader('X-Sendfile', __DIR__ . '/../asset/textfile.txt')
             ->withHeader('Content-Disposition', 'attachment; filename="textfile.txt"');
         $result = (new ApacheFileResult(__DIR__ . '/../asset/textfile.txt'))->withMimeType('text/plain');
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -256,7 +256,7 @@ CSV;
             ->withHeader('X-Accel-Redirect', __DIR__ . '/../asset/textfile.txt')
             ->withHeader('Content-Disposition', 'attachment; filename="textfile.txt"');
         $result = new NginxFileResult(__DIR__ . '/../asset/textfile.txt');
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
 
         $expectedResponse = (new Response())
@@ -264,7 +264,7 @@ CSV;
             ->withHeader('X-Accel-Redirect', __DIR__ . '/../asset/textfile.txt')
             ->withHeader('Content-Disposition', 'attachment; filename="textfile.txt"');
         $result = (new NginxFileResult(__DIR__ . '/../asset/textfile.txt'))->withMimeType('text/plain');
-        $actualResponse = $this->responseBuilder->process($result);
+        $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
 
@@ -277,7 +277,7 @@ CSV;
         fwrite($testResource, 'Test string');
         fseek($testResource, 0);
         $result = (new StreamResult($testResource, 'text/plain'));
-        $response = $this->responseBuilder->process($result);
+        $response = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $response->getHeaders());
         $this->assertEquals('Test string', $response->getBody()->getContents());
     }
@@ -286,7 +286,7 @@ CSV;
     {
         $expectedResponse = (new Response())->withStatus(StatusCodes::HTTP_NO_CONTENT);
         $result = new NoContentResult();
-        $response = $this->responseBuilder->process($result);
+        $response = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getStatusCode(), $response->getStatusCode());
     }
 
