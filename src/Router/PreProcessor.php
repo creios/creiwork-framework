@@ -3,6 +3,7 @@
 namespace Creios\Creiwork\Framework\Router;
 
 use Creios\Creiwork\Framework\BaseRestController;
+use Creios\Creiwork\Framework\Exception\DeserializeException;
 use JMS\Serializer\Serializer;
 use Psr\Http\Message\ServerRequestInterface;
 use TimTegeler\Routerunner\Controller\ControllerInterface;
@@ -27,15 +28,21 @@ class PreProcessor implements PreProcessorInterface
      * @param ServerRequestInterface $request
      * @param ControllerInterface $controller
      * @return ServerRequestInterface
+     * @throws DeserializeException
      */
     public function process(ServerRequestInterface $request, ControllerInterface $controller)
     {
         if ($controller instanceof BaseRestController) {
-            $data = $this->serializer->deserialize(
-                $request->getBody(),
-                $controller->getModel(),
-                'json');
-            $request = $request->withParsedBody($data);
+            if ($controller->getModel() === null) {
+                throw new DeserializeException('You need to set the model property');
+            }
+            if ($request->getBody()->getSize() > 0) {
+                $data = $this->serializer->deserialize(
+                    $request->getBody(),
+                    $controller->getModel(),
+                    'json');
+                $request = $request->withParsedBody($data);
+            }
         }
         return $request;
     }
