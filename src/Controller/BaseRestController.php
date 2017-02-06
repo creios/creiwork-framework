@@ -1,6 +1,6 @@
 <?php
 
-namespace Creios\Creiwork\Framework;
+namespace Creios\Creiwork\Framework\Controller;
 
 use Aura\Session\SegmentInterface;
 use Creios\Creiwork\Framework\Result\NoContentResult;

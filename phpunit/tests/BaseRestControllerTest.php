@@ -3,6 +3,7 @@
 namespace Creios\Creiwork\Framework;
 
 use Aura\Session\SegmentInterface;
+use Creios\Creiwork\Framework\Controller\BaseRestController;
 use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\SerializableResult;
 use JMS\Serializer\Serializer;

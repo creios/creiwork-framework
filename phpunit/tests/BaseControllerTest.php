@@ -3,6 +3,7 @@
 namespace Creios\Creiwork\Framework;
 
 use Aura\Session\SegmentInterface;
+use Creios\Creiwork\Framework\Controller\BaseController;
 use Monolog\Logger;
 use Noodlehaus\Config;
 use Psr\Http\Message\ServerRequestInterface;

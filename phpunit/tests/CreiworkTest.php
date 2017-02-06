@@ -2,6 +2,7 @@
 
 namespace Creios\Creiwork\Framework;
 
+use Creios\Creiwork\Framework\Controller\BaseController;
 use Creios\Creiwork\Framework\Result\StringResult;
 
 class TestController extends BaseController
