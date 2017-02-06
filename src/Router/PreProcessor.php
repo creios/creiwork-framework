@@ -34,7 +34,7 @@ class PreProcessor implements PreProcessorInterface
             $data = $this->serializer->deserialize(
                 $request->getBody(),
                 $controller->getModel(),
-                $controller->getMimeType());
+                'json');
             $request = $request->withParsedBody($data);
         }
         return $request;

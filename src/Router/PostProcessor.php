@@ -169,7 +169,7 @@ class PostProcessor implements PostProcessorInterface
                 break;
             case 'text/html':
                 $data = $this->serializer->serialize($serializableResult->getData(), 'json');
-                $this->templateEngine->addFolder('creiwork', __DIR__ . '/Template');
+                $this->templateEngine->addFolder('creiwork', __DIR__ . '/../Template');
                 $payload = $this->templateEngine->render(
                     'creiwork::serializableResult',
                     [
