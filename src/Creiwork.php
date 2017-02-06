@@ -37,6 +37,8 @@ class Creiwork
     /** @var string */
     const routerConfigKey = 'router-config';
     /** @var string */
+    const modelDirectoryKey = 'model-dir';
+    /** @var string */
     const loggerDirKey = 'logger-dir';
     /** @var string */
     const templateDirKey = 'template-dir';
@@ -112,10 +114,19 @@ class Creiwork
             SerializerBuilder::class => factory([SerializerBuilder::class, 'create']),
 
             Serializer::class => function (SerializerBuilder $serializerBuilder) {
-                return $serializerBuilder->build();
+                return $serializerBuilder->addMetadataDir($this->getModelDirectory())->build();
             },
 
         ];
+    }
+
+    /**
+     * @param $filePath
+     * @return string
+     */
+    private function generateFilePath($filePath)
+    {
+        return realpath($this->configDirectoryPath . $filePath);
     }
 
     /**
@@ -127,12 +138,11 @@ class Creiwork
     }
 
     /**
-     * @param $filePath
      * @return string
      */
-    private function generateFilePath($filePath)
+    private function getModelDirectory()
     {
-        return realpath($this->configDirectoryPath . $filePath);
+        return $this->generateFilePath($this->config->get(self::modelDirectoryKey));
     }
 
     /**
@@ -188,6 +198,7 @@ class Creiwork
         $this->checkConfigKey(self::routerConfigKey);
         $this->checkConfigKey(self::loggerDirKey);
         $this->checkConfigKey(self::templateDirKey);
+        $this->checkConfigKey(self::modelDirectoryKey);
     }
 
     /**
