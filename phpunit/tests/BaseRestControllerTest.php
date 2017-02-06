@@ -10,33 +10,34 @@ use JMS\Serializer\Serializer;
 use Monolog\Logger;
 use Noodlehaus\Config;
 use Psr\Http\Message\ServerRequestInterface;
+use TimTegeler\Routerunner\Controller\RestControllerInterface;
 
-class WrappedBaseRestController extends BaseRestController
+class WrappedBaseRestController extends BaseRestController implements RestControllerInterface
 {
 
-    public function _create()
+    public function _create(ServerRequestInterface $request)
     {
-        return $this->standardCreate();
+        return $this->standardCreate($request);
     }
 
-    public function _update()
+    public function _update(ServerRequestInterface $request, $id)
     {
-        return $this->standardUpdate();
+        return $this->standardUpdate($request, $id);
     }
 
-    public function _retrieve()
+    public function _retrieve(ServerRequestInterface $request, $id)
     {
-        return $this->standardRetrieve();
+        return $this->standardRetrieve($request, $id);
     }
 
-    public function _delete()
+    public function _delete(ServerRequestInterface $request, $id)
     {
-        return $this->standardDelete();
+        return $this->standardDelete($request, $id);
     }
 
-    public function _list()
+    public function _list(ServerRequestInterface $request)
     {
-        return $this->standardList();
+        return $this->standardList($request);
     }
 }
 
@@ -73,31 +74,31 @@ class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $result = $this->controller->_create();
+        $result = $this->controller->_create($this->serverRequest);
         $this->assertInstanceOf(SerializableResult::class, $result);
     }
 
     public function testRetrieve()
     {
-        $result = $this->controller->_retrieve();
+        $result = $this->controller->_retrieve($this->serverRequest, 1);
         $this->assertInstanceOf(SerializableResult::class, $result);
     }
 
     public function testUpdate()
     {
-        $result = $this->controller->_update();
+        $result = $this->controller->_update($this->serverRequest, 1);
         $this->assertInstanceOf(SerializableResult::class, $result);
     }
 
     public function testDelete()
     {
-        $result = $this->controller->_delete();
+        $result = $this->controller->_delete($this->serverRequest, 1);
         $this->assertInstanceOf(NoContentResult::class, $result);
     }
 
     public function testList()
     {
-        $result = $this->controller->_list();
+        $result = $this->controller->_list($this->serverRequest);
         $this->assertInstanceOf(SerializableResult::class, $result);
     }
 }

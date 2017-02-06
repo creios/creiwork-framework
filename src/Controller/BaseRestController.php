@@ -2,13 +2,9 @@
 
 namespace Creios\Creiwork\Framework\Controller;
 
-use Aura\Session\SegmentInterface;
 use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\SerializableResult;
-use JMS\Serializer\Serializer;
-use Noodlehaus\Config;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class BaseRestController
@@ -17,10 +13,6 @@ use Psr\Log\LoggerInterface;
 abstract class BaseRestController extends BaseController
 {
 
-    /**
-     * @var Serializer
-     */
-    protected $serializer;
 //    protected $repository;
     /** @var string */
     protected $model;
@@ -28,73 +20,53 @@ abstract class BaseRestController extends BaseController
     protected $mimeType = "application/json";
 
     /**
-     * BaseRestController constructor.
-     * @param ServerRequestInterface $serverRequest
-     * @param LoggerInterface $logger
-     * @param SegmentInterface $session
-     * @param Config $config
-     * @param Serializer $serializer
-     */
-    public function __construct(ServerRequestInterface $serverRequest,
-                                LoggerInterface $logger,
-                                SegmentInterface $session,
-                                Config $config,
-                                Serializer $serializer)
-    {
-        parent::__construct($serverRequest, $logger, $session, $config);
-        $this->serializer = $serializer;
-    }
-
-    /**
+     * @param ServerRequestInterface $request
      * @return SerializableResult
      */
-    protected function standardCreate()
+    protected function standardCreate(ServerRequestInterface $request)
     {
-        //$userModel = $this->serializer->deserialize(
-        //  $this->request->getBody(),
-        //  self::class,
-        //  self::type);
-        //$this->repository->insert($userModel);
+        //$this->repository->insert($request->getParsedBody());
         return (new SerializableResult([]))->withMimeType($this->mimeType);
     }
 
     /**
+     * @param ServerRequestInterface $request
+     * @param int $id
      * @return SerializableResult
      */
-    protected function standardRetrieve()
+    protected function standardRetrieve(ServerRequestInterface $request, $id)
     {
-        //$id = $this->request->getQueryParams()['id'];
         //$model = $this->repository->get($id);
         return (new SerializableResult([]))->withMimeType($this->mimeType);
     }
 
     /**
+     * @param ServerRequestInterface $request
+     * @param int $id
      * @return SerializableResult
      */
-    protected function standardUpdate()
+    protected function standardUpdate(ServerRequestInterface $request, $id)
     {
-        //$userModel = $this->serializer->deserialize(
-        //  $this->request->getBody(),
-        //  self::class,
-        //  self::type);
-        //$this->repository->update($userModel);
+        //$this->repository->update($request->getParsedBody());
         return (new SerializableResult([]))->withMimeType($this->mimeType);
     }
 
     /**
+     * @param ServerRequestInterface $request
+     * @param int $id
      * @return NoContentResult
      */
-    protected function standardDelete()
+    protected function standardDelete(ServerRequestInterface $request, $id)
     {
-        //$id = $this->request->getQueryParams()['id'];
         //$model = $this->repository->delete($id);
         return new NoContentResult();
     }
 
     /**
+     * @param ServerRequestInterface $request
      * @return SerializableResult
      */
-    protected function standardList()
+    protected function standardList(ServerRequestInterface $request)
     {
         //$model = $this->repository->all();
         return (new SerializableResult([]))->withMimeType($this->mimeType);
