@@ -6,6 +6,8 @@ use Aura\Session\SegmentInterface;
 use Aura\Session\Session;
 use Aura\Session\SessionFactory;
 use Creios\Creiwork\Framework\Exception\ConfigException;
+use Creios\Creiwork\Framework\Router\PostProcessor;
+use Creios\Creiwork\Framework\Router\PreProcessor;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\Definition\Source\DefinitionSource;
@@ -83,7 +85,8 @@ class Creiwork
 
             Routerunner::class => function (ContainerInterface $container) {
                 $routerunner = new Routerunner($this->getRouterConfigFile(), $container);
-                $routerunner->setPostProcessor($container->get(ResponseBuilder::class));
+                $routerunner->setPreProcessor($container->get(PreProcessor::class));
+                $routerunner->setPostProcessor($container->get(PostProcessor::class));
                 return $routerunner;
             },
 

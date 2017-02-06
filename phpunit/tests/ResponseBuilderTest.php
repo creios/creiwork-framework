@@ -13,6 +13,7 @@ use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Disposition;
+use Creios\Creiwork\Framework\Router\PostProcessor;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use JMS\Serializer\Serializer;
@@ -26,7 +27,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
 {
 
-    /** @var ResponseBuilder */
+    /** @var PostProcessor */
     private $responseBuilder;
     /** @var \PHPUnit_Framework_MockObject_MockObject|Engine */
     private $engine;
@@ -42,7 +43,7 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
         $this->engine = $this->createMock(Engine::class);
         $this->serializer = $this->createMock(Serializer::class);
         $this->serverRequest = $this->createMock(ServerRequestInterface::class);
-        $this->responseBuilder = new ResponseBuilder($this->serializer, $this->engine, $this->serverRequest);
+        $this->responseBuilder = new PostProcessor($this->serializer, $this->engine, $this->serverRequest);
         $this->stream = fopen('php://temp', 'r+');
         fwrite($this->stream, '');
         fseek($this->stream, 0);

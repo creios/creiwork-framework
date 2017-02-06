@@ -1,6 +1,6 @@
 <?php
 
-namespace Creios\Creiwork\Framework;
+namespace Creios\Creiwork\Framework\Router;
 
 use Creios\Creiwork\Framework\Result\Abstracts\AbstractFileResult;
 use Creios\Creiwork\Framework\Result\ApacheFileResult;
@@ -16,19 +16,20 @@ use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
+use Creios\Creiwork\Framework\StatusCodes;
 use GuzzleHttp\Psr7\Response;
 use JMS\Serializer\Serializer;
 use League\Plates\Engine;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
-use TimTegeler\Routerunner\PostProcessor\PostProcessorInterface;
+use TimTegeler\Routerunner\Processor\PostProcessorInterface;
 
 /**
- * Class ResponseBuilder
- * @package Creios\Creiwork\Util
+ * Class PostProcessor
+ * @package Creios\Creiwork\Framework\Router
  */
-class ResponseBuilder implements PostProcessorInterface
+class PostProcessor implements PostProcessorInterface
 {
 
     /**

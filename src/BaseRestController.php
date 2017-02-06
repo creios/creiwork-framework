@@ -22,7 +22,9 @@ abstract class BaseRestController extends BaseController
      */
     protected $serializer;
 //    protected $repository;
-//    protected $model;
+    /** @var string */
+    protected $model;
+    /** @var string */
     protected $mimeType = "application/json";
 
     /**
@@ -96,6 +98,22 @@ abstract class BaseRestController extends BaseController
     {
         //$model = $this->repository->all();
         return (new SerializableResult([]))->withMimeType($this->mimeType);
+    }
+
+    /**
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMimeType()
+    {
+        return $this->mimeType;
     }
 
 }
