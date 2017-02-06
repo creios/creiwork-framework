@@ -36,13 +36,12 @@ class PreProcessor implements PreProcessorInterface
             if ($controller->getModel() === null) {
                 throw new DeserializeException('You need to set the model property');
             }
-            if ($request->getBody()->getSize() > 0) {
-                $data = $this->serializer->deserialize(
-                    $request->getBody(),
-                    $controller->getModel(),
-                    'json');
-                $request = $request->withParsedBody($data);
-            }
+            // Todo: Perhaps disable parsing by endpoints without body (e.g. GET, DELETE)
+            $data = $this->serializer->deserialize(
+                $request->getBody(),
+                $controller->getModel(),
+                'json');
+            $request = $request->withParsedBody($data);
         }
         return $request;
     }
