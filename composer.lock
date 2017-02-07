@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "94e8e6542ee8a4bef98340e1d9a24950",
-    "content-hash": "d1fd20d53178d54bce7124185b377bf9",
+    "hash": "66e50dbaa46ebeb85f32f0306efaedb6",
+    "content-hash": "b81f2a09e39a25b3f6f623fdae22eabc",
     "packages": [
         {
             "name": "aura/session",
@@ -95,6 +95,31 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "time": "2014-12-30 15:22:37"
+        },
+        {
+            "name": "creios/quarry",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "ssh://git@git.creios.net:2209/creios/quarry.git",
+                "reference": "b3c15757702cfc675e05619e3269c3cde3cd0a15"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Quarry\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Jonas Schürmann",
+                    "email": "schuermann@creios.net"
+                }
+            ],
+            "time": "2017-02-07 08:47:13"
         },
         {
             "name": "doctrine/annotations",
@@ -1339,12 +1364,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/timtegeler/routerunner.git",
-                "reference": "4d5c815a7162d643fbd2986a7b5546b2d0119823"
+                "reference": "4b800ac7b4aaea24bbb93566bb098c2360be3469"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/4d5c815a7162d643fbd2986a7b5546b2d0119823",
-                "reference": "4d5c815a7162d643fbd2986a7b5546b2d0119823",
+                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/4b800ac7b4aaea24bbb93566bb098c2360be3469",
+                "reference": "4b800ac7b4aaea24bbb93566bb098c2360be3469",
                 "shasum": ""
             },
             "require": {
@@ -1375,7 +1400,7 @@
                 }
             ],
             "description": "Routerunner is a router for HTTP-request written in PHP",
-            "time": "2017-02-06 18:50:01"
+            "time": "2017-02-06 20:38:37"
         }
     ],
     "packages-dev": [

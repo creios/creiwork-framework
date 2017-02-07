@@ -2,6 +2,7 @@
 
 namespace Creios\Creiwork\Framework\Controller;
 
+use Creios\Creiwork\Framework\Repository\RepositoryBaseInterface;
 use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\SerializableResult;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,11 +14,12 @@ use Psr\Http\Message\ServerRequestInterface;
 abstract class BaseRestController extends BaseController
 {
 
-//    protected $repository;
     /** @var string */
     protected $model;
     /** @var string */
     protected $mimeType = "application/json";
+    /** @var  RepositoryBaseInterface */
+    protected $repository;
 
     /**
      * @param ServerRequestInterface $request
@@ -25,8 +27,9 @@ abstract class BaseRestController extends BaseController
      */
     protected function standardCreate(ServerRequestInterface $request)
     {
-        //$this->repository->insert($request->getParsedBody());
-        return (new SerializableResult([]))->withMimeType($this->mimeType);
+        $entity = $request->getParsedBody();
+        $this->repository->insert($entity);
+        return (new SerializableResult($entity))->withMimeType($this->mimeType);
     }
 
     /**
@@ -36,8 +39,8 @@ abstract class BaseRestController extends BaseController
      */
     protected function standardRetrieve(ServerRequestInterface $request, $id)
     {
-        //$model = $this->repository->get($id);
-        return (new SerializableResult([]))->withMimeType($this->mimeType);
+        $entity = $this->repository->find($id);
+        return (new SerializableResult($entity))->withMimeType($this->mimeType);
     }
 
     /**
@@ -47,8 +50,10 @@ abstract class BaseRestController extends BaseController
      */
     protected function standardUpdate(ServerRequestInterface $request, $id)
     {
-        //$this->repository->update($request->getParsedBody());
-        return (new SerializableResult([]))->withMimeType($this->mimeType);
+        //Todo: Not sure how update is performed. Using $id or not?
+        $entity = $request->getParsedBody();
+        $this->repository->update($entity);
+        return (new SerializableResult($entity))->withMimeType($this->mimeType);
     }
 
     /**
@@ -58,7 +63,7 @@ abstract class BaseRestController extends BaseController
      */
     protected function standardDelete(ServerRequestInterface $request, $id)
     {
-        //$model = $this->repository->delete($id);
+        $this->repository->delete($id);
         return new NoContentResult();
     }
 
@@ -68,8 +73,8 @@ abstract class BaseRestController extends BaseController
      */
     protected function standardList(ServerRequestInterface $request)
     {
-        //$model = $this->repository->all();
-        return (new SerializableResult([]))->withMimeType($this->mimeType);
+        $entities = $this->repository->all();
+        return (new SerializableResult($entities))->withMimeType($this->mimeType);
     }
 
     /**

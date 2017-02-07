@@ -8,6 +8,12 @@
       "email": "tegeler@creios.net"
     }
   ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://composer.creios.net/"
+    }
+  ],
   "require-dev": {
     "consolidation/robo": "^1.0.5",
     "phpunit/phpunit": "^5.7"
@@ -22,7 +28,8 @@
     "filp/whoops": "2.1.0",
     "guzzlehttp/psr7": "^1.3.0",
     "hassankhan/config": "^0.10.0",
-    "jms/serializer": "^1.4"
+    "jms/serializer": "^1.4",
+    "creios/quarry": "^0.1.0"
   },
   "autoload": {
     "psr-4": {
