@@ -27,6 +27,7 @@ interface RepositoryBaseInterface
 
     /**
      * @param object
+     * @return int
      */
     public function insert($entity);
 

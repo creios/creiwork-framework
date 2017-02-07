@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "66e50dbaa46ebeb85f32f0306efaedb6",
-    "content-hash": "b81f2a09e39a25b3f6f623fdae22eabc",
+    "hash": "f6a501a71c35b2089765ce0374d5885c",
+    "content-hash": "7b01c7df6243c6bb9c92300151f6fb21",
     "packages": [
         {
             "name": "aura/session",
@@ -98,11 +98,11 @@
         },
         {
             "name": "creios/quarry",
-            "version": "v0.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "ssh://git@git.creios.net:2209/creios/quarry.git",
-                "reference": "b3c15757702cfc675e05619e3269c3cde3cd0a15"
+                "reference": "9c6c625a1e450d4dc65dcae8dbb65ad36e8a0ab9"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.0"
@@ -119,7 +119,7 @@
                     "email": "schuermann@creios.net"
                 }
             ],
-            "time": "2017-02-07 08:47:13"
+            "time": "2017-02-07 14:01:10"
         },
         {
             "name": "doctrine/annotations",
@@ -3283,7 +3283,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "timtegeler/routerunner": 20,
-        "mindplay/middleman": 20
+        "mindplay/middleman": 20,
+        "creios/quarry": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
