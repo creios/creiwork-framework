@@ -32,22 +32,22 @@ class WrappedBaseRestController extends BaseRestController implements RestContro
 
     public function _update(ServerRequestInterface $request, $id)
     {
-        return $this->standardUpdate($request, $id);
+        return $this->standardUpdate($request);
     }
 
     public function _retrieve(ServerRequestInterface $request, $id)
     {
-        return $this->standardRetrieve($request, $id);
+        return $this->standardRetrieve($id);
     }
 
     public function _delete(ServerRequestInterface $request, $id)
     {
-        return $this->standardDelete($request, $id);
+        return $this->standardDelete($id);
     }
 
     public function _list(ServerRequestInterface $request)
     {
-        return $this->standardList($request);
+        return $this->standardList();
     }
 }
 
@@ -104,16 +104,17 @@ class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($entity, $result->getData());
     }
 
-//    public function testUpdate()
-//    {
-//        // config mocks
-//        $entity = new \stdClass();
-//        $this->serverRequest->method('getParsedBody')->willReturn($entity);
-//        $this->repository->method('update')->with(1)->willReturn($entity);
-//        // actual tests
-//        $result = $this->controller->_update($this->serverRequest, 1);
-//        $this->assertInstanceOf(SerializableResult::class, $result);
-//    }
+    public function testUpdate()
+    {
+        // config mocks
+        $entity = new \stdClass();
+        $this->serverRequest->method('getParsedBody')->willReturn($entity);
+        $this->repository->method('update')->with($entity);
+        // actual tests
+        $result = $this->controller->_update($this->serverRequest, 1);
+        $this->assertInstanceOf(SerializableResult::class, $result);
+        $this->assertEquals($entity, $result->getData());
+    }
 
     public function testDelete()
     {
