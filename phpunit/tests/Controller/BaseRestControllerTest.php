@@ -1,9 +1,8 @@
 <?php
 
-namespace Creios\Creiwork\Framework;
+namespace Creios\Creiwork\Framework\Controller;
 
 use Aura\Session\SegmentInterface;
-use Creios\Creiwork\Framework\Controller\BaseRestController;
 use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\SerializableResult;
 use JMS\Serializer\Serializer;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Creios\Creiwork\Framework;
+namespace Creios\Creiwork\Framework\Router;
 
 use Creios\Creiwork\Framework\Result\ApacheFileResult;
 use Creios\Creiwork\Framework\Result\CsvResult;
@@ -14,6 +14,7 @@ use Creios\Creiwork\Framework\Result\StringResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Disposition;
 use Creios\Creiwork\Framework\Router\PostProcessor;
+use Creios\Creiwork\Framework\StatusCodes;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use JMS\Serializer\Serializer;
@@ -24,7 +25,7 @@ use Psr\Http\Message\ServerRequestInterface;
  * Class ResponseBuilderTest
  * @package Creios\Creiwork\Framework
  */
-class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
+class PostProcessorTest extends \PHPUnit_Framework_TestCase
 {
 
     /** @var PostProcessor */
@@ -165,12 +166,12 @@ class ResponseBuilderTest extends \PHPUnit_Framework_TestCase
     public function testFileResult()
     {
         $expectedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 40);
-        $result = new FileResult(__DIR__ . '/../asset/textfile.txt');
+        $result = new FileResult(__DIR__ . '/../../asset/textfile.txt');
         $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
 
         $expectedResponse = (new Response())->withHeader('Content-Type', 'text/plain')->withHeader('Content-Length', 40);
-        $result = (new FileResult(__DIR__ . '/../asset/textfile.txt'))->withMimeType('text/plain');
+        $result = (new FileResult(__DIR__ . '/../../asset/textfile.txt'))->withMimeType('text/plain');
         $actualResponse = $this->responseBuilder->process($this->serverRequest, $result);
         $this->assertEquals($expectedResponse->getHeaders(), $actualResponse->getHeaders());
     }
