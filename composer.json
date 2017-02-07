@@ -28,8 +28,7 @@
     "filp/whoops": "2.1.0",
     "guzzlehttp/psr7": "^1.3.0",
     "hassankhan/config": "^0.10.0",
-    "jms/serializer": "^1.4",
-    "creios/quarry": "dev-master#9c6c625a1e450d4dc65dcae8dbb65ad36e8a0ab9"
+    "jms/serializer": "^1.4"
   },
   "autoload": {
     "psr-4": {

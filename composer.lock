@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f6a501a71c35b2089765ce0374d5885c",
-    "content-hash": "7b01c7df6243c6bb9c92300151f6fb21",
+    "hash": "0fd4bd9de6f8172d8214a05572b2ab84",
+    "content-hash": "b9732731b98706a997ecdfff642be422",
     "packages": [
         {
             "name": "aura/session",
@@ -95,31 +95,6 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "time": "2014-12-30 15:22:37"
-        },
-        {
-            "name": "creios/quarry",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "ssh://git@git.creios.net:2209/creios/quarry.git",
-                "reference": "9c6c625a1e450d4dc65dcae8dbb65ad36e8a0ab9"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Quarry\\": "src/"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Jonas Schürmann",
-                    "email": "schuermann@creios.net"
-                }
-            ],
-            "time": "2017-02-07 14:01:10"
         },
         {
             "name": "doctrine/annotations",
@@ -3283,8 +3258,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "timtegeler/routerunner": 20,
-        "mindplay/middleman": 20,
-        "creios/quarry": 20
+        "mindplay/middleman": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
