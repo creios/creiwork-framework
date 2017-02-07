@@ -17,6 +17,7 @@ use Interop\Container\ContainerInterface;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 use League\Plates;
+use Middlewares\Whoops as WhoopsMiddleware;
 use mindplay\middleman\ContainerResolver;
 use mindplay\middleman\Dispatcher;
 use Monolog\Handler\StreamHandler;
@@ -25,7 +26,6 @@ use Noodlehaus\Config;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use TimTegeler\Routerunner\Routerunner;
-use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 use function DI\factory;
 use function DI\object;
@@ -100,6 +100,16 @@ class Creiwork
                 return $logger;
             },
 
+            WhoopsMiddleware::class => function (Config $config, ErrorPageHandler $errorPageHandler) {
+                if ($config->get('debug')) {
+                    return new WhoopsMiddleware();
+                } else {
+                    $run = new Run();
+                    $run->pushHandler($errorPageHandler);
+                    return new WhoopsMiddleware($run);
+                }
+            },
+
             StreamHandler::class => function () {
                 return new StreamHandler($this->getLoggerDirectory() . '/info.log', Logger::INFO);
             },
@@ -171,6 +181,7 @@ class Creiwork
     {
         return [
             //Add new middleware here
+            WhoopsMiddleware::class,
             Routerunner::class
         ];
     }
@@ -180,8 +191,6 @@ class Creiwork
         ob_start();
 
         $this->preStart();
-
-        $this->registerWhoops();
 
         $response = $this->dispatch();
 
@@ -213,24 +222,6 @@ class Creiwork
         if (!$this->config->has($key)) {
             throw new ConfigException("Config file doesn't contain '${key}''");
         }
-    }
-
-    /**
-     * Method should be replaced to appropriated Middleware
-     *
-     * @deprecated
-     */
-    private function registerWhoops()
-    {
-        $whoops = $this->container->get(Run::class);
-
-        if ($this->config->get('debug')) {
-            $whoops->pushHandler($this->container->get(PrettyPageHandler::class));
-        } else {
-            $whoops->pushHandler($this->container->get(ErrorPageHandler::class));
-        }
-
-        $whoops->register();
     }
 
     /**
