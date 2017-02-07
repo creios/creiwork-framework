@@ -250,6 +250,8 @@ class Creiwork
             }
         }
 
+        $response->getBody()->seek(0);
+
         stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
     }
 
