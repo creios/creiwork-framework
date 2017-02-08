@@ -19,6 +19,7 @@ use Interop\Container\ContainerInterface;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 use League\Plates;
+use Middlewares\ContentType;
 use Middlewares\Whoops as WhoopsMiddleware;
 use mindplay\middleman\ContainerResolver;
 use mindplay\middleman\Dispatcher;
@@ -190,6 +191,7 @@ class Creiwork
     {
         return [
             //Add new middleware here
+            ContentType::class,
             WhoopsMiddleware::class,
             Routerunner::class
         ];

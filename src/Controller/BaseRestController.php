@@ -16,8 +16,6 @@ abstract class BaseRestController extends BaseController
 
     /** @var string */
     protected $model;
-    /** @var string */
-    protected $mimeType = "application/json";
     /** @var  RepositoryBaseInterface */
     protected $repository;
 
@@ -29,7 +27,7 @@ abstract class BaseRestController extends BaseController
     {
         $entity = $request->getParsedBody();
         $entity->id = $this->repository->insert($entity);
-        return (new SerializableResult($entity))->withMimeType($this->mimeType);
+        return new SerializableResult($entity);
     }
 
     /**
@@ -39,7 +37,7 @@ abstract class BaseRestController extends BaseController
     protected function standardRetrieve($id)
     {
         $entity = $this->repository->find($id);
-        return (new SerializableResult($entity))->withMimeType($this->mimeType);
+        return new SerializableResult($entity);
     }
 
     /**
@@ -50,7 +48,7 @@ abstract class BaseRestController extends BaseController
     {
         $entity = $request->getParsedBody();
         $this->repository->update($entity);
-        return (new SerializableResult($entity))->withMimeType($this->mimeType);
+        return new SerializableResult($entity);
     }
 
     /**
@@ -69,7 +67,7 @@ abstract class BaseRestController extends BaseController
     protected function standardList()
     {
         $entities = $this->repository->all();
-        return (new SerializableResult($entities))->withMimeType($this->mimeType);
+        return new SerializableResult($entities);
     }
 
     /**
@@ -78,14 +76,6 @@ abstract class BaseRestController extends BaseController
     public function getModel()
     {
         return $this->model;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMimeType()
-    {
-        return $this->mimeType;
     }
 
 }

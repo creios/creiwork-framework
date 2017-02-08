@@ -160,7 +160,14 @@ class PostProcessor implements PostProcessorInterface
      */
     private function modifyResponseForSerializableResult(ResponseInterface $response, SerializableResult $serializableResult)
     {
-        switch ($serializableResult->getMimeType()) {
+        if ($this->serverRequest->hasHeader('Accept')) {
+            $mimeType = $this->serverRequest->getHeaderLine('Accept');
+        } else if ($serializableResult->getMimeType()) {
+            $mimeType = $serializableResult->getMimeType();
+        } else {
+            $mimeType = 'application/json';
+        }
+        switch ($mimeType) {
             case 'text/plain':
                 $payload = print_r($serializableResult->getData(), true);
                 break;
@@ -184,7 +191,7 @@ class PostProcessor implements PostProcessorInterface
         }
         $stream = \GuzzleHttp\Psr7\stream_for($payload);
         $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', $serializableResult->getMimeType())->withBody($stream);
+        return $response->withHeader('Content-Type', $mimeType)->withBody($stream);
     }
 
     /**
