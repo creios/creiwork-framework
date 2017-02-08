@@ -91,6 +91,8 @@ class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
         // actual tests
         $result = $this->controller->_create($this->serverRequest);
         $this->assertInstanceOf(SerializableResult::class, $result);
+        $this->assertEquals(201, $result->getStatusCode());
+        $this->assertEquals($entity, $result->getData());
     }
 
     public function testRetrieve()

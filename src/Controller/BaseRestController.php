@@ -5,6 +5,7 @@ namespace Creios\Creiwork\Framework\Controller;
 use Creios\Creiwork\Framework\Repository\RepositoryBaseInterface;
 use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\SerializableResult;
+use Creios\Creiwork\Framework\StatusCodes;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -27,7 +28,7 @@ abstract class BaseRestController extends BaseController
     {
         $entity = $request->getParsedBody();
         $entity->id = $this->repository->insert($entity);
-        return new SerializableResult($entity);
+        return (new SerializableResult($entity))->withStatusCode(StatusCodes::HTTP_CREATED);
     }
 
     /**
