@@ -13,7 +13,7 @@ class ErrorFactory extends MessageFactory
     /** @var string */
     private $code;
     /** @var string */
-    private $solution;
+    private $suggestion;
 
     /**
      * @param string $code
@@ -26,12 +26,12 @@ class ErrorFactory extends MessageFactory
     }
 
     /**
-     * @param string $solution
+     * @param string $suggestion
      * @return $this
      */
-    public function setSolution($solution)
+    public function setSuggestion($suggestion)
     {
-        $this->solution = $solution;
+        $this->suggestion = $suggestion;
         return $this;
     }
 
@@ -41,7 +41,7 @@ class ErrorFactory extends MessageFactory
      */
     public function buildError($message)
     {
-        return new Error($this->contact, $message, $this->code, $this->solution);
+        return new Error($this->contact, $message, $this->code, $this->suggestion);
     }
 
 }

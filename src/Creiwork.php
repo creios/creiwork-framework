@@ -8,7 +8,6 @@ use Aura\Session\SessionFactory;
 use Creios\Creiwork\Framework\Exception\ConfigException;
 use Creios\Creiwork\Framework\Message\Factory\ErrorFactory;
 use Creios\Creiwork\Framework\Message\Factory\InformationFactory;
-use Creios\Creiwork\Framework\Message\Factory\MessageFactory;
 use Creios\Creiwork\Framework\Router\PostProcessor;
 use Creios\Creiwork\Framework\Router\PreProcessor;
 use DI\Container;

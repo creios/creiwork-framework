@@ -19,21 +19,21 @@ class Error extends Message
     /**
      * @var string
      */
-    protected $solution;
+    protected $suggestion;
 
     /**
      * Error constructor.
      * @param string $contact
      * @param string $error
      * @param string $code
-     * @param string $solution
+     * @param string $suggestion
      */
-    public function __construct($contact, $error, $code, $solution)
+    public function __construct($contact, $error, $code, $suggestion)
     {
         $this->contact = $contact;
         $this->error = $error;
         $this->code = $code;
-        $this->solution = $solution;
+        $this->suggestion = $suggestion;
     }
 
 }
