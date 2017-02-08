@@ -17,18 +17,22 @@ class ErrorFactory extends MessageFactory
 
     /**
      * @param string $code
+     * @return $this
      */
     public function setCode($code)
     {
         $this->code = $code;
+        return $this;
     }
 
     /**
      * @param string $solution
+     * @return $this
      */
     public function setSolution($solution)
     {
         $this->solution = $solution;
+        return $this;
     }
 
     /**

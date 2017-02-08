@@ -25,10 +25,12 @@ abstract class MessageFactory
 
     /**
      * @param string $contact
+     * @return $this
      */
     public function setContact($contact)
     {
         $this->contact = $contact;
+        return $this;
     }
 
 }
