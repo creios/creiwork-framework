@@ -6,6 +6,9 @@ use Aura\Session\SegmentInterface;
 use Aura\Session\Session;
 use Aura\Session\SessionFactory;
 use Creios\Creiwork\Framework\Exception\ConfigException;
+use Creios\Creiwork\Framework\Message\Factory\ErrorFactory;
+use Creios\Creiwork\Framework\Message\Factory\InformationFactory;
+use Creios\Creiwork\Framework\Message\Factory\MessageFactory;
 use Creios\Creiwork\Framework\Router\PostProcessor;
 use Creios\Creiwork\Framework\Router\PreProcessor;
 use DI\Container;
@@ -100,14 +103,12 @@ class Creiwork
                 return $logger;
             },
 
-            WhoopsMiddleware::class => function (Config $config, ErrorPageHandler $errorPageHandler) {
-                if ($config->get('debug')) {
-                    return new WhoopsMiddleware();
-                } else {
-                    $run = new Run();
-                    $run->pushHandler($errorPageHandler);
-                    return new WhoopsMiddleware($run);
-                }
+            ErrorFactory::class => function (Config $config) {
+                return new ErrorFactory($config->get('contact'));
+            },
+
+            InformationFactory::class => function (Config $config) {
+                return new InformationFactory($config->get('contact'));
             },
 
             StreamHandler::class => function () {
@@ -130,6 +131,15 @@ class Creiwork
                 return $serializerBuilder->addMetadataDir($this->getModelDirectory())->build();
             },
 
+            WhoopsMiddleware::class => function (Config $config, ErrorPageHandler $errorPageHandler) {
+                if ($config->get('debug')) {
+                    return new WhoopsMiddleware();
+                } else {
+                    $run = new Run();
+                    $run->pushHandler($errorPageHandler);
+                    return new WhoopsMiddleware($run);
+                }
+            }
         ];
     }
 
