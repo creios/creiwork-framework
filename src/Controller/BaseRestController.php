@@ -71,12 +71,24 @@ abstract class BaseRestController extends BaseController
     }
 
     /**
+     * @param ServerRequestInterface $request
      * @return SerializableResult
      */
-    protected function standardList()
+    protected function standardList(ServerRequestInterface $request)
     {
-        $entities = $this->repository->all();
-        return new SerializableResult($entities);
+        $limitKey = 'limit';
+        $offsetKey = 'offset';
+        $queryParams = $request->getQueryParams();
+        if (isset($queryParams[$limitKey]) && isset($queryParams[$offsetKey])) {
+            $limit = $queryParams[$limitKey];
+            $offset = $queryParams[$offsetKey];
+            $count = $this->repository->count();
+            $entities = $this->repository->limit($limit, $offset);
+            $data = new Page($count, $entities);
+        } else {
+            $data = $this->repository->all();
+        }
+        return new SerializableResult($data);
     }
 
 }

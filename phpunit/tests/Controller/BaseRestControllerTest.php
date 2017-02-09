@@ -38,7 +38,7 @@ class WrappedBaseRestController extends BaseRestController implements RestContro
 
     public function _list(ServerRequestInterface $request)
     {
-        return $this->standardList();
+        return $this->standardList($request);
     }
 }
 
@@ -115,4 +115,17 @@ class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($entities, $result->getData());
     }
 
+    public function testListLimitOffsetPagination()
+    {
+        // config mocks
+        $entities = [new \stdClass(), new \stdClass()];
+        $page = new Page(2, $entities);
+        $this->serverRequest->method('getQueryParams')->willReturn(['limit' => 2, 'offset' => 0]);
+        $this->repository->method('limit')->with(2, 0)->willReturn($entities);
+        $this->repository->method('count')->willReturn(2);
+        // actual tests
+        $result = $this->controller->_list($this->serverRequest);
+        $this->assertInstanceOf(SerializableResult::class, $result);
+        $this->assertEquals($page, $result->getData());
+    }
 }

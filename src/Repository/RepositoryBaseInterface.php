@@ -21,6 +21,13 @@ interface RepositoryBaseInterface
     public function all();
 
     /**
+     * @param int $limit
+     * @param int|null $offset
+     * @return object[]
+     */
+    public function limit($limit, $offset = null);
+
+    /**
      * @return int
      */
     public function count();
