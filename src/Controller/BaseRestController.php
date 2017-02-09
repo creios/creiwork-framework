@@ -80,8 +80,8 @@ abstract class BaseRestController extends BaseController
         $offsetKey = 'offset';
         $queryParams = $request->getQueryParams();
         if (isset($queryParams[$limitKey]) && isset($queryParams[$offsetKey])) {
-            $limit = $queryParams[$limitKey];
-            $offset = $queryParams[$offsetKey];
+            $limit = (int)$queryParams[$limitKey];
+            $offset = (int)$queryParams[$offsetKey];
             $count = $this->repository->count();
             $entities = $this->repository->limit($limit, $offset);
             $data = new Page($count, $entities);
