@@ -21,6 +21,14 @@ abstract class BaseRestController extends BaseController
     protected $repository;
 
     /**
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
      * @param ServerRequestInterface $request
      * @return SerializableResult
      */
@@ -69,14 +77,6 @@ abstract class BaseRestController extends BaseController
     {
         $entities = $this->repository->all();
         return new SerializableResult($entities);
-    }
-
-    /**
-     * @return string
-     */
-    public function getModel()
-    {
-        return $this->model;
     }
 
 }

@@ -13,7 +13,6 @@ use Creios\Creiwork\Framework\Result\StreamResult;
 use Creios\Creiwork\Framework\Result\StringResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Disposition;
-use Creios\Creiwork\Framework\Router\PostProcessor;
 use Creios\Creiwork\Framework\StatusCodes;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;

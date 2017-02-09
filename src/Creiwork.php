@@ -144,15 +144,6 @@ class Creiwork
     }
 
     /**
-     * @param $filePath
-     * @return string
-     */
-    private function generateFilePath($filePath)
-    {
-        return realpath($this->configDirectoryPath . $filePath);
-    }
-
-    /**
      * @return string
      */
     private function getRouterConfigFile()
@@ -161,11 +152,12 @@ class Creiwork
     }
 
     /**
+     * @param $filePath
      * @return string
      */
-    private function getModelDirectory()
+    private function generateFilePath($filePath)
     {
-        return $this->generateFilePath($this->config->get(self::modelDirectoryKey));
+        return realpath($this->configDirectoryPath . $filePath);
     }
 
     /**
@@ -182,6 +174,14 @@ class Creiwork
     private function getLoggerDirectory()
     {
         return $this->generateFilePath($this->config->get(self::loggerDirKey));
+    }
+
+    /**
+     * @return string
+     */
+    private function getModelDirectory()
+    {
+        return $this->generateFilePath($this->config->get(self::modelDirectoryKey));
     }
 
     /**

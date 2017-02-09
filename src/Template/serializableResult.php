@@ -19,7 +19,7 @@
             </a>
         </li>
         <li>
-            <a href="http://<?= $request->getUri() ?>"><?= trim($request->getUri()->getPath(),'/'); ?></a>
+            <a href="http://<?= $request->getUri() ?>"><?= trim($request->getUri()->getPath(), '/'); ?></a>
         </li>
     </ol>
     <pre><?php echo $this->e($data) ?></pre>

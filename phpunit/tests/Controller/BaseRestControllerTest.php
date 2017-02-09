@@ -2,26 +2,17 @@
 
 namespace Creios\Creiwork\Framework\Controller;
 
-use Aura\Session\SegmentInterface;
 use Creios\Creiwork\Framework\Repository\RepositoryBaseInterface;
 use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\SerializableResult;
-use Monolog\Logger;
-use Noodlehaus\Config;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 use TimTegeler\Routerunner\Controller\RestControllerInterface;
 
 class WrappedBaseRestController extends BaseRestController implements RestControllerInterface
 {
 
-    public function __construct(ServerRequestInterface $serverRequest,
-                                LoggerInterface $logger,
-                                SegmentInterface $session,
-                                Config $config,
-                                RepositoryBaseInterface $repository)
+    public function __construct(RepositoryBaseInterface $repository)
     {
-        parent::__construct($serverRequest, $logger, $session, $config);
         $this->repository = $repository;
     }
 
@@ -56,12 +47,6 @@ class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|ServerRequestInterface */
     private $serverRequest;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Logger */
-    private $logger;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|SegmentInterface */
-    private $segment;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Config */
-    private $config;
     /** @var \PHPUnit_Framework_MockObject_MockObject|RepositoryBaseInterface */
     private $repository;
     /** @var WrappedBaseRestController */
@@ -70,16 +55,8 @@ class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->serverRequest = $this->createMock(ServerRequestInterface::class);
-        $this->logger = $this->createMock(Logger::class);
-        $this->segment = $this->createMock(SegmentInterface::class);
-        $this->config = $this->createMock(Config::class);
         $this->repository = $this->createMock(RepositoryBaseInterface::class);
-        $this->controller = new WrappedBaseRestController(
-            $this->serverRequest,
-            $this->logger,
-            $this->segment,
-            $this->config,
-            $this->repository);
+        $this->controller = new WrappedBaseRestController($this->repository);
     }
 
     public function testCreate()
