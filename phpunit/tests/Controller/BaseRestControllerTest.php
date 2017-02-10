@@ -40,6 +40,16 @@ class WrappedBaseRestController extends BaseRestController implements RestContro
     {
         return $this->standardList($request);
     }
+
+    public function calculatePreviousLimitAndOffset($limit, $offset)
+    {
+        return parent::calculatePreviousLimitAndOffset($limit, $offset);
+    }
+
+    public function calculateNextLimitAndOffset($count, $limit, $offset)
+    {
+        return parent::calculateNextLimitAndOffset($count, $limit, $offset);
+    }
 }
 
 class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
@@ -119,7 +129,7 @@ class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
     {
         // config mocks
         $entities = [new \stdClass(), new \stdClass()];
-        $page = new Page(2, $entities);
+        $page = new Page(2, null, null, $entities);
         $this->serverRequest->method('getQueryParams')->willReturn(['limit' => 2, 'offset' => 0]);
         $this->repository->method('limit')->with(2, 0)->willReturn($entities);
         $this->repository->method('count')->willReturn(2);
@@ -127,5 +137,50 @@ class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
         $result = $this->controller->_list($this->serverRequest);
         $this->assertInstanceOf(SerializableResult::class, $result);
         $this->assertEquals($page, $result->getData());
+    }
+
+    public function testCalculateNextLimitAndOffset()
+    {
+        $limitAndOffset = $this->controller->calculateNextLimitAndOffset(10, 0, 0);
+        $this->assertSame($limitAndOffset['limit'], 0);
+        $this->assertSame($limitAndOffset['offset'], 0);
+        $limitAndOffset = $this->controller->calculateNextLimitAndOffset(10, 10, 0);
+        $this->assertFalse($limitAndOffset);
+        $limitAndOffset = $this->controller->calculateNextLimitAndOffset(10, 2, 0);
+        $this->assertSame($limitAndOffset['limit'], 2);
+        $this->assertSame($limitAndOffset['offset'], 2);
+        $limitAndOffset = $this->controller->calculateNextLimitAndOffset(10, 2, 2);
+        $this->assertSame($limitAndOffset['limit'], 2);
+        $this->assertSame($limitAndOffset['offset'], 4);
+        $limitAndOffset = $this->controller->calculateNextLimitAndOffset(10, 2, 4);
+        $this->assertSame($limitAndOffset['limit'], 2);
+        $this->assertSame($limitAndOffset['offset'], 6);
+        $limitAndOffset = $this->controller->calculateNextLimitAndOffset(10, 2, 6);
+        $this->assertSame($limitAndOffset['limit'], 2);
+        $this->assertSame($limitAndOffset['offset'], 8);
+        $limitAndOffset = $this->controller->calculateNextLimitAndOffset(10, 2, 8);
+        $this->assertFalse($limitAndOffset);
+    }
+
+    public function testCalculatePreviousLimitAndOffset()
+    {
+        $limitAndOffset = $this->controller->calculatePreviousLimitAndOffset(0, 0);
+        $this->assertFalse($limitAndOffset);
+        $limitAndOffset = $this->controller->calculatePreviousLimitAndOffset(10, 0);
+        $this->assertFalse($limitAndOffset);
+        $limitAndOffset = $this->controller->calculatePreviousLimitAndOffset(2, 0);
+        $this->assertFalse($limitAndOffset);
+        $limitAndOffset = $this->controller->calculatePreviousLimitAndOffset(2, 2);
+        $this->assertSame($limitAndOffset['limit'], 2);
+        $this->assertSame($limitAndOffset['offset'], 0);
+        $limitAndOffset = $this->controller->calculatePreviousLimitAndOffset(2, 4);
+        $this->assertSame($limitAndOffset['limit'], 2);
+        $this->assertSame($limitAndOffset['offset'], 2);
+        $limitAndOffset = $this->controller->calculatePreviousLimitAndOffset(2, 6);
+        $this->assertSame($limitAndOffset['limit'], 2);
+        $this->assertSame($limitAndOffset['offset'], 4);
+        $limitAndOffset = $this->controller->calculatePreviousLimitAndOffset(2, 8);
+        $this->assertSame($limitAndOffset['limit'], 2);
+        $this->assertSame($limitAndOffset['offset'], 6);
     }
 }
