@@ -22,10 +22,10 @@ interface RepositoryBaseInterface
 
     /**
      * @param int $limit
-     * @param int|null $offset
+     * @param int $offset
      * @return object[]
      */
-    public function limit($limit, $offset = null);
+    public function limit($limit, $offset = 0);
 
     /**
      * @return int
@@ -47,4 +47,5 @@ interface RepositoryBaseInterface
      * @param int $id
      */
     public function delete($id);
+    
 }
