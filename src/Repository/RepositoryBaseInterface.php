@@ -47,5 +47,5 @@ interface RepositoryBaseInterface
      * @param int $id
      */
     public function delete($id);
-    
+
 }

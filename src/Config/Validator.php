@@ -13,10 +13,10 @@ class Validator
 
     /** @var JsonValidator */
     protected $jsonValidator;
-    /** @var string */
-    private $configSchemaPath;
     /** @var array */
     protected $errors;
+    /** @var string */
+    private $configSchemaPath;
 
     /**
      * Validator constructor.
@@ -35,7 +35,10 @@ class Validator
      */
     public function validate($config)
     {
-        $this->jsonValidator->check(json_decode($config), json_decode($this->configSchemaPath));
+        $this->jsonValidator->check(
+            json_decode(file_get_contents($config)),
+            json_decode(file_get_contents($this->configSchemaPath))
+        );
 
         if ($this->jsonValidator->isValid()) {
             return true;
