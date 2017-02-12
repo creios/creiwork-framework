@@ -15,8 +15,8 @@ class Validator
     protected $jsonValidator;
     /** @var array */
     protected $errors;
-    /** @var string */
-    private $configSchemaPath;
+    /** @var mixed */
+    private $configSchema;
 
     /**
      * Validator constructor.
@@ -26,7 +26,7 @@ class Validator
     public function __construct(JsonValidator $jsonValidator, $configSchemaPath)
     {
         $this->jsonValidator = $jsonValidator;
-        $this->configSchemaPath = $configSchemaPath;
+        $this->configSchema = json_decode(file_get_contents($configSchemaPath));
     }
 
     /**
@@ -37,7 +37,7 @@ class Validator
     {
         $this->jsonValidator->check(
             json_decode(file_get_contents($config)),
-            json_decode(file_get_contents($this->configSchemaPath))
+            $this->configSchema
         );
 
         if ($this->jsonValidator->isValid()) {
