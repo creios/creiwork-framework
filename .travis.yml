@@ -4,7 +4,8 @@ php:
   - '7.0'
   - hhvm
 before_install:
-   - composer require phpunit/phpunit:5.7.* satooshi/php-coveralls:1.0.*
    - composer install --dev
+script:
+   - vendor/bin/phpunit
 after_success:
   - php vendor/bin/coveralls -v

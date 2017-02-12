@@ -1,37 +1,35 @@
 <?php
 
-namespace Creios\Creiwork\Framework;
+namespace Creios\Creiwork\Framework\Router;
 
 use Creios\Creiwork\Framework\Result\Abstracts\AbstractFileResult;
-use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\ApacheFileResult;
+use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\FileResult;
-use Creios\Creiwork\Framework\Result\HtmlRawResult;
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
-use Creios\Creiwork\Framework\Result\JsonRawResult;
-use Creios\Creiwork\Framework\Result\JsonResult;
-use Creios\Creiwork\Framework\Result\PlainTextResult;
 use Creios\Creiwork\Framework\Result\NginxFileResult;
+use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\RedirectResult;
+use Creios\Creiwork\Framework\Result\SerializableResult;
 use Creios\Creiwork\Framework\Result\StreamResult;
-use Creios\Creiwork\Framework\Result\StringBufferResult;
+use Creios\Creiwork\Framework\Result\StringResult;
 use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
-use Creios\Creiwork\Framework\Result\XmlRawResult;
+use Creios\Creiwork\Framework\StatusCodes;
 use GuzzleHttp\Psr7\Response;
+use JMS\Serializer\Serializer;
 use League\Plates\Engine;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
-use TimTegeler\Routerunner\PostProcessor\PostProcessorInterface;
-use Zumba\Util\JsonSerializer;
+use TimTegeler\Routerunner\Processor\PostProcessorInterface;
 
 /**
- * Class ResponseBuilder
- * @package Creios\Creiwork\Util
+ * Class PostProcessor
+ * @package Creios\Creiwork\Framework\Router
  */
-class ResponseBuilder implements PostProcessorInterface
+class PostProcessor implements PostProcessorInterface
 {
 
     /**
@@ -39,9 +37,9 @@ class ResponseBuilder implements PostProcessorInterface
      */
     protected $templateEngine;
     /**
-     * @var JsonSerializer
+     * @var Serializer
      */
-    protected $jsonSerializer;
+    protected $serializer;
     /**
      * @var ServerRequestInterface
      */
@@ -49,23 +47,24 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * OutputLayer constructor.
-     * @param JsonSerializer $jsonSerializer
+     * @param Serializer $serializer
      * @param Engine $templateEngine
-     * @param ServerRequestInterface $serverRequest
      */
-    public function __construct(JsonSerializer $jsonSerializer, Engine $templateEngine, ServerRequestInterface $serverRequest)
+    public function __construct(Serializer $serializer, Engine $templateEngine)
     {
-        $this->jsonSerializer = $jsonSerializer;
+        $this->serializer = $serializer;
         $this->templateEngine = $templateEngine;
-        $this->serverRequest = $serverRequest;
     }
 
     /**
+     * @param ServerRequestInterface $serverRequest
      * @param Result|string $output
      * @return ResponseInterface
      */
-    public function process($output)
+    public function process(ServerRequestInterface $serverRequest, $output)
     {
+        $this->serverRequest = $serverRequest;
+
         $response = (new Response())->withProtocolVersion('1.1');
 
         if ($output instanceof DisposableResultInterface) {
@@ -74,10 +73,10 @@ class ResponseBuilder implements PostProcessorInterface
 
         if ($output instanceof TemplateResult) {
             $response = $this->modifyResponseForTemplateResult($response, $output);
-        } else if ($output instanceof JsonResult) {
-            $response = $this->modifyResponseForJsonResult($response, $output);
-        } else if ($output instanceof JsonRawResult) {
-            $response = $this->modifyResponseForJsonRawResult($response, $output);
+        } else if ($output instanceof SerializableResult) {
+            $response = $this->modifyResponseForSerializableResult($response, $output);
+        } else if ($output instanceof NoContentResult) {
+            $response = $this->modifyResponseForNoContentResult($response, $output);
         } else if ($output instanceof RedirectResult) {
             $response = $this->modifyResponseForRedirectResult($response, $output);
         } elseif ($output instanceof FileResult) {
@@ -86,20 +85,14 @@ class ResponseBuilder implements PostProcessorInterface
             $response = $this->modifyResponseForWebServerFileResult($response, $output, 'X-Sendfile');
         } elseif ($output instanceof NginxFileResult) {
             $response = $this->modifyResponseForWebServerFileResult($response, $output, 'X-Accel-Redirect');
-        } elseif ($output instanceof StringBufferResult) {
-            $response = $this->modifyResponseForStringBufferResult($response, $output);
-        } elseif ($output instanceof HtmlRawResult) {
-            $response = $this->modifyResponseForHtmlRawResult($response, $output);
-        } elseif ($output instanceof XmlRawResult) {
-            $response = $this->modifyResponseForXmlRawResult($response, $output);
         } elseif ($output instanceof StreamResult) {
             $response = $this->modifyResponseForStreamResult($response, $output);
-        } elseif ($output instanceof PlainTextResult) {
-            $response = $this->modifyResponseForPlainTextResult($response, $output);
+        } elseif ($output instanceof StringResult) {
+            $response = $this->modifyResponseForStringResult($response, $output);
         } elseif ($output instanceof CsvResult) {
             $response = $this->modifyResponseForCsvResult($response, $output);
         } else {
-            $response = $this->modifyResponseForPlainTextResult($response, new PlainTextResult($output));
+            $response = $this->modifyResponseForStringResult($response, StringResult::createPlainTextResult($output));
         }
 
         if ($output instanceof StatusCodeResultInterface) {
@@ -147,27 +140,68 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param JsonResult $jsonResult
+     * @param StreamInterface $stream
      * @return ResponseInterface
      */
-    private function modifyResponseForJsonResult(ResponseInterface $response, JsonResult $jsonResult)
+    private function modifyResponseWithContentLength(ResponseInterface $response, StreamInterface $stream)
     {
-        $json = $this->jsonSerializer->serialize($jsonResult->getData());
-        $stream = \GuzzleHttp\Psr7\stream_for($json);
-        $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', 'application/json')->withBody($stream);
+        $size = $stream->getSize();
+        if ($size !== null) {
+            return $response->withHeader('Content-Length', $stream->getSize());
+        } else {
+            return $response;
+        }
     }
 
     /**
      * @param ResponseInterface $response
-     * @param JsonRawResult $jsonRawResult
+     * @param SerializableResult $serializableResult
      * @return ResponseInterface
      */
-    private function modifyResponseForJsonRawResult(ResponseInterface $response, JsonRawResult $jsonRawResult)
+    private function modifyResponseForSerializableResult(ResponseInterface $response, SerializableResult $serializableResult)
     {
-        $stream = \GuzzleHttp\Psr7\stream_for($jsonRawResult->getJson());
+        if ($this->serverRequest->hasHeader('Accept')) {
+            $mimeType = $this->serverRequest->getHeaderLine('Accept');
+        } else if ($serializableResult->getMimeType()) {
+            $mimeType = $serializableResult->getMimeType();
+        } else {
+            $mimeType = 'application/json';
+        }
+        switch ($mimeType) {
+            case 'text/plain':
+                $payload = print_r($serializableResult->getData(), true);
+                break;
+            case 'text/xml':
+                $payload = $this->serializer->serialize($serializableResult->getData(), 'xml');
+                break;
+            case 'text/html':
+                $data = $this->serializer->serialize($serializableResult->getData(), 'json');
+                $this->templateEngine->addFolder('creiwork', __DIR__ . '/../Template');
+                $payload = $this->templateEngine->render(
+                    'creiwork::serializableResult',
+                    [
+                        'data' => $data,
+                        'request' => $this->serverRequest
+                    ]);
+                break;
+            case 'application/json':
+            default:
+                $payload = $this->serializer->serialize($serializableResult->getData(), 'json');
+                break;
+        }
+        $stream = \GuzzleHttp\Psr7\stream_for($payload);
         $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', 'application/json')->withBody($stream);
+        return $response->withHeader('Content-Type', $mimeType)->withBody($stream);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param NoContentResult $output
+     * @return ResponseInterface
+     */
+    private function modifyResponseForNoContentResult(ResponseInterface $response, NoContentResult $output)
+    {
+        return $response->withStatus(StatusCodes::HTTP_NO_CONTENT);
     }
 
     /**
@@ -178,10 +212,11 @@ class ResponseBuilder implements PostProcessorInterface
     private function modifyResponseForRedirectResult(ResponseInterface $response, RedirectResult $redirectResult)
     {
         if ($redirectResult->getUrl() == null) {
-            return $response->withHeader('Location', $this->serverRequest->getServerParams()['REQUEST_URI']);
+            $response = $response->withHeader('Location', $this->serverRequest->getServerParams()['REQUEST_URI']);
         } else {
-            return $response->withHeader('Location', $redirectResult->getUrl());
+            $response = $response->withHeader('Location', $redirectResult->getUrl());
         }
+        return $response->withStatus(StatusCodes::HTTP_FOUND);
     }
 
     /**
@@ -203,43 +238,21 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param StringBufferResult $stringBufferResult
+     * @param AbstractFileResult $result
+     * @param string $redirectHeaderKey
      * @return ResponseInterface
      */
-    private function modifyResponseForStringBufferResult(ResponseInterface $response, StringBufferResult $stringBufferResult)
+    private function modifyResponseForWebServerFileResult(ResponseInterface $response, AbstractFileResult $result, $redirectHeaderKey)
     {
-        if ($stringBufferResult->getMimeType() != null) {
-            $mimeType = $stringBufferResult->getMimeType();
+        if ($result->getMimeType() != null) {
+            $mimeType = $result->getMimeType();
         } else {
-            $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->buffer($stringBufferResult->getBuffer());
+            $mimeType = 'application/octet-stream';
         }
-        $stream = \GuzzleHttp\Psr7\stream_for($stringBufferResult->getBuffer());
-        $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', $mimeType)->withBody($stream);
-    }
-
-    /**
-     * @param ResponseInterface $response
-     * @param HtmlRawResult $htmlResult
-     * @return ResponseInterface
-     */
-    private function modifyResponseForHtmlRawResult(ResponseInterface $response, HtmlRawResult $htmlResult)
-    {
-        $stream = \GuzzleHttp\Psr7\stream_for($htmlResult->getHtml());
-        $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', 'text/html')->withBody($stream);
-    }
-
-    /**
-     * @param ResponseInterface $response
-     * @param XmlRawResult $xmlResult
-     * @return ResponseInterface
-     */
-    private function modifyResponseForXmlRawResult(ResponseInterface $response, XmlRawResult $xmlResult)
-    {
-        $stream = \GuzzleHttp\Psr7\stream_for($xmlResult->getXml());
-        $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', 'text/xml')->withBody($stream);
+        if ($result->getDisposition() === null) {
+            $response = $response->withHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($result->getPath())));
+        }
+        return $response->withHeader($redirectHeaderKey, $result->getPath())->withHeader('Content-Type', $mimeType);
     }
 
     /**
@@ -256,14 +269,14 @@ class ResponseBuilder implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param PlainTextResult $plainTextResult
+     * @param StringResult $stringResult
      * @return ResponseInterface
      */
-    private function modifyResponseForPlainTextResult(ResponseInterface $response, PlainTextResult $plainTextResult)
+    private function modifyResponseForStringResult(ResponseInterface $response, StringResult $stringResult)
     {
-        $stream = \GuzzleHttp\Psr7\stream_for($plainTextResult->getPlainText());
+        $stream = \GuzzleHttp\Psr7\stream_for($stringResult->getPlainText());
         $response = $this->modifyResponseWithContentLength($response, $stream);
-        return $response->withHeader('Content-Type', 'text/plain')->withBody($stream);
+        return $response->withHeader('Content-Type', $stringResult->getMimeType())->withBody($stream);
     }
 
     /**
@@ -296,43 +309,11 @@ class ResponseBuilder implements PostProcessorInterface
     {
         if ($statusCodeResult->getStatusCode() != null) {
             $response = $response->withStatus($statusCodeResult->getStatusCode());
+        } else {
+            $response = $response->withStatus(StatusCodes::HTTP_OK);
         }
         return $response;
 
-    }
-
-    /**
-     * @param ResponseInterface $response
-     * @param StreamInterface $stream
-     * @return ResponseInterface
-     */
-    private function modifyResponseWithContentLength(ResponseInterface $response, StreamInterface $stream)
-    {
-        $size = $stream->getSize();
-        if ($size !== null) {
-            return $response->withHeader('Content-Length', $stream->getSize());
-        } else {
-            return $response;
-        }
-    }
-
-    /**
-     * @param ResponseInterface $response
-     * @param AbstractFileResult $result
-     * @param string $redirectHeaderKey
-     * @return ResponseInterface
-     */
-    private function modifyResponseForWebServerFileResult(ResponseInterface $response, AbstractFileResult $result, $redirectHeaderKey)
-    {
-        if ($result->getMimeType() != null) {
-            $mimeType = $result->getMimeType();
-        } else {
-            $mimeType = 'application/octet-stream';
-        }
-        if ($result->getDisposition() === null) {
-            $response = $response->withHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($result->getPath())));
-        }
-        return $response->withHeader($redirectHeaderKey, $result->getPath())->withHeader('Content-Type', $mimeType);
     }
 
 }
