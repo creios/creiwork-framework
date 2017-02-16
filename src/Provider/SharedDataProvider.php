@@ -5,7 +5,7 @@ namespace Creios\Creiwork\Framework\Provider;
 class SharedDataProvider
 {
     /** @var array */
-    protected $data;
+    protected $data = [];
 
     /**
      * @return array
@@ -29,6 +29,15 @@ class SharedDataProvider
     public function hasData()
     {
         return count($this->data) > 0;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     */
+    public function addData($key, $value)
+    {
+        $this->data[$key] = $value;
     }
 
 }
