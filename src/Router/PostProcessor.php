@@ -2,6 +2,7 @@
 
 namespace Creios\Creiwork\Framework\Router;
 
+use Creios\Creiwork\Framework\Provider\SharedDataProvider;
 use Creios\Creiwork\Framework\Result\Abstracts\AbstractFileResult;
 use Creios\Creiwork\Framework\Result\ApacheFileResult;
 use Creios\Creiwork\Framework\Result\CsvResult;
@@ -44,16 +45,25 @@ class PostProcessor implements PostProcessorInterface
      * @var ServerRequestInterface
      */
     protected $serverRequest;
+    /**
+     * @var SharedDataProvider
+     */
+    private $sharedDataProvider;
 
     /**
      * OutputLayer constructor.
      * @param Serializer $serializer
      * @param Engine $templateEngine
+     * @param SharedDataProvider $sharedDataProvider
      */
-    public function __construct(Serializer $serializer, Engine $templateEngine)
+    public function __construct(Serializer $serializer,
+                                Engine $templateEngine,
+                                SharedDataProvider $sharedDataProvider)
+
     {
         $this->serializer = $serializer;
         $this->templateEngine = $templateEngine;
+        $this->sharedDataProvider = $sharedDataProvider;
     }
 
     /**
@@ -127,6 +137,9 @@ class PostProcessor implements PostProcessorInterface
      */
     private function modifyResponseForTemplateResult(ResponseInterface $response, TemplateResult $templateResult)
     {
+        if ($this->sharedDataProvider->hasData()) {
+            $this->templateEngine->addData($this->sharedDataProvider->getData());
+        }
         $this->templateEngine->addData(['host' => 'http://' . $this->serverRequest->getServerParams()['HTTP_HOST'] . '/']);
         if ($templateResult->getData() === null) {
             $data = [];
