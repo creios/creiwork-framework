@@ -5,6 +5,7 @@ namespace Creios\Creiwork\Framework;
 use Aura\Session\SegmentInterface;
 use Aura\Session\Session;
 use Aura\Session\SessionFactory;
+use Creios\Creiwork\Framework\Config\Validator;
 use Creios\Creiwork\Framework\Exception\ConfigException;
 use Creios\Creiwork\Framework\Message\Factory\ErrorFactory;
 use Creios\Creiwork\Framework\Message\Factory\InformationFactory;
@@ -18,6 +19,7 @@ use GuzzleHttp\Psr7\StreamWrapper;
 use Interop\Container\ContainerInterface;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
+use JsonSchema\Validator as JsonValidator;
 use League\Plates;
 use Middlewares\ContentType;
 use Middlewares\Whoops as WhoopsMiddleware;
@@ -132,6 +134,10 @@ class Creiwork
                 return $serializerBuilder->addMetadataDir($this->getModelDirectory())->build();
             },
 
+            Validator::class => function (JsonValidator $jsonValidator) {
+                return new Validator($jsonValidator, __DIR__ . '/Config/config-schema.json');
+            },
+
             WhoopsMiddleware::class => function (Config $config, ErrorPageHandler $errorPageHandler) {
                 if ($config->get('debug')) {
                     return new WhoopsMiddleware();
@@ -217,22 +223,12 @@ class Creiwork
         date_default_timezone_set('UTC');
         //container
         $this->container = $this->containerBuilder->build();
-        //config
-        $this->config = $this->container->get(Config::class);
-        $this->checkConfigKey(self::routerConfigKey);
-        $this->checkConfigKey(self::loggerDirKey);
-        $this->checkConfigKey(self::templateDirKey);
-        $this->checkConfigKey(self::modelDirectoryKey);
-    }
-
-    /**
-     * @param string $key
-     * @throws ConfigException
-     */
-    private function checkConfigKey($key)
-    {
-        if (!$this->config->has($key)) {
-            throw new ConfigException("Config file doesn't contain '${key}''");
+        //validate config against schema
+        $configValidator = $this->container->get(Validator::class);
+        if ($configValidator->validate($this->configFilePath)) {
+            $this->config = $this->container->get(Config::class);
+        } else {
+            throw new ConfigException("Config is not valid");
         }
     }
 

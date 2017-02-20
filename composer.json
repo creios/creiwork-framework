@@ -30,7 +30,8 @@
     "hassankhan/config": "^0.10.0",
     "jms/serializer": "^1.4",
     "middlewares/whoops": "^0.3.0",
-    "middlewares/negotiation": "^0.3.0"
+    "middlewares/negotiation": "^0.3.0",
+    "justinrainbow/json-schema": "^4.1"
   },
   "autoload": {
     "psr-4": {
