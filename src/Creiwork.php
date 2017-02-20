@@ -230,22 +230,7 @@ class Creiwork
         } else {
             throw new ConfigException("Config is not valid");
         }
-//        $this->checkConfigKey(self::routerConfigKey);
-//        $this->checkConfigKey(self::loggerDirKey);
-//        $this->checkConfigKey(self::templateDirKey);
-//        $this->checkConfigKey(self::modelDirectoryKey);
     }
-
-//    /**
-//     * @param string $key
-//     * @throws ConfigException
-//     */
-//    private function checkConfigKey($key)
-//    {
-//        if (!$this->config->has($key)) {
-//            throw new ConfigException("Config file doesn't contain '${key}''");
-//        }
-//    }
 
     /**
      * @return ResponseInterface
