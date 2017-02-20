@@ -2,6 +2,7 @@
 
 namespace Creios\Creiwork\Framework\Router;
 
+use Creios\Creiwork\Framework\Provider\SharedDataProvider;
 use Creios\Creiwork\Framework\Result\ApacheFileResult;
 use Creios\Creiwork\Framework\Result\CsvResult;
 use Creios\Creiwork\Framework\Result\FileResult;
@@ -37,13 +38,16 @@ class PostProcessorTest extends \PHPUnit_Framework_TestCase
     private $serverRequest;
     /** @var resource */
     private $stream;
+    /** @var \PHPUnit_Framework_MockObject_MockObject|SharedDataProvider */
+    private $shareDataProvider;
 
     public function setUp()
     {
         $this->engine = $this->createMock(Engine::class);
+        $this->shareDataProvider = $this->createMock(SharedDataProvider::class);
         $this->serializer = $this->createMock(Serializer::class);
         $this->serverRequest = $this->createMock(ServerRequestInterface::class);
-        $this->responseBuilder = new PostProcessor($this->serializer, $this->engine, $this->serverRequest);
+        $this->responseBuilder = new PostProcessor($this->serializer, $this->engine, $this->shareDataProvider);
         $this->stream = fopen('php://temp', 'r+');
         fwrite($this->stream, '');
         fseek($this->stream, 0);

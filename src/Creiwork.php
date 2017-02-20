@@ -25,6 +25,7 @@ use Middlewares\ContentType;
 use Middlewares\Whoops as WhoopsMiddleware;
 use mindplay\middleman\ContainerResolver;
 use mindplay\middleman\Dispatcher;
+use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Noodlehaus\Config;
@@ -99,9 +100,9 @@ class Creiwork
                 return new Plates\Engine($this->getTemplateDirectory());
             },
 
-            LoggerInterface::class => function (StreamHandler $streamHandler) {
+            LoggerInterface::class => function (HandlerInterface $handlerInterface) {
                 $logger = new Logger('Creiwork');
-                $logger->pushHandler($streamHandler);
+                $logger->pushHandler($handlerInterface);
                 return $logger;
             },
 
@@ -113,7 +114,7 @@ class Creiwork
                 return new InformationFactory($config->get('contact'));
             },
 
-            StreamHandler::class => function () {
+            HandlerInterface::class => function () {
                 return new StreamHandler($this->getLoggerDirectory() . '/info.log', Logger::INFO);
             },
 
