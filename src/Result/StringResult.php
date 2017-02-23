@@ -9,6 +9,7 @@ use Creios\Creiwork\Framework\Result\Traits\DisposableResult;
 use Creios\Creiwork\Framework\Result\Traits\MimeTypeResult;
 use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
+use Creios\Creiwork\Framework\StatusCodes;
 
 /**
  * Class StringResult
@@ -67,6 +68,17 @@ class StringResult extends Result implements MimeTypeResultInterface, StatusCode
     public static function createHtmlResult($string)
     {
         return (new StringResult($string))->withMimeType('text/html');
+    }
+
+    /**
+     * @param int $statusCode
+     * @return StringResult
+     */
+    public static function createPlainTextResultFromStatusCode($statusCode)
+    {
+        return StringResult::createPlainTextResult(
+            StatusCodes::getMessageForCode($statusCode))
+            ->withStatusCode($statusCode);
     }
 
     /**
