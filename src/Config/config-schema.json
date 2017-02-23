@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "debug": {
-      "type": "string"
+      "type": "boolean"
     },
     "router-config": {
       "type": "string"
