@@ -42,6 +42,7 @@ use function DI\object;
  */
 class Creiwork
 {
+
     /** @var string */
     const routerConfigKey = 'router-config';
     /** @var string */
@@ -66,6 +67,13 @@ class Creiwork
     /**
      * Creiwork constructor.
      * @param string $configPath
+     * @throws \Interop\Container\Exception\ContainerException
+     * @throws \Interop\Container\Exception\NotFoundException
+     * @throws \InvalidArgumentException
+     * @throws \JMS\Serializer\Exception\InvalidArgumentException
+     * @throws \Noodlehaus\Exception\EmptyDirectoryException
+     * @throws \TimTegeler\Routerunner\Exception\ParseException
+     * @throws \Exception
      */
     public function __construct($configPath)
     {
@@ -80,6 +88,13 @@ class Creiwork
 
     /**
      * @return array
+     * @throws \Interop\Container\Exception\ContainerException
+     * @throws \Interop\Container\Exception\NotFoundException
+     * @throws \InvalidArgumentException
+     * @throws \JMS\Serializer\Exception\InvalidArgumentException
+     * @throws \Noodlehaus\Exception\EmptyDirectoryException
+     * @throws \TimTegeler\Routerunner\Exception\ParseException
+     * @throws \Exception
      */
     private function standardDiDefinitions()
     {
@@ -228,12 +243,14 @@ class Creiwork
         if ($configValidator->validate($this->configFilePath)) {
             $this->config = $this->container->get(Config::class);
         } else {
-            throw new ConfigException("Config is not valid");
+            throw new ConfigException('Config is not valid');
         }
     }
 
     /**
      * @return ResponseInterface
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     private function dispatch()
     {
@@ -247,12 +264,15 @@ class Creiwork
 
     /**
      * @param ResponseInterface $response
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     private function out(ResponseInterface $response)
     {
         header(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase()));
 
         foreach ($response->getHeaders() as $name => $values) {
+            /** @var string[] $values */
             foreach ($values as $value) {
                 header(sprintf('%s: %s', $name, $value), false);
             }
@@ -260,7 +280,7 @@ class Creiwork
 
         $response->getBody()->seek(0);
 
-        stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'w'));
+        stream_copy_to_stream(StreamWrapper::getResource($response->getBody()), fopen('php://output', 'wb'));
     }
 
     /**

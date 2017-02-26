@@ -28,7 +28,7 @@ class Disposition
     /** @var string */
     private $type;
     /** @var string */
-    private $filename = null;
+    private $filename;
 
     /**
      * Disposition constructor.

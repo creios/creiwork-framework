@@ -28,6 +28,7 @@ class PreProcessor implements PreProcessorInterface
      * @param ServerRequestInterface $request
      * @param ControllerInterface $controller
      * @return ServerRequestInterface
+     * @throws \InvalidArgumentException
      * @throws DeserializeException
      */
     public function process(ServerRequestInterface $request, ControllerInterface $controller)

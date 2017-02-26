@@ -145,8 +145,8 @@ class StatusCodes
             // True if not in 100s
             ($code < self::HTTP_CONTINUE || $code >= self::HTTP_OK)
             && // and not 204 NO CONTENT
-            $code != self::HTTP_NO_CONTENT
+            $code !== self::HTTP_NO_CONTENT
             && // and not 304 NOT MODIFIED
-            $code != self::HTTP_NOT_MODIFIED;
+            $code !== self::HTTP_NOT_MODIFIED;
     }
 }

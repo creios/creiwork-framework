@@ -79,7 +79,7 @@ abstract class BaseRestController extends BaseController
         $limitKey = 'limit';
         $offsetKey = 'offset';
         $queryParams = $request->getQueryParams();
-        if (isset($queryParams[$limitKey]) && isset($queryParams[$offsetKey])) {
+        if (isset($queryParams[$limitKey], $queryParams[$offsetKey])) {
             $limit = (int)$queryParams[$limitKey];
             $offset = (int)$queryParams[$offsetKey];
             $count = $this->repository->count();

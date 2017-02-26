@@ -70,6 +70,7 @@ class PostProcessor implements PostProcessorInterface
      * @param ServerRequestInterface $serverRequest
      * @param Result|string $output
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      */
     public function process(ServerRequestInterface $serverRequest, $output)
     {
@@ -86,7 +87,7 @@ class PostProcessor implements PostProcessorInterface
         } else if ($output instanceof SerializableResult) {
             $response = $this->modifyResponseForSerializableResult($response, $output);
         } else if ($output instanceof NoContentResult) {
-            $response = $this->modifyResponseForNoContentResult($response, $output);
+            $response = $this->modifyResponseForNoContentResult($response);
         } else if ($output instanceof RedirectResult) {
             $response = $this->modifyResponseForRedirectResult($response, $output);
         } elseif ($output instanceof FileResult) {
@@ -116,6 +117,7 @@ class PostProcessor implements PostProcessorInterface
      * @param ResponseInterface $response
      * @param DisposableResultInterface $disposable
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      */
     private function modifyResponseForDisposableResult(ResponseInterface $response, DisposableResultInterface $disposable)
     {
@@ -134,6 +136,7 @@ class PostProcessor implements PostProcessorInterface
      * @param ResponseInterface $response
      * @param TemplateResult $templateResult
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      */
     private function modifyResponseForTemplateResult(ResponseInterface $response, TemplateResult $templateResult)
     {
@@ -155,6 +158,7 @@ class PostProcessor implements PostProcessorInterface
      * @param ResponseInterface $response
      * @param StreamInterface $stream
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      */
     private function modifyResponseWithContentLength(ResponseInterface $response, StreamInterface $stream)
     {
@@ -170,15 +174,15 @@ class PostProcessor implements PostProcessorInterface
      * @param ResponseInterface $response
      * @param SerializableResult $serializableResult
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      */
     private function modifyResponseForSerializableResult(ResponseInterface $response, SerializableResult $serializableResult)
     {
+        $mimeType = 'application/json';
         if ($this->serverRequest->hasHeader('Accept')) {
             $mimeType = $this->serverRequest->getHeaderLine('Accept');
         } else if ($serializableResult->getMimeType()) {
             $mimeType = $serializableResult->getMimeType();
-        } else {
-            $mimeType = 'application/json';
         }
         switch ($mimeType) {
             case 'text/plain':
@@ -209,10 +213,11 @@ class PostProcessor implements PostProcessorInterface
 
     /**
      * @param ResponseInterface $response
-     * @param NoContentResult $output
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
+     * @internal param NoContentResult $output
      */
-    private function modifyResponseForNoContentResult(ResponseInterface $response, NoContentResult $output)
+    private function modifyResponseForNoContentResult(ResponseInterface $response)
     {
         return $response->withStatus(StatusCodes::HTTP_NO_CONTENT);
     }
@@ -221,10 +226,11 @@ class PostProcessor implements PostProcessorInterface
      * @param ResponseInterface $response
      * @param RedirectResult $redirectResult
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      */
     private function modifyResponseForRedirectResult(ResponseInterface $response, RedirectResult $redirectResult)
     {
-        if ($redirectResult->getUrl() == null) {
+        if ($redirectResult->getUrl() === null) {
             $response = $response->withHeader('Location', $this->serverRequest->getServerParams()['REQUEST_URI']);
         } else {
             $response = $response->withHeader('Location', $redirectResult->getUrl());
@@ -236,15 +242,16 @@ class PostProcessor implements PostProcessorInterface
      * @param ResponseInterface $response
      * @param FileResult $fileResult
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      */
     private function modifyResponseForFileResult(ResponseInterface $response, FileResult $fileResult)
     {
-        if ($fileResult->getMimeType() != null) {
+        if ($fileResult->getMimeType() !== null) {
             $mimeType = $fileResult->getMimeType();
         } else {
             $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->file($fileResult->getPath());
         }
-        $stream = \GuzzleHttp\Psr7\stream_for(fopen($fileResult->getPath(), 'r'));
+        $stream = \GuzzleHttp\Psr7\stream_for(fopen($fileResult->getPath(), 'rb'));
         $response = $this->modifyResponseWithContentLength($response, $stream);
         return $response->withHeader('Content-Type', $mimeType)->withBody($stream);
     }
@@ -254,17 +261,19 @@ class PostProcessor implements PostProcessorInterface
      * @param AbstractFileResult $result
      * @param string $redirectHeaderKey
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      */
     private function modifyResponseForWebServerFileResult(ResponseInterface $response, AbstractFileResult $result, $redirectHeaderKey)
     {
-        if ($result->getMimeType() != null) {
+        $mimeType = 'application/octet-stream';
+        if ($result->getMimeType() !== null) {
             $mimeType = $result->getMimeType();
-        } else {
-            $mimeType = 'application/octet-stream';
         }
+
         if ($result->getDisposition() === null) {
             $response = $response->withHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($result->getPath())));
         }
+
         return $response->withHeader($redirectHeaderKey, $result->getPath())->withHeader('Content-Type', $mimeType);
     }
 
@@ -272,6 +281,7 @@ class PostProcessor implements PostProcessorInterface
      * @param ResponseInterface $response
      * @param StreamResult $streamResult
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      */
     private function modifyResponseForStreamResult(ResponseInterface $response, StreamResult $streamResult)
     {
@@ -284,6 +294,7 @@ class PostProcessor implements PostProcessorInterface
      * @param ResponseInterface $response
      * @param StringResult $stringResult
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      */
     private function modifyResponseForStringResult(ResponseInterface $response, StringResult $stringResult)
     {
@@ -296,13 +307,14 @@ class PostProcessor implements PostProcessorInterface
      * @param ResponseInterface $response
      * @param CsvResult $csvResult
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      */
     private function modifyResponseForCsvResult(
         ResponseInterface $response,
         CsvResult $csvResult
     )
     {
-        $resource = fopen('php://temp', 'r+');
+        $resource = fopen('php://temp', 'rb+');
         foreach ($csvResult->getData() as $row) {
             fputcsv($resource, $row);
         }
@@ -317,10 +329,11 @@ class PostProcessor implements PostProcessorInterface
      * @param ResponseInterface $response
      * @param StatusCodeResultInterface $statusCodeResult
      * @return ResponseInterface
+     * @throws \InvalidArgumentException
      */
     private function modifyResponseForStatusCodeResult(ResponseInterface $response, StatusCodeResultInterface $statusCodeResult)
     {
-        if ($statusCodeResult->getStatusCode() != null) {
+        if ($statusCodeResult->getStatusCode() !== null) {
             $response = $response->withStatus($statusCodeResult->getStatusCode());
         } else {
             $response = $response->withStatus(StatusCodes::HTTP_OK);
