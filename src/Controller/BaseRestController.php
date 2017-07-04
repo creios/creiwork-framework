@@ -15,18 +15,13 @@ use Psr\Http\Message\ServerRequestInterface;
 abstract class BaseRestController extends BaseController
 {
 
-    /** @var string */
-    protected $model;
     /** @var  RepositoryBaseInterface */
     protected $repository;
 
     /**
      * @return string
      */
-    public function getModel()
-    {
-        return $this->model;
-    }
+    abstract public function getModel();
 
     /**
      * @param ServerRequestInterface $request

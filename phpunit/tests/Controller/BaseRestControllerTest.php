@@ -40,6 +40,14 @@ class WrappedBaseRestController extends BaseRestController implements RestContro
     {
         return $this->standardList($request);
     }
+
+    /**
+     * @return string
+     */
+    public function getModel()
+    {
+        return "";
+    }
 }
 
 class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
