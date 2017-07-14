@@ -66,19 +66,19 @@ class Creiwork
 
     /**
      * Creiwork constructor.
-     * @param string $configPath
-     * @throws \Interop\Container\Exception\ContainerException
-     * @throws \Interop\Container\Exception\NotFoundException
-     * @throws \InvalidArgumentException
+     * @param string $configDirectoryPath
      * @throws \JMS\Serializer\Exception\InvalidArgumentException
-     * @throws \Noodlehaus\Exception\EmptyDirectoryException
+     * @throws \Interop\Container\Exception\NotFoundException
+     * @throws \Interop\Container\Exception\ContainerException
      * @throws \TimTegeler\Routerunner\Exception\ParseException
+     * @throws \Noodlehaus\Exception\EmptyDirectoryException
+     * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    public function __construct($configPath)
+    public function __construct($configDirectoryPath)
     {
-        $this->configFilePath = $configPath;
-        $this->configDirectoryPath = dirname($configPath) . '/';
+        $this->configDirectoryPath = $configDirectoryPath;
+        $this->resolveConfigFilePath(getenv('ENVIRONMENT'));
         $this->containerBuilder = new ContainerBuilder();
         //add standard definitions
         $this->containerBuilder->addDefinitions($this->standardDiDefinitions());
@@ -87,13 +87,43 @@ class Creiwork
     }
 
     /**
+     * @param string $environment
+     */
+    private function resolveConfigFilePath($environment)
+    {
+        if ($environment !== false) {
+            $this->configFilePath = $this->getEnvironmentBasedConfigFilePath($environment);
+        } else {
+            $this->configFilePath = $this->getDefaultConfigFilePath();
+        }
+    }
+
+    /**
+     * @param string $environment
+     * @return string
+     */
+    private function getEnvironmentBasedConfigFilePath($environment)
+    {
+        return sprintf('%s/config.%s.json', $this->configDirectoryPath, $environment);
+    }
+
+    /**
+     * @return string
+     */
+    private function getDefaultConfigFilePath()
+    {
+        return sprintf('%s/config.json', $this->configDirectoryPath);
+
+    }
+
+    /**
      * @return array
-     * @throws \Interop\Container\Exception\ContainerException
-     * @throws \Interop\Container\Exception\NotFoundException
-     * @throws \InvalidArgumentException
      * @throws \JMS\Serializer\Exception\InvalidArgumentException
-     * @throws \Noodlehaus\Exception\EmptyDirectoryException
+     * @throws \Interop\Container\Exception\NotFoundException
+     * @throws \Interop\Container\Exception\ContainerException
      * @throws \TimTegeler\Routerunner\Exception\ParseException
+     * @throws \Noodlehaus\Exception\EmptyDirectoryException
+     * @throws \InvalidArgumentException
      * @throws \Exception
      */
     private function standardDiDefinitions()
@@ -156,11 +186,10 @@ class Creiwork
             WhoopsMiddleware::class => function (Config $config, ErrorPageHandler $errorPageHandler) {
                 if ($config->get('debug')) {
                     return new WhoopsMiddleware();
-                } else {
-                    $run = new Run();
-                    $run->pushHandler($errorPageHandler);
-                    return new WhoopsMiddleware($run);
                 }
+                $run = new Run();
+                $run->pushHandler($errorPageHandler);
+                return new WhoopsMiddleware($run);
             }
         ];
     }
@@ -264,8 +293,8 @@ class Creiwork
 
     /**
      * @param ResponseInterface $response
-     * @throws \InvalidArgumentException
      * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
     private function out(ResponseInterface $response)
     {
@@ -273,6 +302,7 @@ class Creiwork
 
         foreach ($response->getHeaders() as $name => $values) {
             /** @var string[] $values */
+            /** @var string $value */
             foreach ($values as $value) {
                 header(sprintf('%s: %s', $name, $value), false);
             }
@@ -304,4 +334,5 @@ class Creiwork
         array_unshift($this->middlewareStack, $middleware);
         return $this;
     }
+
 }

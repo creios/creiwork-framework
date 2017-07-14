@@ -23,7 +23,7 @@ class CreiworkTest extends \PHPUnit_Framework_TestCase
      */
     public function testStart()
     {
-        (new Creiwork(__DIR__ . '/../asset/config.json'))->start();
+        (new Creiwork(__DIR__ . '/../asset/'))->start();
         $this->expectOutputString('Controller has been executed');
     }
 }
