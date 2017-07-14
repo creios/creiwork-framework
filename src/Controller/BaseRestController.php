@@ -23,6 +23,17 @@ abstract class BaseRestController extends BaseController
     protected $config;
 
     /**
+     * BaseRestController constructor.
+     * @param Config $config
+     * @param RepositoryBaseInterface $repository
+     */
+    public function __construct(Config $config, RepositoryBaseInterface $repository)
+    {
+        $this->config = $config;
+        $this->repository = $repository;
+    }
+
+    /**
      * @return string
      */
     abstract public function getModel();
