@@ -2,10 +2,12 @@
 
 namespace Creios\Creiwork\Framework\Controller;
 
+use Creios\Creiwork\Framework\Message\Factory\ErrorFactory;
 use Creios\Creiwork\Framework\Repository\RepositoryBaseInterface;
 use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\SerializableResult;
 use Creios\Creiwork\Framework\StatusCodes;
+use Noodlehaus\Config;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -15,8 +17,10 @@ use Psr\Http\Message\ServerRequestInterface;
 abstract class BaseRestController extends BaseController
 {
 
-    /** @var  RepositoryBaseInterface */
+    /** @var RepositoryBaseInterface */
     protected $repository;
+    /** @var Config */
+    protected $config;
 
     /**
      * @return string
@@ -40,8 +44,17 @@ abstract class BaseRestController extends BaseController
      */
     protected function standardRetrieve($id)
     {
-        $entity = $this->repository->find($id);
-        return new SerializableResult($entity);
+        try {
+            $entity = $this->repository->find($id);
+            return new SerializableResult($entity);
+        } catch (\Exception $e) {
+            $error = (new ErrorFactory($this->getSupportContact()))
+                ->setSuggestion("Perhaps you are using the wrong id (${id})")
+                ->buildError("Record with id ${id} not found");
+
+            return (new SerializableResult($error))
+                ->withStatusCode(StatusCodes::HTTP_NOT_FOUND);
+        }
     }
 
     /**
@@ -84,6 +97,14 @@ abstract class BaseRestController extends BaseController
             $data = $this->repository->all();
         }
         return new SerializableResult($data);
+    }
+
+    /**
+     * @return string
+     */
+    private function getSupportContact()
+    {
+        return $this->config->get('support-contact');
     }
 
 }

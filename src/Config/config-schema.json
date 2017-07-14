@@ -16,12 +16,16 @@
     },
     "model-dir": {
       "type": "string"
+    },
+    "support-contact": {
+      "type": "string"
     }
   },
   "required": [
     "debug",
     "router-config",
     "logger-dir",
+    "support-contact",
     "model-dir"
   ]
 }

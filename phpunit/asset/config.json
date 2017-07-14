@@ -1,6 +1,7 @@
 {
   "debug": true,
   "router-config": "routerunner-config.yml",
+  "support-contact": "John Doe <john.doe@example.org>",
   "logger-dir": ".",
   "template-dir": ".",
   "model-dir": "."
