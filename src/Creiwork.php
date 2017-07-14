@@ -77,13 +77,22 @@ class Creiwork
      */
     public function __construct($configDirectoryPath)
     {
-        $this->configDirectoryPath = $configDirectoryPath;
+        $this->configDirectoryPath = $this->addTrailingSlashIfMissing($configDirectoryPath);
         $this->resolveConfigFilePath(getenv('ENVIRONMENT'));
         $this->containerBuilder = new ContainerBuilder();
         //add standard definitions
         $this->containerBuilder->addDefinitions($this->standardDiDefinitions());
         //add standard middleware stack
         $this->middlewareStack = $this->standardMiddlewareStack();
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    private function addTrailingSlashIfMissing($path)
+    {
+        return sprintf('%s/', rtrim($path, '/'));
     }
 
     /**
