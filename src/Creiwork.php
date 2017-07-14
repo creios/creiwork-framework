@@ -193,7 +193,7 @@ class Creiwork
             },
 
             Validator::class => function (JsonValidator $jsonValidator) {
-                return new Validator($jsonValidator, __DIR__ . '/Config/config-schema.json');
+                return new Validator($jsonValidator, __DIR__ . '/../resource/config-schema.json');
             },
 
             WhoopsMiddleware::class => function (Config $config, ErrorPageHandler $errorPageHandler) {
