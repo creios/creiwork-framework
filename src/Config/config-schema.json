@@ -22,7 +22,6 @@
     "debug",
     "router-config",
     "logger-dir",
-    "template-dir",
     "model-dir"
   ]
 }

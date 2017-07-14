@@ -43,10 +43,10 @@ class Validator
 
         if ($this->jsonValidator->isValid()) {
             return true;
-        } else {
-            $this->errors = $this->jsonValidator->getErrors();
-            return false;
         }
+
+        $this->errors = $this->jsonValidator->getErrors();
+        return false;
 
     }
 

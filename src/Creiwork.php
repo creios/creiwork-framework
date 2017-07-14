@@ -142,7 +142,11 @@ class Creiwork
             },
 
             Plates\Engine::class => function () {
-                return new Plates\Engine($this->getTemplateDirectory());
+                $templateDirectory = null;
+                if ($this->isTemplateDirectorySet()) {
+                    $templateDirectory = $this->getTemplateDirectory();
+                }
+                return new Plates\Engine($templateDirectory);
             },
 
             LoggerInterface::class => function (HandlerInterface $handlerInterface) {
@@ -209,6 +213,14 @@ class Creiwork
     private function generateFilePath($filePath)
     {
         return realpath($this->configDirectoryPath . $filePath);
+    }
+
+    /**
+     * @return bool
+     */
+    private function isTemplateDirectorySet()
+    {
+        return $this->config->has(self::templateDirKey);
     }
 
     /**
