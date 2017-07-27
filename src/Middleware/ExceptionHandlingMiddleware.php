@@ -8,9 +8,9 @@ use Creios\Creiwork\Framework\Router\PostProcessor;
 use Creios\Creiwork\Framework\StatusCodes;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Noodlehaus\Config;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Robo\Config;
 
 class ExceptionHandlingMiddleware implements MiddlewareInterface
 {

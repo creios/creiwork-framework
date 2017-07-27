@@ -86,7 +86,6 @@ class Creiwork
         $this->containerBuilder = new ContainerBuilder();
         //add standard definitions
         $this->containerBuilder->addDefinitions($this->standardDiDefinitions());
-        $this->container = $this->containerBuilder->build();
         $this->loadConfig();
         //add standard middleware stack
         $this->middlewareStack = $this->standardMiddlewareStack();
@@ -137,16 +136,24 @@ class Creiwork
      * @throws \JsonSchema\Exception\ExceptionInterface
      * @throws \DI\NotFoundException
      * @throws \InvalidArgumentException
+     * @throws \Noodlehaus\Exception\EmptyDirectoryException
      */
     private function loadConfig()
     {
-        //validate config against schema
-        $configValidator = $this->container->get(Validator::class);
+        $configValidator = $this->buildConfigValidator();
         if ($configValidator->validate($this->configFilePath)) {
-            $this->config = $this->container->get(Config::class);
+            $this->config = new Config($this->configFilePath);
         } else {
             throw new ConfigException('Config is not valid');
         }
+    }
+
+    /**
+     * @return Validator
+     */
+    private function buildConfigValidator()
+    {
+        return new Validator(new JsonValidator(), __DIR__ . '/../resource/config-schema.json');
     }
 
     /**
@@ -215,10 +222,6 @@ class Creiwork
             Serializer::class => function (SerializerBuilder $serializerBuilder) {
                 return $serializerBuilder->addMetadataDir($this->getModelDirectory())->build();
             },
-
-            Validator::class => function (JsonValidator $jsonValidator) {
-                return new Validator($jsonValidator, __DIR__ . '/../resource/config-schema.json');
-            }
 
         ];
     }
@@ -308,6 +311,7 @@ class Creiwork
         //settings
         date_default_timezone_set('UTC');
 
+        $this->container = $this->containerBuilder->build();
     }
 
     /**
