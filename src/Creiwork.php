@@ -9,6 +9,7 @@ use Creios\Creiwork\Framework\Config\Validator;
 use Creios\Creiwork\Framework\Exception\ConfigException;
 use Creios\Creiwork\Framework\Message\Factory\ErrorFactory;
 use Creios\Creiwork\Framework\Message\Factory\InformationFactory;
+use Creios\Creiwork\Framework\Middleware\ExceptionHandlingMiddleware;
 use Creios\Creiwork\Framework\Router\PostProcessor;
 use Creios\Creiwork\Framework\Router\PreProcessor;
 use DI\Container;
@@ -32,7 +33,6 @@ use Noodlehaus\Config;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use TimTegeler\Routerunner\Routerunner;
-use Whoops\Run;
 use function DI\factory;
 use function DI\object;
 
@@ -74,6 +74,10 @@ class Creiwork
      * @throws \Noodlehaus\Exception\EmptyDirectoryException
      * @throws \InvalidArgumentException
      * @throws \Exception
+     * @throws \Creios\Creiwork\Framework\Exception\ConfigException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \JsonSchema\Exception\ExceptionInterface
      */
     public function __construct($configDirectoryPath)
     {
@@ -82,6 +86,7 @@ class Creiwork
         $this->containerBuilder = new ContainerBuilder();
         //add standard definitions
         $this->containerBuilder->addDefinitions($this->standardDiDefinitions());
+        $this->loadConfig();
         //add standard middleware stack
         $this->middlewareStack = $this->standardMiddlewareStack();
     }
@@ -123,6 +128,32 @@ class Creiwork
     {
         return sprintf('%s/config.json', $this->configDirectoryPath);
 
+    }
+
+    /**
+     * @throws ConfigException
+     * @throws \DI\DependencyException
+     * @throws \JsonSchema\Exception\ExceptionInterface
+     * @throws \DI\NotFoundException
+     * @throws \InvalidArgumentException
+     * @throws \Noodlehaus\Exception\EmptyDirectoryException
+     */
+    private function loadConfig()
+    {
+        $configValidator = $this->buildConfigValidator();
+        if ($configValidator->validate($this->configFilePath)) {
+            $this->config = new Config($this->configFilePath);
+        } else {
+            throw new ConfigException('Config is not valid');
+        }
+    }
+
+    /**
+     * @return Validator
+     */
+    private function buildConfigValidator()
+    {
+        return new Validator(new JsonValidator(), __DIR__ . '/../resource/config-schema.json');
     }
 
     /**
@@ -192,18 +223,6 @@ class Creiwork
                 return $serializerBuilder->addMetadataDir($this->getModelDirectory())->build();
             },
 
-            Validator::class => function (JsonValidator $jsonValidator) {
-                return new Validator($jsonValidator, __DIR__ . '/../resource/config-schema.json');
-            },
-
-            WhoopsMiddleware::class => function (Config $config, ErrorPageHandler $errorPageHandler) {
-                if ($config->get('debug')) {
-                    return new WhoopsMiddleware();
-                }
-                $run = new Run();
-                $run->pushHandler($errorPageHandler);
-                return new WhoopsMiddleware($run);
-            }
         ];
     }
 
@@ -261,12 +280,17 @@ class Creiwork
      */
     private function standardMiddlewareStack()
     {
-        return [
-            //Add new middleware here
-            ContentType::class,
-            WhoopsMiddleware::class,
-            Routerunner::class
-        ];
+        $stack = [ContentType::class];
+
+        if ($this->config->get('debug')) {
+            $stack[] = WhoopsMiddleware::class;
+        } else {
+            $stack[] = ExceptionHandlingMiddleware::class;
+        }
+
+        $stack[] = Routerunner::class;
+
+        return $stack;
     }
 
     public function start()
@@ -286,15 +310,8 @@ class Creiwork
     {
         //settings
         date_default_timezone_set('UTC');
-        //container
+
         $this->container = $this->containerBuilder->build();
-        //validate config against schema
-        $configValidator = $this->container->get(Validator::class);
-        if ($configValidator->validate($this->configFilePath)) {
-            $this->config = $this->container->get(Config::class);
-        } else {
-            throw new ConfigException('Config is not valid');
-        }
     }
 
     /**
