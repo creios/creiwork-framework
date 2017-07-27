@@ -174,9 +174,15 @@ class Creiwork
                 return new Config($this->configFilePath);
             },
 
+            'routerunnerMiddlewareStack' => [],
+
             Routerunner::class => function (ContainerInterface $container) {
                 $routerunner = new Routerunner($this->getRouterConfigFile(), $container);
                 $routerunner->setPreProcessor($container->get(PreProcessor::class));
+                $routerunnerMiddlewareStack = $container->get('routerunnerMiddlewareStack');
+                foreach ($routerunnerMiddlewareStack as $middleware) {
+                    $routerunner->registerMiddleware($middleware);
+                }
                 $routerunner->setPostProcessor($container->get(PostProcessor::class));
                 return $routerunner;
             },
