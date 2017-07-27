@@ -9,6 +9,7 @@ use Creios\Creiwork\Framework\Config\Validator;
 use Creios\Creiwork\Framework\Exception\ConfigException;
 use Creios\Creiwork\Framework\Message\Factory\ErrorFactory;
 use Creios\Creiwork\Framework\Message\Factory\InformationFactory;
+use Creios\Creiwork\Framework\Middleware\ExceptionHandlingMiddleware;
 use Creios\Creiwork\Framework\Router\PostProcessor;
 use Creios\Creiwork\Framework\Router\PreProcessor;
 use DI\Container;
@@ -32,7 +33,6 @@ use Noodlehaus\Config;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use TimTegeler\Routerunner\Routerunner;
-use Whoops\Run;
 use function DI\factory;
 use function DI\object;
 
@@ -194,16 +194,8 @@ class Creiwork
 
             Validator::class => function (JsonValidator $jsonValidator) {
                 return new Validator($jsonValidator, __DIR__ . '/../resource/config-schema.json');
-            },
-
-            WhoopsMiddleware::class => function (Config $config, ErrorPageHandler $errorPageHandler) {
-                if ($config->get('debug')) {
-                    return new WhoopsMiddleware();
-                }
-                $run = new Run();
-                $run->pushHandler($errorPageHandler);
-                return new WhoopsMiddleware($run);
             }
+
         ];
     }
 
@@ -261,12 +253,17 @@ class Creiwork
      */
     private function standardMiddlewareStack()
     {
-        return [
-            //Add new middleware here
-            ContentType::class,
-            WhoopsMiddleware::class,
-            Routerunner::class
-        ];
+        $stack = [ContentType::class];
+
+        if ($this->config->get('debug')) {
+            $stack[] = WhoopsMiddleware::class;
+        } else {
+            $stack[] = ExceptionHandlingMiddleware::class;
+        }
+
+        $stack[] = Routerunner::class;
+
+        return $stack;
     }
 
     public function start()
