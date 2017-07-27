@@ -74,6 +74,10 @@ class Creiwork
      * @throws \Noodlehaus\Exception\EmptyDirectoryException
      * @throws \InvalidArgumentException
      * @throws \Exception
+     * @throws \Creios\Creiwork\Framework\Exception\ConfigException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \JsonSchema\Exception\ExceptionInterface
      */
     public function __construct($configDirectoryPath)
     {
@@ -82,6 +86,8 @@ class Creiwork
         $this->containerBuilder = new ContainerBuilder();
         //add standard definitions
         $this->containerBuilder->addDefinitions($this->standardDiDefinitions());
+        $this->container = $this->containerBuilder->build();
+        $this->loadConfig();
         //add standard middleware stack
         $this->middlewareStack = $this->standardMiddlewareStack();
     }
@@ -123,6 +129,24 @@ class Creiwork
     {
         return sprintf('%s/config.json', $this->configDirectoryPath);
 
+    }
+
+    /**
+     * @throws ConfigException
+     * @throws \DI\DependencyException
+     * @throws \JsonSchema\Exception\ExceptionInterface
+     * @throws \DI\NotFoundException
+     * @throws \InvalidArgumentException
+     */
+    private function loadConfig()
+    {
+        //validate config against schema
+        $configValidator = $this->container->get(Validator::class);
+        if ($configValidator->validate($this->configFilePath)) {
+            $this->config = $this->container->get(Config::class);
+        } else {
+            throw new ConfigException('Config is not valid');
+        }
     }
 
     /**
@@ -283,15 +307,7 @@ class Creiwork
     {
         //settings
         date_default_timezone_set('UTC');
-        //container
-        $this->container = $this->containerBuilder->build();
-        //validate config against schema
-        $configValidator = $this->container->get(Validator::class);
-        if ($configValidator->validate($this->configFilePath)) {
-            $this->config = $this->container->get(Config::class);
-        } else {
-            throw new ConfigException('Config is not valid');
-        }
+
     }
 
     /**
