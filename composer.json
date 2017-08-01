@@ -25,7 +25,7 @@
   },
   "require": {
     "php": ">=5.6.0",
-    "timtegeler/routerunner": "dev-develop#a903026394cb129fd7b7016e5fbf8e026bad0bb3",
+    "timtegeler/routerunner": "dev-dispatcher-remove-needs-id-check#a903026394cb129fd7b7016e5fbf8e026bad0bb3",
     "mindplay/middleman": "3.0.0.x-dev#ff114e34f0b6620f095fe022857813c79486bfc0",
     "aura/session": "^2.0.0",
     "league/plates": "^3.1",
