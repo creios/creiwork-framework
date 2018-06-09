@@ -33,12 +33,31 @@ class SerializableResult extends Result implements
     }
 
     /**
+     * Creates an SerializableResult from a string.
+     * You need to provide an encoded JSON string.
      * @param mixed $data
      * @return SerializableResult
      */
     public static function createJsonResult($data)
     {
         return (new SerializableResult($data))->withMimeType('application/json');
+    }
+
+    /**
+     * Creates an SerializableResult form an array using json_encode.
+     * @param array|object $data array or object.
+     * @param int $options (optional) json_encode otptions
+     * @param int $depth (optional) json_encode depth
+     * @return SerializableResult
+     */
+    public static function createEncodedJsonResult($data, $options = null, $depth = null){
+        if ($options === null) {
+            return self::createJsonResult(json_encode($data));
+        }
+        if ($depth === null) {
+            return self::createJsonResult(json_encode($data, $options));
+        }
+        return self::createJsonResult(json_encode($data, $options, $depth));
     }
 
     /**

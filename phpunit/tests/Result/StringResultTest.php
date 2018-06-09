@@ -2,6 +2,8 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
+use stdClass;
+
 class StringResultTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -97,5 +99,59 @@ JSON;
         $this->assertEquals('application/json', $result->getMimeType());
         $this->assertNull($result->getStatusCode());
         $this->assertNull($result->getDisposition());
+    }
+
+    public function testCreateEncodedJsonResult()
+    {
+
+        $json = <<<JSON
+{
+    "Id": 123456,
+    "Name": "Max Mustermann",
+    "Classes": {
+        "Id": 12345,
+        "Name": "Info I",
+        "ECTS": 12.5
+    }
+}
+JSON;
+
+        $testArray = array(
+            "Id" => 123456,
+            "Name" => "Max Mustermann",
+            "Classes" => array(
+                "Id" => 12345,
+                "Name" => "Info I",
+                "ECTS" => 12.5
+            )
+        );
+
+        $this->assertEquals($json, json_encode($testArray, JSON_PRETTY_PRINT));
+
+        $resultFromCreateEncodedJsonResult = StringResult::createEncodedJsonResult($testArray);
+
+        $this->assertInstanceOf(StringResult::class, $resultFromCreateEncodedJsonResult);
+        $this->assertEquals(
+            // remove all sorts of whitespaces
+            preg_replace('/\s+/', '', $json),
+            preg_replace('/\s+/', '', $resultFromCreateEncodedJsonResult->getPlainText())
+        );
+        $this->assertEquals('application/json', $resultFromCreateEncodedJsonResult->getMimeType());
+        $this->assertNull($resultFromCreateEncodedJsonResult->getStatusCode());
+        $this->assertNull($resultFromCreateEncodedJsonResult->getDisposition());
+
+        $resultFromCreateJsonResult = StringResult::createJsonResult(json_encode($testArray));
+        $this->assertEquals($resultFromCreateEncodedJsonResult, $resultFromCreateJsonResult);
+
+        // test json_encode param propagation
+        $resultFromCreateEncodedJsonResult = StringResult::createEncodedJsonResult($testArray, JSON_BIGINT_AS_STRING, 1);
+        $resultFromCreateJsonResult = StringResult::createJsonResult(json_encode($testArray, JSON_BIGINT_AS_STRING, 1));
+        $this->assertEquals($resultFromCreateJsonResult, $resultFromCreateEncodedJsonResult);
+
+        $resultFromCreateEncodedJsonResult = StringResult::createEncodedJsonResult($testArray, JSON_BIGINT_AS_STRING);
+        $resultFromCreateJsonResult = StringResult::createJsonResult(json_encode($testArray, JSON_BIGINT_AS_STRING));
+        $this->assertEquals($resultFromCreateJsonResult, $resultFromCreateEncodedJsonResult);
+
+
     }
 }

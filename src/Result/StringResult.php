@@ -35,7 +35,8 @@ class StringResult extends Result implements MimeTypeResultInterface, StatusCode
     }
 
     /**
-     * @param $string
+     * Creates an StringResult from a string.
+     * @param string $string
      * @return StringResult
      */
     public static function createPlainTextResult($string)
@@ -44,7 +45,9 @@ class StringResult extends Result implements MimeTypeResultInterface, StatusCode
     }
 
     /**
-     * @param $string
+     * Creates an StringResult from a string.
+     * You need to provide an encoded JSON string.
+     * @param string $string
      * @return StringResult
      */
     public static function createJsonResult($string)
@@ -53,7 +56,25 @@ class StringResult extends Result implements MimeTypeResultInterface, StatusCode
     }
 
     /**
-     * @param $string
+     * Creates an StringResult form an array using json_encode.
+     * @param array|object $data array or object.
+     * @param int $options (optional) json_encode otptions
+     * @param int $depth (optional) json_encode depth
+     * @return SerializableResult
+     */
+    public static function createEncodedJsonResult($data, $options = null, $depth = null)
+    {
+        if ($options === null) {
+            return self::createJsonResult(json_encode($data));
+        }
+        if ($depth === null) {
+            return self::createJsonResult(json_encode($data, $options));
+        }
+        return self::createJsonResult(json_encode($data, $options, $depth));
+    }
+
+    /**
+     * @param string $string
      * @return StringResult
      */
     public static function createXmlResult($string)
@@ -62,7 +83,7 @@ class StringResult extends Result implements MimeTypeResultInterface, StatusCode
     }
 
     /**
-     * @param $string
+     * @param string $string
      * @return StringResult
      */
     public static function createHtmlResult($string)
