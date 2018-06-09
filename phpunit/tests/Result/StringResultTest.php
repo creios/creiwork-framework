@@ -2,8 +2,6 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
-use stdClass;
-
 class StringResultTest extends \PHPUnit_Framework_TestCase
 {
 
