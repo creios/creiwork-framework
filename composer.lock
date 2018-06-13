@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fa33fe276d89a9fe93fef8c24423519",
+    "content-hash": "2ddeda81c2f4e757eb303b43b15a16be",
     "packages": [
         {
             "name": "aura/session",
@@ -1851,16 +1851,16 @@
         },
         {
             "name": "timtegeler/routerunner",
-            "version": "dev-master",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timtegeler/routerunner.git",
-                "reference": "923d826af565258e8da42b8896771d5d5d6dea61"
+                "reference": "d6c7fc43781ab9a43fa1ba29f65b061e9731e693"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/923d826af565258e8da42b8896771d5d5d6dea61",
-                "reference": "923d826af565258e8da42b8896771d5d5d6dea61",
+                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/d6c7fc43781ab9a43fa1ba29f65b061e9731e693",
+                "reference": "d6c7fc43781ab9a43fa1ba29f65b061e9731e693",
                 "shasum": ""
             },
             "require": {
@@ -1892,7 +1892,7 @@
                 }
             ],
             "description": "Routerunner is a router for HTTP-request written in PHP",
-            "time": "2018-06-13T12:21:56+00:00"
+            "time": "2018-06-13T12:33:04+00:00"
         },
         {
             "name": "willdurand/negotiation",
@@ -4281,13 +4281,11 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "timtegeler/routerunner": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.6.0"
+        "php": ">=7.2.0"
     },
     "platform-dev": []
 }
