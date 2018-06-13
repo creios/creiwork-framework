@@ -1,6 +1,7 @@
 <?php
 
 namespace Creios\Creiwork\Framework\Result;
+
 use Creios\Creiwork\Framework\Result\Abstracts\AbstractFileResult;
 
 /**

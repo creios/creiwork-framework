@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "debug": {
+      "type": "boolean"
+    },
+    "router-config": {
+      "type": "string"
+    },
+    "logger-dir": {
+      "type": "string"
+    },
+    "template-dir": {
+      "type": "string"
+    },
+    "model-dir": {
+      "type": "string"
+    },
+    "support-contact": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "debug",
+    "router-config",
+    "logger-dir",
+    "support-contact",
+    "model-dir"
+  ]
+}
