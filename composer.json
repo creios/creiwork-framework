@@ -21,8 +21,8 @@
   },
   "require": {
     "php": ">=5.6.0",
-    "timtegeler/routerunner": "v3.x-dev#6e90d9553400eb8251fc9dc3d1c508bfe1bd0c49",
-    "mindplay/middleman": "3.0.0.x-dev#ff114e34f0b6620f095fe022857813c79486bfc0",
+    "timtegeler/routerunner": "dev-master#923d826af565258e8da42b8896771d5d5d6dea61",
+    "mindplay/middleman": "3.0.3",
     "aura/session": "^2.0.0",
     "league/plates": "^3.1",
     "monolog/monolog": "^1.18",
@@ -30,8 +30,8 @@
     "guzzlehttp/psr7": "^1.3.0",
     "hassankhan/config": "^0.10.0",
     "jms/serializer": "^1.4",
-    "middlewares/whoops": "^0.3.0",
-    "middlewares/negotiation": "^0.3.0",
+    "middlewares/whoops": "^1.1.0",
+    "middlewares/negotiation": "^1.0.0",
     "justinrainbow/json-schema": "^5.2"
   },
   "autoload": {
