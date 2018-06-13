@@ -31,8 +31,10 @@ use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Noodlehaus\Config;
+use phpFastCache\CacheManager;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use TimTegeler\Routerunner\Components\Cache;
 use TimTegeler\Routerunner\Routerunner;
 use function DI\factory;
 use function DI\object;
@@ -231,7 +233,11 @@ class Creiwork
             },
 
             ExceptionHandlingMiddlewareInterface::class =>
-                object(ExceptionHandlingMiddleware::class)
+                object(ExceptionHandlingMiddleware::class),
+
+            Cache::class => function () {
+                return new Cache(CacheManager::Files(), 'routerunner');
+            },
         ];
     }
 
