@@ -2,7 +2,7 @@
 
 namespace Creios\Creiwork\Framework\Middleware;
 
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
 interface ExceptionHandlingMiddlewareInterface extends MiddlewareInterface
 {

@@ -6,10 +6,10 @@ use Creios\Creiwork\Framework\Message\Factory\ErrorFactory;
 use Creios\Creiwork\Framework\Result\SerializableResult;
 use Creios\Creiwork\Framework\Router\PostProcessor;
 use Creios\Creiwork\Framework\StatusCodes;
-use Interop\Http\ServerMiddleware\DelegateInterface;
 use Noodlehaus\Config;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 class ExceptionHandlingMiddleware implements ExceptionHandlingMiddlewareInterface
 {
@@ -35,15 +35,15 @@ class ExceptionHandlingMiddleware implements ExceptionHandlingMiddlewareInterfac
      * to the next middleware component to create the response.
      *
      * @param ServerRequestInterface $request
-     * @param DelegateInterface $delegate
+     * @param RequestHandlerInterface $requestHandler
      *
      * @return ResponseInterface
      * @throws \InvalidArgumentException
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $requestHandler): ResponseInterface
     {
         try {
-            return $delegate->process($request);
+            return $requestHandler->handle($request);
         } catch (\Exception $exception) {
             $result = $this->buildResult();
             return $this->postProcessor->process($request, $result);
