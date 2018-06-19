@@ -323,6 +323,30 @@ class Creiwork
 
     private function preStart()
     {
+        set_error_handler(
+            function ($errno, $errstr, $errfile, $errline) {
+                if (!(error_reporting() & $errno)) {
+                    return false;
+                }
+                throw new \ErrorException(
+                    $errstr,
+                    0,
+                    $errno,
+                    $errfile,
+                    $errline
+                );
+            }
+        );
+
+        register_shutdown_function(
+            function () {
+                $error = error_get_last();
+                if ($error !== null) {
+                    http_response_code(500);
+                }
+            }
+        );
+
         //settings
         date_default_timezone_set('UTC');
 
