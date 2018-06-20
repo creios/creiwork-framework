@@ -19,6 +19,9 @@ use DI\Definition\Source\DefinitionSource;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Interop\Container\ContainerInterface;
+use JMS\Serializer\ContextFactory\CallableSerializationContextFactory;
+use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 use JsonSchema\Validator as JsonValidator;
@@ -228,8 +231,21 @@ class Creiwork
 
             SerializerBuilder::class => factory([SerializerBuilder::class, 'create']),
 
-            Serializer::class => function (SerializerBuilder $serializerBuilder) {
-                return $serializerBuilder->addMetadataDir($this->getModelDirectory())->build();
+            Serializer::class => function (
+                SerializerBuilder $serializerBuilder
+            ) {
+                return $serializerBuilder
+                    ->addMetadataDir(__DIR__.'/../resource/Serializer')
+                    ->setSerializationContextFactory(
+                        new CallableSerializationContextFactory(function () {
+                            $context = new SerializationContext();
+                            $context->setSerializeNull(true);
+                            return $context;
+                        }))
+                    ->setPropertyNamingStrategy(
+                        new IdenticalPropertyNamingStrategy()
+                    )
+                    ->build();
             },
 
             ExceptionHandlingMiddlewareInterface::class =>
