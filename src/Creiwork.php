@@ -235,7 +235,7 @@ class Creiwork
                 SerializerBuilder $serializerBuilder
             ) {
                 return $serializerBuilder
-                    ->addMetadataDir(__DIR__.'/../resource/Serializer')
+                    ->addMetadataDir($this->getModelDirectory())
                     ->setSerializationContextFactory(
                         new CallableSerializationContextFactory(function () {
                             $context = new SerializationContext();
