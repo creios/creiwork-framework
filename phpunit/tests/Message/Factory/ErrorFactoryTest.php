@@ -3,8 +3,9 @@
 namespace Creios\Creiwork\Framework\Message\Factory;
 
 use Creios\Creiwork\Framework\Message\Error;
+use PHPUnit\Framework\TestCase;
 
-class ErrorFactoryTest extends \PHPUnit_Framework_TestCase
+class ErrorFactoryTest extends TestCase
 {
 
     public function testBuild()

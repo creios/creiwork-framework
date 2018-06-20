@@ -4,6 +4,7 @@ namespace Creios\Creiwork\Framework;
 
 use Creios\Creiwork\Framework\Controller\BaseController;
 use Creios\Creiwork\Framework\Result\StringResult;
+use PHPUnit\Framework\TestCase;
 
 class TestController extends BaseController
 {
@@ -16,7 +17,7 @@ class TestController extends BaseController
     }
 }
 
-class CreiworkTest extends \PHPUnit_Framework_TestCase
+class CreiworkTest extends TestCase
 {
     /**
      * @runInSeparateProcess

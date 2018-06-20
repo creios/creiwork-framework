@@ -19,13 +19,14 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use JMS\Serializer\Serializer;
 use League\Plates\Engine;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class ResponseBuilderTest
  * @package Creios\Creiwork\Framework
  */
-class PostProcessorTest extends \PHPUnit_Framework_TestCase
+class PostProcessorTest extends TestCase
 {
 
     /** @var PostProcessor */

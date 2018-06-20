@@ -2,6 +2,8 @@
 
 namespace Creios\Creiwork\Framework\Controller;
 
+use PHPUnit\Framework\TestCase;
+
 class WrappedBaseController extends BaseController
 {
     /**
@@ -14,7 +16,7 @@ class WrappedBaseController extends BaseController
 
 }
 
-class BaseControllerTest extends \PHPUnit_Framework_TestCase
+class BaseControllerTest extends TestCase
 {
 
     public function testSetReroutedPath()

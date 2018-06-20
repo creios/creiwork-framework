@@ -3,8 +3,9 @@
 namespace Creios\Creiwork\Framework\Message\Factory;
 
 use Creios\Creiwork\Framework\Message\Information;
+use PHPUnit\Framework\TestCase;
 
-class InformationFactoryTest extends \PHPUnit_Framework_TestCase
+class InformationFactoryTest extends TestCase
 {
 
     public function testBuild()

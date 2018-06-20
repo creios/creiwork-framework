@@ -2,7 +2,9 @@
 
 namespace Creios\Creiwork\Framework\Result;
 
-class StringResultTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class StringResultTest extends TestCase
 {
 
     public function testCreatePlainTextResult()

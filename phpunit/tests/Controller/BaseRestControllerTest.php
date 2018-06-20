@@ -5,6 +5,7 @@ namespace Creios\Creiwork\Framework\Controller;
 use Creios\Creiwork\Framework\Repository\RepositoryBaseInterface;
 use Creios\Creiwork\Framework\Result\NoContentResult;
 use Creios\Creiwork\Framework\Result\SerializableResult;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use TimTegeler\Routerunner\Controller\RestControllerInterface;
 
@@ -50,7 +51,7 @@ class WrappedBaseRestController extends BaseRestController implements RestContro
     }
 }
 
-class BaseRestControllerTest extends \PHPUnit_Framework_TestCase
+class BaseRestControllerTest extends TestCase
 {
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|ServerRequestInterface */
