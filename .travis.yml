@@ -6,4 +6,4 @@ before_install:
 script:
   - vendor/bin/phpunit
 after_success:
-  - vendor/bin/coveralls -v
+  - vendor/bin/php-coveralls -v
