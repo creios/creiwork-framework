@@ -82,7 +82,7 @@ class JsonValidator
         if($schemaDir === null){
             throw new FileNotFoundException("Key 'json-schema-dir' does not exist in config");
         }
-        $schemaPath = __DIR__.'../../../../../config/'.$schemaDir.'/'.$schemaName.'.json';
+        $schemaPath = __DIR__.'/../../../../../config/'.$schemaDir.'/'.$schemaName.'.json';
         if(!file_exists($schemaPath)){
             throw new FileNotFoundException("File $schemaPath not found");
         }
