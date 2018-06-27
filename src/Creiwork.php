@@ -13,6 +13,7 @@ use Creios\Creiwork\Framework\Middleware\ExceptionHandlingMiddleware;
 use Creios\Creiwork\Framework\Middleware\ExceptionHandlingMiddlewareInterface;
 use Creios\Creiwork\Framework\Router\PostProcessor;
 use Creios\Creiwork\Framework\Router\PreProcessor;
+use Creios\Creiwork\Framework\Util\JsonValidator;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\Definition\Source\DefinitionSource;
@@ -24,7 +25,6 @@ use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
-use JsonSchema\Validator as JsonValidator;
 use League\Plates;
 use Middlewares\ContentType;
 use Middlewares\Whoops as WhoopsMiddleware;
@@ -257,6 +257,14 @@ class Creiwork
                         new IdenticalPropertyNamingStrategy()
                     )
                     ->build();
+            },
+
+            JsonValidator::class => function(Config $config){
+                return new JsonValidator($config);
+            },
+
+            Validator::class => function() {
+                return new Validator();
             },
 
             ExceptionHandlingMiddlewareInterface::class =>
