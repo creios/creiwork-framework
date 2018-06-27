@@ -86,10 +86,11 @@ class JsonValidator
         if(!file_exists($schemaPath)){
             throw new FileNotFoundException("File $schemaPath not found");
         }
-
-        $schema = Schema::fromJsonString(file_get_contents($schemaPath));
+        
+        $schemaJsonString = file_get_contents($schemaPath);
         $decodedJson = json_decode($json);
         if ($decodedJson === false) {
+            $schema = json_decode($schemaJsonString);
             // error decoding json
             return (new ValidationResult())
                 ->addError(new ValidationError($json,
@@ -99,7 +100,7 @@ class JsonValidator
                         "Failed to decode JSON string")
                 );
         }
-        return $this->dataValidation($decodedJson, $schema);
+        return $this->dataValidation($decodedJson, $schemaJsonString);
     }
 
 }
