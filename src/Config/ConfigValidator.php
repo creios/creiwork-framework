@@ -2,13 +2,13 @@
 
 namespace Creios\Creiwork\Framework\Config;
 
-use JsonSchema\Validator as JsonValidator;
+use Opis\JsonSchema\Validator as JsonValidator;
 
 /**
- * Class Validator
+ * Class ConfigValidator
  * @package Creios\Creiwork\Framework\Config
  */
-class Validator
+class ConfigValidator
 {
 
     /** @var JsonValidator */
@@ -19,7 +19,7 @@ class Validator
     private $configSchema;
 
     /**
-     * Validator constructor.
+     * ConfigValidator constructor.
      * @param JsonValidator $jsonValidator
      * @param string $configSchemaPath
      */
@@ -36,16 +36,16 @@ class Validator
      */
     public function validate($config)
     {
-        $this->jsonValidator->check(
+        $validationResult = $this->jsonValidator->dataValidation(
             json_decode(file_get_contents($config)),
             $this->configSchema
         );
 
-        if ($this->jsonValidator->isValid()) {
+        if ($validationResult->isValid()) {
             return true;
         }
 
-        $this->errors = $this->jsonValidator->getErrors();
+        $this->errors = $validationResult->getErrors();
         return false;
 
     }

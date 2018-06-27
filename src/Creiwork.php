@@ -5,7 +5,7 @@ namespace Creios\Creiwork\Framework;
 use Aura\Session\SegmentInterface;
 use Aura\Session\Session;
 use Aura\Session\SessionFactory;
-use Creios\Creiwork\Framework\Config\Validator;
+use Creios\Creiwork\Framework\Config\ConfigValidator;
 use Creios\Creiwork\Framework\Exception\ConfigException;
 use Creios\Creiwork\Framework\Message\Factory\ErrorFactory;
 use Creios\Creiwork\Framework\Message\Factory\InformationFactory;
@@ -34,7 +34,10 @@ use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Noodlehaus\Config;
+use Opis\JsonSchema\ValidationError;
+use Opis\JsonSchema\Validator;
 use phpFastCache\CacheManager;
+use function PHPSTORM_META\map;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use TimTegeler\Routerunner\Components\Cache;
@@ -150,16 +153,24 @@ class Creiwork
         if ($configValidator->validate($this->configFilePath)) {
             $this->config = new Config($this->configFilePath);
         } else {
-            throw new ConfigException('Config is not valid');
+            /** @var ValidationError[] $errors */
+            $errors = $configValidator->getErrors();
+            /** @var string[] $errorStrings */
+            $errorStrings = [];
+            foreach($errors as $error){
+               $errorStrings[] = implode(" ",$error->keywordArgs()) . ' ' . $error->keyword();
+            }
+            $errorString = implode(", ", $errorStrings);
+            throw new ConfigException('Config is not valid: ' . $errorString);
         }
     }
 
     /**
-     * @return Validator
+     * @return ConfigValidator
      */
     private function buildConfigValidator()
     {
-        return new Validator(new JsonValidator(), __DIR__ . '/../resource/config-schema.json');
+        return new ConfigValidator(new Validator(), __DIR__ . '/../resource/config-schema.json');
     }
 
     /**
