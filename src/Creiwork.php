@@ -147,6 +147,13 @@ class Creiwork
     }
 
     /**
+     * @return string Absolute path of cache dir (without tailing slash)
+     */
+    private function getAbsoluteCachePath(){
+        return $this->getAbsoluteConfigDirectoryPath().$this->config->get('cache_dir', '../cache');
+    }
+
+    /**
      * @throws ConfigException
      * @throws \DI\DependencyException
      * @throws \JsonSchema\Exception\ExceptionInterface
@@ -278,7 +285,7 @@ class Creiwork
                 object(ExceptionHandlingMiddleware::class),
 
             Cache::class => function () {
-                return new Cache(CacheManager::Files(), 'routerunner');
+                return new Cache(CacheManager::Files(['path' => $this->getAbsoluteCachePath()]), 'routerunner');
             },
         ];
     }

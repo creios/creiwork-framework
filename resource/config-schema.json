@@ -8,6 +8,9 @@
     "router-config": {
       "type": "string"
     },
+    "cache-dir":{
+      "type": "string"
+    },
     "logger-dir": {
       "type": "string"
     },
