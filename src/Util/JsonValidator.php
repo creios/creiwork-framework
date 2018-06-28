@@ -22,13 +22,16 @@ class JsonValidator
 {
     /** @var Validator */
     private $validator;
-    /** @var Config  */
+    /** @var Config */
     private $config;
+    /** @var string */
+    private $configDirectoryPath;
 
     /**
      * JsonValidator constructor.
      * @see Validator
      * @param Config $config
+     * @param string $configDirectoryPath Absolute path to config directory
      * @param IValidatorHelper|null $helper
      * @param ISchemaLoader|null $loader
      * @param IFormatContainer|null $formats
@@ -36,6 +39,7 @@ class JsonValidator
      * @param IMediaTypeContainer|null $media
      */
     public function __construct(Config $config,
+                                string $configDirectoryPath,
                                 IValidatorHelper $helper = null,
                                 ISchemaLoader $loader = null,
                                 IFormatContainer $formats = null,
@@ -50,6 +54,7 @@ class JsonValidator
             $media
         );
         $this->config = $config;
+        $this->configDirectoryPath = $configDirectoryPath;
     }
 
     /**
@@ -78,11 +83,8 @@ class JsonValidator
      */
     public function validateJson(string $json, string $schemaName): ValidationResult
     {
-        $schemaDir = $this->config->get('json-schema-dir');
-        if($schemaDir === null){
-            throw new FileNotFoundException("Key 'json-schema-dir' does not exist in config");
-        }
-        $schemaPath = __DIR__.'/../../../../../config/'.$schemaDir.'/'.$schemaName.'.json';
+        $schemaDir = $this->config->get('schema-dir');
+        $schemaPath = $this->configDirectoryPath.$schemaDir.'/'.$schemaName.'.json';
         if(!file_exists($schemaPath)){
             throw new FileNotFoundException("File $schemaPath not found");
         }

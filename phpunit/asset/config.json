@@ -4,5 +4,6 @@
   "support-contact": "John Doe <john.doe@example.org>",
   "logger-dir": ".",
   "template-dir": ".",
+  "schema-dir": ".",
   "model-dir": "."
 }

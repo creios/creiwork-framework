@@ -140,6 +140,13 @@ class Creiwork
     }
 
     /**
+     * @return string Absolute path config dir with tailing slash
+     */
+    private function getAbsoluteConfigDirectoryPath(){
+        return $this->addTrailingSlashIfMissing(realpath($this->configDirectoryPath));
+    }
+
+    /**
      * @throws ConfigException
      * @throws \DI\DependencyException
      * @throws \JsonSchema\Exception\ExceptionInterface
@@ -260,7 +267,7 @@ class Creiwork
             },
 
             JsonValidator::class => function(Config $config){
-                return new JsonValidator($config);
+                return new JsonValidator($config, $this->getAbsoluteConfigDirectoryPath());
             },
 
             Validator::class => function() {
