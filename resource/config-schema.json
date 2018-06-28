@@ -17,7 +17,7 @@
     "model-dir": {
       "type": "string"
     },
-    "json-schema-dir": {
+    "schema-dir": {
       "type": "string"
     },
     "support-contact": {
@@ -29,6 +29,7 @@
     "router-config",
     "logger-dir",
     "support-contact",
-    "model-dir"
+    "model-dir",
+    "schema-dir"
   ]
 }
