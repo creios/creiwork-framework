@@ -23,7 +23,7 @@ class JsonValidatorTest extends TestCase
         $configMock->method('get')->with('schema-dir')
             ->willReturn('.');
 
-        $validator = new JsonValidator($configMock, realpath('../../asset') . '/');
+        $validator = new JsonValidator($configMock, realpath('asset') . '/');
 
         $validTestJson = <<<'JSON'
 {
