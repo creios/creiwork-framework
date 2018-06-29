@@ -17,15 +17,9 @@ use Creios\Creiwork\Framework\Util\JsonValidator;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\Definition\Source\DefinitionSource;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Interop\Container\ContainerInterface;
-use JMS\Serializer\ContextFactory\CallableSerializationContextFactory;
-use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\Serializer;
-use JMS\Serializer\SerializerBuilder;
 use League\Plates;
 use Middlewares\ContentType;
 use Middlewares\Whoops as WhoopsMiddleware;
@@ -38,9 +32,12 @@ use Noodlehaus\Config;
 use Opis\JsonSchema\ValidationError;
 use Opis\JsonSchema\Validator;
 use phpFastCache\CacheManager;
-use function PHPSTORM_META\map;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use TimTegeler\Routerunner\Components\Cache;
 use TimTegeler\Routerunner\Routerunner;
 use function DI\factory;
@@ -79,7 +76,6 @@ class Creiwork
     /**
      * Creiwork constructor.
      * @param string $configDirectoryPath
-     * @throws \JMS\Serializer\Exception\InvalidArgumentException
      * @throws \Interop\Container\Exception\NotFoundException
      * @throws \Interop\Container\Exception\ContainerException
      * @throws \TimTegeler\Routerunner\Exception\ParseException
@@ -99,7 +95,6 @@ class Creiwork
         //add standard definitions
         $this->containerBuilder->addDefinitions($this->standardDiDefinitions());
         $this->loadConfig();
-        AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
         //add standard middleware stack
         $this->middlewareStack = $this->standardMiddlewareStack();
     }
@@ -193,7 +188,6 @@ class Creiwork
 
     /**
      * @return array
-     * @throws \JMS\Serializer\Exception\InvalidArgumentException
      * @throws \Interop\Container\Exception\NotFoundException
      * @throws \Interop\Container\Exception\ContainerException
      * @throws \TimTegeler\Routerunner\Exception\ParseException
@@ -258,32 +252,18 @@ class Creiwork
                 return $session->getSegment('Creios\Creiwork');
             },
 
-            SerializerBuilder::class => factory([SerializerBuilder::class, 'create']),
-
-            Serializer::class => function (
-                SerializerBuilder $serializerBuilder
-            ) {
-                return $serializerBuilder
-                    ->addMetadataDir($this->getModelDirectory())
-                    ->setCacheDir($this->getAbsoluteCachePath())
-                    ->setSerializationContextFactory(
-                        new CallableSerializationContextFactory(function () {
-                            $context = new SerializationContext();
-                            $context->setSerializeNull(true);
-                            return $context;
-                        }))
-                    ->setPropertyNamingStrategy(
-                        new IdenticalPropertyNamingStrategy()
-                    )
-                    ->build();
-            },
-
             JsonValidator::class => function(Config $config){
                 return new JsonValidator($config, $this->getAbsoluteConfigDirectoryPath());
             },
 
             Validator::class => function() {
                 return new Validator();
+            },
+
+            Serializer::class => function(){
+                $encoders = array('json' => new JsonEncoder(), 'xml' => new XmlEncoder());
+                $normalizers = array(new ObjectNormalizer());
+                return new Serializer($normalizers, $encoders);
             },
 
             ExceptionHandlingMiddlewareInterface::class =>

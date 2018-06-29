@@ -29,10 +29,15 @@
     "filp/whoops": "2.1.0",
     "guzzlehttp/psr7": "^1.3.0",
     "hassankhan/config": "^0.10.0",
-    "jms/serializer": "^1.4",
     "middlewares/whoops": "^1.1.0",
     "middlewares/negotiation": "^1.0.0",
-    "opis/json-schema": "^1.0"
+    "opis/json-schema": "^1.0",
+    "doctrine/cache": "^1.7",
+    "symfony/serializer": "^4.1",
+    "doctrine/annotations": "^1.6",
+    "symfony/property-access": "^4.1",
+    "symfony/property-info": "^4.1",
+    "symfony/http-foundation": "^4.1"
   },
   "autoload": {
     "psr-4": {

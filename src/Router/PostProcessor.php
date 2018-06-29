@@ -19,11 +19,11 @@ use Creios\Creiwork\Framework\Result\TemplateResult;
 use Creios\Creiwork\Framework\Result\Util\Result;
 use Creios\Creiwork\Framework\StatusCodes;
 use GuzzleHttp\Psr7\Response;
-use JMS\Serializer\Serializer;
 use League\Plates\Engine;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
+use Symfony\Component\Serializer\Serializer;
 use TimTegeler\Routerunner\Processor\PostProcessorInterface;
 
 /**

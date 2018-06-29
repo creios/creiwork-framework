@@ -4,8 +4,8 @@ namespace Creios\Creiwork\Framework\Router;
 
 use Creios\Creiwork\Framework\Controller\BaseRestController;
 use Creios\Creiwork\Framework\Exception\DeserializeException;
-use JMS\Serializer\Serializer;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\Serializer\Serializer;
 use TimTegeler\Routerunner\Controller\ControllerInterface;
 use TimTegeler\Routerunner\Processor\PreProcessorInterface;
 
