@@ -17,6 +17,7 @@ use Creios\Creiwork\Framework\Util\JsonValidator;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\Definition\Source\DefinitionSource;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Interop\Container\ContainerInterface;
@@ -60,6 +61,8 @@ class Creiwork
     const loggerDirKey = 'logger-dir';
     /** @var string */
     const templateDirKey = 'template-dir';
+    /** @var string */
+    const schemaDirKey = 'schema-dir';
     /** @var Container */
     private $container;
     /** @var string */
@@ -96,6 +99,7 @@ class Creiwork
         //add standard definitions
         $this->containerBuilder->addDefinitions($this->standardDiDefinitions());
         $this->loadConfig();
+        AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
         //add standard middleware stack
         $this->middlewareStack = $this->standardMiddlewareStack();
     }
@@ -261,6 +265,7 @@ class Creiwork
             ) {
                 return $serializerBuilder
                     ->addMetadataDir($this->getModelDirectory())
+                    ->setCacheDir($this->getAbsoluteCachePath())
                     ->setSerializationContextFactory(
                         new CallableSerializationContextFactory(function () {
                             $context = new SerializationContext();
@@ -287,6 +292,21 @@ class Creiwork
             Cache::class => function () {
                 return new Cache(CacheManager::Files(['path' => $this->getAbsoluteCachePath()]), 'routerunner');
             },
+
+            \PDO::class => function (Config $config) {
+                $host = $config->get('database.host');
+                $database = $config->get('database.database');
+                $user = $config->get('database.user');
+                $password = $config->get('database.password');
+
+                $dsn = "mysql:dbname={$database};host={$host};charset=UTF8";
+                $pdo = new \PDO($dsn, $user, $password);
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                return $pdo;
+            },
+            // TODO uncomment after Quarry integration
+            //Database::class =>\DI\object(PdoDatabase::class),
         ];
     }
 
