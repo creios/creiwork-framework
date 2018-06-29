@@ -20,7 +20,7 @@ use GuzzleHttp\Psr7\Stream;
 use League\Plates\Engine;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class ResponseBuilderTest
@@ -46,7 +46,7 @@ class PostProcessorTest extends TestCase
     {
         $this->engine = $this->createMock(Engine::class);
         $this->shareDataProvider = $this->createMock(SharedDataProvider::class);
-        $this->serializer = $this->createMock(Serializer::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
         $this->serializer->method('serialize')->withAnyParameters()->willReturn('');
         $this->serverRequest = $this->createMock(ServerRequestInterface::class);
         $this->responseBuilder = new PostProcessor($this->serializer, $this->engine, $this->shareDataProvider);

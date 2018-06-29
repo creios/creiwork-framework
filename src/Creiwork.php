@@ -38,6 +38,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 use TimTegeler\Routerunner\Components\Cache;
 use TimTegeler\Routerunner\Routerunner;
 use function DI\factory;
@@ -259,6 +260,8 @@ class Creiwork
             Validator::class => function() {
                 return new Validator();
             },
+
+            SerializerInterface::class => object(Serializer::class),
 
             Serializer::class => function(){
                 $encoders = array('json' => new JsonEncoder(), 'xml' => new XmlEncoder());

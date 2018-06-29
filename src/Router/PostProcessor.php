@@ -24,6 +24,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 use TimTegeler\Routerunner\Processor\PostProcessorInterface;
 
 /**
@@ -56,7 +57,7 @@ class PostProcessor implements PostProcessorInterface
      * @param Engine $templateEngine
      * @param SharedDataProvider $sharedDataProvider
      */
-    public function __construct(Serializer $serializer,
+    public function __construct(SerializerInterface $serializer,
                                 Engine $templateEngine,
                                 SharedDataProvider $sharedDataProvider)
 
