@@ -50,21 +50,4 @@ class SerializableResult extends Result implements
         return (new SerializableResult($data))->withMimeType('text/xml');
     }
 
-    /**
-     * @param mixed $data
-     * @return SerializableResult
-     */
-    public static function createPlainTextResult($data)
-    {
-        return (new SerializableResult($data))->withMimeType('text/plain');
-    }
-
-    /**
-     * @param mixed $data
-     * @return SerializableResult
-     */
-    public static function createHtmlResult($data)
-    {
-        return (new SerializableResult($data))->withMimeType('text/html');
-    }
 }

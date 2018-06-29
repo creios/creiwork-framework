@@ -186,23 +186,10 @@ class PostProcessor implements PostProcessorInterface
             $mimeType = $serializableResult->getMimeType();
         }
         switch ($mimeType) {
-            case 'text/plain':
-                $payload = print_r($serializableResult->getData(), true);
-                break;
             case 'text/xml':
                 $payload = $this->serializer->serialize($serializableResult->getData(), 'xml');
                 break;
-            case 'text/html':
-                $data = $this->serializer->serialize($serializableResult->getData(), 'json');
-                $this->templateEngine->addFolder('creiwork', __DIR__ . '/../Template');
-                $payload = $this->templateEngine->render(
-                    'creiwork::serializableResult',
-                    [
-                        'data' => $data,
-                        'request' => $this->serverRequest
-                    ]);
-                break;
-            case 'application/json':
+             case 'application/json':
             default:
                 $payload = $this->serializer->serialize($serializableResult->getData(), 'json');
                 break;
