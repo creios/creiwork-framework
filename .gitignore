@@ -1,4 +1,7 @@
-/.idea
+/.idea/workspace.xml
+/.idea/usage.statistics.xml
+/.idea/tasks.xml
 /vendor
 /phpunit/logs
 /phpunit/report
+/phpunit/tests/annotations
