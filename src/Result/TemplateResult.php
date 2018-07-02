@@ -6,7 +6,6 @@ use Creios\Creiwork\Framework\Result\Interfaces\DataResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\MimeTypeResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
-use Creios\Creiwork\Framework\Result\Traits\DataResult;
 use Creios\Creiwork\Framework\Result\Traits\DisposableResult;
 use Creios\Creiwork\Framework\Result\Traits\MimeTypeResult;
 use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
@@ -19,10 +18,12 @@ use Creios\Creiwork\Framework\Result\Util\Result;
 class TemplateResult extends Result implements DataResultInterface, MimeTypeResultInterface, StatusCodeResultInterface, DisposableResultInterface
 {
 
-    use DataResult;
     use MimeTypeResult;
     use StatusCodeResult;
     use DisposableResult;
+
+    /** @var array  */
+    private $data;
 
     /**
      * @var string
@@ -46,6 +47,14 @@ class TemplateResult extends Result implements DataResultInterface, MimeTypeResu
     public function getTemplate()
     {
         return $this->template;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->data;
     }
 
 }

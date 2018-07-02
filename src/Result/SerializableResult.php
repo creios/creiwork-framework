@@ -5,7 +5,6 @@ use Creios\Creiwork\Framework\Result\Interfaces\DataResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\DisposableResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\MimeTypeResultInterface;
 use Creios\Creiwork\Framework\Result\Interfaces\StatusCodeResultInterface;
-use Creios\Creiwork\Framework\Result\Traits\DataResult;
 use Creios\Creiwork\Framework\Result\Traits\DisposableResult;
 use Creios\Creiwork\Framework\Result\Traits\MimeTypeResult;
 use Creios\Creiwork\Framework\Result\Traits\StatusCodeResult;
@@ -18,10 +17,12 @@ class SerializableResult extends Result implements
     StatusCodeResultInterface
 {
 
-    use DataResult;
     use MimeTypeResult;
     use StatusCodeResult;
     use DisposableResult;
+
+    /** @var object|array  */
+    private $data;
 
     /**
      * SerializableResult constructor.
@@ -48,6 +49,14 @@ class SerializableResult extends Result implements
     public static function createXmlResult($data)
     {
         return (new SerializableResult($data))->withMimeType('text/xml');
+    }
+
+    /**
+     * @return array|object
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 
 }
