@@ -5,5 +5,5 @@
   "logger-dir": ".",
   "template-dir": ".",
   "schema-dir": ".",
-  "model-dir": "."
+  "serializer-model-dir": "."
 }

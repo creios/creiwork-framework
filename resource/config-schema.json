@@ -1,58 +1,78 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "properties": {
-        "debug": {
-            "type": "boolean"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "debug": {
+      "type": "boolean"
+    },
+    "router-config": {
+      "type": "string"
+    },
+    "cache-dir": {
+      "type": "string"
+    },
+    "logger-dir": {
+      "type": "string"
+    },
+    "template-dir": {
+      "type": "string"
+    },
+    "serializer-model-dir": {
+      "type": "string"
+    },
+    "schema-dir": {
+      "type": "string"
+    },
+    "support-contact": {
+      "type": "string"
+    },
+    "database": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string"
         },
-        "router-config": {
-            "type": "string"
-        },
-        "cache-dir": {
-            "type": "string"
-        },
-        "logger-dir": {
-            "type": "string"
-        },
-        "template-dir": {
-            "type": "string"
-        },
-        "model-dir": {
-            "type": "string"
-        },
-        "schema-dir": {
-            "type": "string"
-        },
-        "support-contact": {
-            "type": "string"
+        "port": {
+          "type": "number"
         },
         "database": {
-            "type": "object",
-            "properties": {
-                "host": {
-                    "type": "string"
-                },
-                "port": {
-                    "type": "number"
-                },
-                "database": {
-                    "type": "string"
-                },
-                "user": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
         }
+      }
     },
-    "required": [
-        "debug",
-        "router-config",
-        "logger-dir",
-        "support-contact",
-        "model-dir",
-        "schema-dir"
-    ]
+    "smtp": {
+      "type": "object",
+      "properties": {
+        "host":{
+          "type": "string"
+        },
+        "port": {
+          "type": "number"
+        },
+        "user": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "security": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [
+    "debug",
+    "router-config",
+    "logger-dir",
+    "support-contact",
+    "serializer-model-dir",
+    "schema-dir"
+  ]
 }

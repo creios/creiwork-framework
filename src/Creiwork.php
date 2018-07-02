@@ -52,7 +52,7 @@ class Creiwork
     /** @var string */
     const routerConfigKey = 'router-config';
     /** @var string */
-    const modelDirectoryKey = 'model-dir';
+    const modelDirectoryKey = 'serializer-model-dir';
     /** @var string */
     const loggerDirKey = 'logger-dir';
     /** @var string */
