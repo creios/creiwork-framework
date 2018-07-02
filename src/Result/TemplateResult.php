@@ -35,7 +35,7 @@ class TemplateResult extends Result implements DataResultInterface, MimeTypeResu
      * @param string $template
      * @param array $data
      */
-    public function __construct($template, array $data = null)
+    public function __construct($template, array $data = [])
     {
         $this->template = $template;
         $this->data = $data;

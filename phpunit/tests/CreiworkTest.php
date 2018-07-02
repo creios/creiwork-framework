@@ -24,7 +24,7 @@ class CreiworkTest extends TestCase
      */
     public function testStart()
     {
-        (new Creiwork(__DIR__ . '/../asset/'))->start();
+        (new Creiwork(__DIR__ . '/../asset'))->start();
         $this->expectOutputString('Controller has been executed');
     }
 }

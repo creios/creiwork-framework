@@ -125,7 +125,7 @@ class Creiwork
      */
     private function getEnvironmentBasedConfigFilePath($environment)
     {
-        return sprintf('%s/config.%s.creiwork.json', $this->configDirectoryPath, $environment);
+        return sprintf('%sconfig.%s.creiwork.json', $this->configDirectoryPath, $environment);
     }
 
     /**
@@ -133,7 +133,7 @@ class Creiwork
      */
     private function getDefaultConfigFilePath()
     {
-        return sprintf('%s/config.creiwork.json', $this->configDirectoryPath);
+        return sprintf('%sconfig.creiwork.json', $this->configDirectoryPath);
 
     }
 
