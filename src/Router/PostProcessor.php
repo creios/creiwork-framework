@@ -144,7 +144,7 @@ class PostProcessor implements PostProcessorInterface
         if ($this->sharedDataProvider->hasData()) {
             $this->templateEngine->addData($this->sharedDataProvider->getData());
         }
-        $this->templateEngine->addData(['host' => 'http://' . $this->serverRequest->getServerParams()['HTTP_HOST'] . '/']);
+        $this->templateEngine->addData(['hostWithProtocol' => ($this->serverRequest->getServerParams()['HTTPS'] ? 'https://' : 'http://') . $this->serverRequest->getServerParams()['HTTP_HOST'] . '/']);
         if ($templateResult->getData() === null) {
             $data = [];
         } else {
