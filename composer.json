@@ -30,7 +30,6 @@
     "guzzlehttp/psr7": "^1.3.0",
     "hassankhan/config": "^0.10.0",
     "middlewares/whoops": "^1.1.0",
-    "middlewares/negotiation": "^1.0.0",
     "opis/json-schema": "^1.0",
     "doctrine/cache": "^1.7",
     "symfony/serializer": "^4.1",

@@ -21,7 +21,6 @@ use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Interop\Container\ContainerInterface;
 use League\Plates;
-use Middlewares\ContentType;
 use Middlewares\Whoops as WhoopsMiddleware;
 use mindplay\middleman\ContainerResolver;
 use mindplay\middleman\Dispatcher;
@@ -41,7 +40,6 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 use TimTegeler\Routerunner\Components\Cache;
 use TimTegeler\Routerunner\Routerunner;
-use function DI\factory;
 use function DI\object;
 
 /**
@@ -347,7 +345,7 @@ class Creiwork
      */
     private function standardMiddlewareStack()
     {
-        $stack = [ContentType::class];
+        $stack = [];
 
         if ($this->config->get('debug')) {
             $stack[] = WhoopsMiddleware::class;

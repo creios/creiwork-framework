@@ -179,12 +179,8 @@ class PostProcessor implements PostProcessorInterface
      */
     private function modifyResponseForSerializableResult(ResponseInterface $response, SerializableResult $serializableResult)
     {
-        $mimeType = 'application/json';
-        if ($this->serverRequest->hasHeader('Accept')) {
-            $mimeType = $this->serverRequest->getHeaderLine('Accept');
-        } else if ($serializableResult->getMimeType()) {
-            $mimeType = $serializableResult->getMimeType();
-        }
+        $mimeType = $serializableResult->getMimeType() ? $serializableResult->getMimeType() : 'application/json';
+
         switch ($mimeType) {
             case 'text/xml':
                 $payload = $this->serializer->serialize($serializableResult->getData(), 'xml');
