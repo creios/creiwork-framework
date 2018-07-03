@@ -6,20 +6,16 @@ namespace Creios\Creiwork\Framework\Message;
  * Class Error
  * @package Creios\Creiwork\Framework\Message
  */
-class Error extends Message
+class Error
 {
-    /**
-     * @var string
-     */
-    protected $error;
-    /**
-     * @var string
-     */
-    protected $code;
-    /**
-     * @var string
-     */
-    protected $suggestion;
+    /** @var string  */
+    private $error;
+    /** @var string  */
+    private $code;
+    /** @var string  */
+    private $suggestion;
+    /** @var string **/
+    private $contact;
 
     /**
      * Error constructor.
@@ -39,7 +35,7 @@ class Error extends Message
     /**
      * @return string
      */
-    public function getError(): string
+    public function getError()
     {
         return $this->error;
     }
@@ -47,7 +43,7 @@ class Error extends Message
     /**
      * @return string
      */
-    public function getCode(): string
+    public function getCode()
     {
         return $this->code;
     }
@@ -55,10 +51,20 @@ class Error extends Message
     /**
      * @return string
      */
-    public function getSuggestion(): string
+    public function getSuggestion()
     {
         return $this->suggestion;
     }
+
+    /**
+     * @return string
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+
 
 
 }

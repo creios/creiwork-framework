@@ -6,11 +6,13 @@ namespace Creios\Creiwork\Framework\Message;
  * Class Information
  * @package Creios\Creiwork\Framework\Message
  */
-class Information extends Message
+class Information
 {
 
     /** @var string */
-    protected $information;
+    private $information;
+    /** @var string  */
+    private $contact;
 
     /**
      * Information constructor.
@@ -22,5 +24,22 @@ class Information extends Message
         $this->contact = $contact;
         $this->information = $information;
     }
+
+    /**
+     * @return string
+     */
+    public function getInformation()
+    {
+        return $this->information;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
 
 }

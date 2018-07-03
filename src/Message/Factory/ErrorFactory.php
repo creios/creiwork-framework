@@ -8,12 +8,23 @@ use Creios\Creiwork\Framework\Message\Error;
  * Class ErrorFactory
  * @package Creios\Creiwork\Framework\Message\Factory
  */
-class ErrorFactory extends MessageFactory
+class ErrorFactory
 {
     /** @var string */
     private $code;
     /** @var string */
     private $suggestion;
+    /** @var string */
+    private $contact;
+
+    /**
+     * ErrorFactory constructor.
+     * @param string $contact
+     */
+    public function __construct($contact)
+    {
+        $this->contact = $contact;
+    }
 
     /**
      * @param string $code
@@ -32,6 +43,16 @@ class ErrorFactory extends MessageFactory
     public function setSuggestion($suggestion)
     {
         $this->suggestion = $suggestion;
+        return $this;
+    }
+
+    /**
+     * @param $contact
+     * @return $this
+     */
+    public function setContact($contact)
+    {
+        $this->contact = $contact;
         return $this;
     }
 
