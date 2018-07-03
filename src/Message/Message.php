@@ -12,4 +12,14 @@ abstract class Message
     /** @var string */
     protected $contact;
 
+    /**
+     * @return string
+     */
+    public function getContact(): string
+    {
+        return $this->contact;
+    }
+
+
+
 }

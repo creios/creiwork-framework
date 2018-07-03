@@ -36,4 +36,29 @@ class Error extends Message
         $this->suggestion = $suggestion;
     }
 
+    /**
+     * @return string
+     */
+    public function getError(): string
+    {
+        return $this->error;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSuggestion(): string
+    {
+        return $this->suggestion;
+    }
+
+
 }
