@@ -17,6 +17,7 @@ use Creios\Creiwork\Framework\Util\JsonValidator;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\Definition\Source\DefinitionSource;
+use function DI\get;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Interop\Container\ContainerInterface;
@@ -259,11 +260,11 @@ class Creiwork
                 return new Validator();
             },
 
-            SerializerInterface::class => object(Serializer::class),
+            SerializerInterface::class => get(Serializer::class),
 
             Serializer::class => function(){
-                $encoders = array('json' => new JsonEncoder(), 'xml' => new XmlEncoder());
-                $normalizers = array(new ObjectNormalizer());
+                $encoders = ['json' => new JsonEncoder(), 'xml' => new XmlEncoder()];
+                $normalizers = [new ObjectNormalizer()];
                 return new Serializer($normalizers, $encoders);
             },
 
