@@ -34,6 +34,8 @@ use Opis\JsonSchema\Validator;
 use phpFastCache\CacheManager;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Quarry\Framework\Database;
+use Quarry\Framework\PdoDatabase;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -218,7 +220,7 @@ class Creiwork
                 );
             },
 
-            Database::class => object(PdoDatabase::class),
+            Database::class => create(PdoDatabase::class),
 
             Plates\Engine::class => function () {
                 $templateDirectory = null;
