@@ -88,6 +88,12 @@
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-util" />
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/vendor/jeremeamia/SuperClosure" />
+      <path value="$PROJECT_DIR$/vendor/league/flysystem" />
+      <path value="$PROJECT_DIR$/vendor/twig/twig" />
+      <path value="$PROJECT_DIR$/vendor/celest/tzdata" />
+      <path value="$PROJECT_DIR$/vendor/celest/celest" />
+      <path value="$PROJECT_DIR$/vendor/creios/quarry" />
+      <path value="$PROJECT_DIR$/vendor/lstrojny/functional-php" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />

@@ -22,6 +22,8 @@
   "require": {
     "php": ">=7.2.0",
     "timtegeler/routerunner": "dev-migrate-to-php-di-6.0#7ba7283dd6c761462688bef61bfea6e1a1006aa5@dev",
+    "celest/celest": "dev-master@dev",
+    "celest/tzdata": "dev-master@dev",
     "mindplay/middleman": "3.0.3",
     "aura/session": "^2.0.0",
     "league/plates": "^3.1",
@@ -36,7 +38,8 @@
     "doctrine/annotations": "^1.6",
     "symfony/property-access": "^4.1",
     "symfony/property-info": "^4.1",
-    "symfony/http-foundation": "^4.1"
+    "symfony/http-foundation": "^4.1",
+    "creios/quarry": "^1.0"
   },
   "autoload": {
     "psr-4": {

@@ -136,15 +136,17 @@ class Creiwork
     /**
      * @return string Absolute path config dir with tailing slash
      */
-    private function getAbsoluteConfigDirectoryPath(){
+    private function getAbsoluteConfigDirectoryPath()
+    {
         return $this->addTrailingSlashIfMissing(realpath($this->configDirectoryPath));
     }
 
     /**
      * @return string Absolute path of cache dir (without tailing slash)
      */
-    private function getAbsoluteCachePath(){
-        return $this->getAbsoluteConfigDirectoryPath().$this->config->get('cache_dir', '../cache');
+    private function getAbsoluteCachePath()
+    {
+        return $this->getAbsoluteConfigDirectoryPath() . $this->config->get('cache_dir', '../cache');
     }
 
     /**
@@ -164,8 +166,8 @@ class Creiwork
             $errors = $configValidator->getErrors();
             /** @var string[] $errorStrings */
             $errorStrings = [];
-            foreach($errors as $error){
-               $errorStrings[] = implode(" ",$error->keywordArgs()) . ' ' . $error->keyword();
+            foreach ($errors as $error) {
+                $errorStrings[] = implode(" ", $error->keywordArgs()) . ' ' . $error->keyword();
             }
             $errorString = implode(", ", $errorStrings);
             throw new ConfigException('Config is not valid: ' . $errorString);
@@ -205,6 +207,19 @@ class Creiwork
                 return $routerunner;
             },
 
+            \PDO::class => function (Config $config) {
+                $database = $config->get('database.database');
+                $host = $config->get('database.host');
+                $port = $config->get('database.port');
+                return new PDO(
+                    "mysql:dbname=$database;host=$host;port=$port",
+                    $config->get('database.user'),
+                    $config->get('database.password')
+                );
+            },
+
+            Database::class => object(PdoDatabase::class),
+
             Plates\Engine::class => function () {
                 $templateDirectory = null;
                 if ($this->isTemplateDirectorySet()) {
@@ -241,17 +256,17 @@ class Creiwork
                 return $session->getSegment('Creios\Creiwork');
             },
 
-            JsonValidator::class => function(Config $config){
+            JsonValidator::class => function (Config $config) {
                 return new JsonValidator($config, $this->getAbsoluteConfigDirectoryPath());
             },
 
-            Validator::class => function() {
+            Validator::class => function () {
                 return new Validator();
             },
 
             SerializerInterface::class => get(Serializer::class),
 
-            Serializer::class => function(){
+            Serializer::class => function () {
                 $encoders = ['json' => new JsonEncoder(), 'xml' => new XmlEncoder()];
                 $normalizers = [new ObjectNormalizer()];
                 return new Serializer($normalizers, $encoders);

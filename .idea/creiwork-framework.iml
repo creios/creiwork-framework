@@ -5,6 +5,8 @@
       <sourceFolder url="file://$MODULE_DIR$/phpunit/tests" isTestSource="true" packagePrefix="Creios\Creiwork\Framework\" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="Creios\Creiwork\Framework\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/aura/session" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/celest/celest" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/celest/tzdata" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/consolidation/annotated-command" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/consolidation/config" />
@@ -12,6 +14,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/consolidation/output-formatters" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/consolidation/robo" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/container-interop/container-interop" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/creios/quarry" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/dflydev/dot-access-data" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/annotations" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/cache" />
@@ -28,7 +31,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/http-interop/http-server-middleware" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jeremeamia/SuperClosure" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/container" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/league/flysystem" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/plates" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/lstrojny/functional-php" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/middlewares/utils" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/middlewares/whoops" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/mindplay/middleman" />
@@ -89,6 +94,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/timtegeler/routerunner" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/twig/twig" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
     </content>
     <orderEntry type="inheritedJdk" />
