@@ -32,7 +32,6 @@ class ConfigValidator
     /**
      * @param mixed $config
      * @return bool
-     * @throws \JsonSchema\Exception\ExceptionInterface
      */
     public function validate($config)
     {

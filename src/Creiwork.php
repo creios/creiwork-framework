@@ -16,11 +16,11 @@ use Creios\Creiwork\Framework\Router\PreProcessor;
 use Creios\Creiwork\Framework\Util\JsonValidator;
 use DI\Container;
 use DI\ContainerBuilder;
+use function DI\create;
 use DI\Definition\Source\DefinitionSource;
 use function DI\get;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\StreamWrapper;
-use Interop\Container\ContainerInterface;
 use League\Plates;
 use Middlewares\Whoops as WhoopsMiddleware;
 use mindplay\middleman\ContainerResolver;
@@ -41,7 +41,6 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 use TimTegeler\Routerunner\Components\Cache;
 use TimTegeler\Routerunner\Routerunner;
-use function DI\object;
 
 /**
  * Class Creiwork
@@ -75,17 +74,13 @@ class Creiwork
 
     /**
      * Creiwork constructor.
-     * @param string $configDirectoryPath
-     * @throws \Interop\Container\Exception\NotFoundException
-     * @throws \Interop\Container\Exception\ContainerException
-     * @throws \TimTegeler\Routerunner\Exception\ParseException
-     * @throws \Noodlehaus\Exception\EmptyDirectoryException
-     * @throws \InvalidArgumentException
-     * @throws \Exception
-     * @throws \Creios\Creiwork\Framework\Exception\ConfigException
+     * @param $configDirectoryPath
+     * @throws ConfigException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
-     * @throws \JsonSchema\Exception\ExceptionInterface
+     * @throws \Noodlehaus\Exception\EmptyDirectoryException
+     * @throws \TimTegeler\Routerunner\Exception\ParseException
+     * @throws \Exception
      */
     public function __construct($configDirectoryPath)
     {
@@ -155,7 +150,6 @@ class Creiwork
     /**
      * @throws ConfigException
      * @throws \DI\DependencyException
-     * @throws \JsonSchema\Exception\ExceptionInterface
      * @throws \DI\NotFoundException
      * @throws \InvalidArgumentException
      * @throws \Noodlehaus\Exception\EmptyDirectoryException
@@ -188,12 +182,7 @@ class Creiwork
 
     /**
      * @return array
-     * @throws \Interop\Container\Exception\NotFoundException
-     * @throws \Interop\Container\Exception\ContainerException
-     * @throws \TimTegeler\Routerunner\Exception\ParseException
-     * @throws \Noodlehaus\Exception\EmptyDirectoryException
      * @throws \InvalidArgumentException
-     * @throws \Exception
      */
     private function standardDiDefinitions()
     {
@@ -205,7 +194,7 @@ class Creiwork
 
             'routerunnerMiddlewareStack' => [],
 
-            Routerunner::class => function (ContainerInterface $container) {
+            Routerunner::class => function (Container $container) {
                 $routerunner = new Routerunner($this->getRouterConfigFile(), $container);
                 $routerunner->setPreProcessor($container->get(PreProcessor::class));
                 $routerunnerMiddlewareStack = $container->get('routerunnerMiddlewareStack');
@@ -242,7 +231,7 @@ class Creiwork
                 return new StreamHandler($this->getLoggerDirectory() . '/info.log', Logger::INFO);
             },
 
-            SessionFactory::class => object()->constructor(),
+            SessionFactory::class => create()->constructor(),
 
             Session::class => function (SessionFactory $sessionFactory) {
                 return $sessionFactory->newInstance($_COOKIE);
@@ -269,7 +258,7 @@ class Creiwork
             },
 
             ExceptionHandlingMiddlewareInterface::class =>
-                object(ExceptionHandlingMiddleware::class),
+                create(ExceptionHandlingMiddleware::class),
 
             Cache::class => function () {
                 return new Cache(CacheManager::Files(['path' => $this->getAbsoluteCachePath()]), 'routerunner');
@@ -288,7 +277,7 @@ class Creiwork
                 return $pdo;
             },
             // TODO uncomment after Quarry integration
-            //Database::class =>\DI\object(PdoDatabase::class),
+            //Database::class =>\DI\create(PdoDatabase::class),
         ];
     }
 
@@ -359,6 +348,9 @@ class Creiwork
         return $stack;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function start()
     {
         ob_start();
@@ -372,6 +364,9 @@ class Creiwork
         $this->out($response);
     }
 
+    /**
+     * @throws \Exception
+     */
     private function preStart()
     {
         set_error_handler(
