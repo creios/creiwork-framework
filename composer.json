@@ -22,8 +22,7 @@
   "require": {
     "php": ">=7.2.0",
     "timtegeler/routerunner": "dev-migrate-to-php-di-6.0#7ba7283dd6c761462688bef61bfea6e1a1006aa5@dev",
-    "celest/celest": "dev-master@dev",
-    "celest/tzdata": "dev-master@dev",
+    "creios/celest": "^1.0.0",
     "mindplay/middleman": "3.0.3",
     "aura/session": "^2.0.0",
     "league/plates": "^3.1",
