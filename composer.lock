@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ada042f689c95ae230f602a00fe4826f",
+    "content-hash": "fbbd5b039606e00fc10383219700c114",
     "packages": [
         {
             "name": "aura/session",
@@ -3301,16 +3301,16 @@
         },
         {
             "name": "timtegeler/routerunner",
-            "version": "dev-migrate-to-php-di-6.0",
+            "version": "v5.0.0-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timtegeler/routerunner.git",
-                "reference": "7ba7283dd6c761462688bef61bfea6e1a1006aa5"
+                "reference": "12552e13e3a141a653407de6011afa69439700b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/7ba7283dd6c761462688bef61bfea6e1a1006aa5",
-                "reference": "7ba7283dd6c761462688bef61bfea6e1a1006aa5",
+                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/12552e13e3a141a653407de6011afa69439700b5",
+                "reference": "12552e13e3a141a653407de6011afa69439700b5",
                 "shasum": ""
             },
             "require": {
@@ -3342,7 +3342,7 @@
                 }
             ],
             "description": "Routerunner is a router for HTTP-request written in PHP",
-            "time": "2018-07-03T11:50:11+00:00"
+            "time": "2018-07-09T09:01:11+00:00"
         },
         {
             "name": "twig/twig",
@@ -5132,7 +5132,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "timtegeler/routerunner": 20
+        "timtegeler/routerunner": 10
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -21,7 +21,7 @@
   },
   "require": {
     "php": ">=7.2.0",
-    "timtegeler/routerunner": "dev-migrate-to-php-di-6.0#7ba7283dd6c761462688bef61bfea6e1a1006aa5@dev",
+    "timtegeler/routerunner": "^5.0.0-beta",
     "creios/celest": "^1.0.0",
     "mindplay/middleman": "3.0.3",
     "aura/session": "^2.0.0",
