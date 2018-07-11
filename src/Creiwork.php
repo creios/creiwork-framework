@@ -32,6 +32,7 @@ use Monolog\Logger;
 use Noodlehaus\Config;
 use Opis\JsonSchema\ValidationError;
 use Opis\JsonSchema\Validator;
+use PDO;
 use phpFastCache\CacheManager;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
