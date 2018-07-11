@@ -14,6 +14,7 @@ use Creios\Creiwork\Framework\Middleware\ExceptionHandlingMiddlewareInterface;
 use Creios\Creiwork\Framework\Router\PostProcessor;
 use Creios\Creiwork\Framework\Router\PreProcessor;
 use Creios\Creiwork\Framework\Util\JsonValidator;
+use function DI\autowire;
 use DI\Container;
 use DI\ContainerBuilder;
 use function DI\create;
@@ -275,7 +276,7 @@ class Creiwork
             },
 
             ExceptionHandlingMiddlewareInterface::class =>
-                create(ExceptionHandlingMiddleware::class),
+                autowire(ExceptionHandlingMiddleware::class),
 
             Cache::class => function () {
                 return new Cache(CacheManager::Files(['path' => $this->getAbsoluteCachePath()]), 'routerunner');
