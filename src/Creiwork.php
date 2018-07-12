@@ -210,20 +210,7 @@ class Creiwork
                 $routerunner->setPostProcessor($container->get(PostProcessor::class));
                 return $routerunner;
             },
-
-            \PDO::class => function (Config $config) {
-                $database = $config->get('database.database');
-                $host = $config->get('database.host');
-                $port = $config->get('database.port');
-                return new PDO(
-                    "mysql:dbname=$database;host=$host;port=$port;charset=utf8",
-                    $config->get('database.user'),
-                    $config->get('database.password')
-                );
-            },
-
-            Database::class => create(PdoDatabase::class),
-
+            
             Plates\Engine::class => function () {
                 $templateDirectory = null;
                 if ($this->isTemplateDirectorySet()) {
