@@ -295,8 +295,8 @@ class Creiwork
 
                 return $pdo;
             },
-            // TODO uncomment after Quarry integration
-            //Database::class =>\DI\create(PdoDatabase::class),
+            
+            Database::class =>\DI\create(PdoDatabase::class),
         ];
     }
 
