@@ -210,7 +210,7 @@ class Creiwork
                 $routerunner->setPostProcessor($container->get(PostProcessor::class));
                 return $routerunner;
             },
-            
+
             Plates\Engine::class => function () {
                 $templateDirectory = null;
                 if ($this->isTemplateDirectorySet()) {
@@ -283,7 +283,7 @@ class Creiwork
                 return $pdo;
             },
             
-            Database::class =>\DI\create(PdoDatabase::class),
+            Database::class =>autowire(PdoDatabase::class),
         ];
     }
 
