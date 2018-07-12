@@ -216,7 +216,7 @@ class Creiwork
                 $host = $config->get('database.host');
                 $port = $config->get('database.port');
                 return new PDO(
-                    "mysql:dbname=$database;host=$host;port=$port",
+                    "mysql:dbname=$database;host=$host;port=$port;charset=utf8",
                     $config->get('database.user'),
                     $config->get('database.password')
                 );
