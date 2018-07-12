@@ -272,11 +272,12 @@ class Creiwork
 
             \PDO::class => function (Config $config) {
                 $host = $config->get('database.host');
+                $port = $config->get('database.port');
                 $database = $config->get('database.database');
                 $user = $config->get('database.user');
                 $password = $config->get('database.password');
 
-                $dsn = "mysql:dbname={$database};host={$host};charset=UTF8";
+                $dsn = "mysql:dbname={$database};host={$host};port={$port};charset=UTF8";
                 $pdo = new \PDO($dsn, $user, $password);
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
