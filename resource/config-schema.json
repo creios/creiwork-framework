@@ -17,6 +17,9 @@
     "template-dir": {
       "type": "string"
     },
+    "template-file-extension": {
+      "type": "string"
+    },
     "serializer-model-dir": {
       "type": "string"
     },

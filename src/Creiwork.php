@@ -216,7 +216,12 @@ class Creiwork
                 if ($this->isTemplateDirectorySet()) {
                     $templateDirectory = $this->getTemplateDirectory();
                 }
-                return new Plates\Engine($templateDirectory);
+                if ($this->config->has('template-file-extension')) {
+                    $extension = $this->config->get('template-file-extension');
+                } else {
+                    $extension = 'php';
+                }
+                return new Plates\Engine($templateDirectory, $extension);
             },
 
             LoggerInterface::class => function (HandlerInterface $handlerInterface) {
@@ -283,8 +288,8 @@ class Creiwork
 
                 return $pdo;
             },
-            
-            Database::class =>autowire(PdoDatabase::class),
+
+            Database::class => autowire(PdoDatabase::class),
         ];
     }
 
