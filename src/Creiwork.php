@@ -198,7 +198,17 @@ class Creiwork
                 return new Config($this->configFilePath);
             },
 
-            'routerunnerMiddlewareStack' => [],
+            'routerunnerMiddlewareStack' => function () {
+                try {
+                    $userMiddlewares = require $this->getAbsoluteConfigDirectoryPath() . 'routerunner-middlewares.php';
+                    if (is_array($userMiddlewares)) {
+                        return $userMiddlewares;
+                    }
+                } catch (\Throwable $e) {
+                    return [];
+                }
+                return [];
+            },
 
             Routerunner::class => function (Container $container) {
                 $routerunner = new Routerunner($this->getRouterConfigFile(), $container);
