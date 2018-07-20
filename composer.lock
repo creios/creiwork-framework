@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fbbd5b039606e00fc10383219700c114",
+    "content-hash": "8566e659e62d10dea99ced8120db50ca",
     "packages": [
         {
             "name": "aura/session",
@@ -67,6 +67,54 @@
                 "sessions"
             ],
             "time": "2016-10-03T20:28:32+00:00"
+        },
+        {
+            "name": "benjaminknauer/quarry",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/benjaminknauer/quarry.git",
+                "reference": "4af3214b655d714f05c5fb0ffc66b9a380ce2918"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/benjaminknauer%2Fquarry/repository/archive.zip?sha=4af3214b655d714f05c5fb0ffc66b9a380ce2918",
+                "reference": "4af3214b655d714f05c5fb0ffc66b9a380ce2918",
+                "shasum": ""
+            },
+            "require": {
+                "consolidation/robo": "^1.2",
+                "creios/celest": "^1.0.0",
+                "league/flysystem": "^1.0",
+                "lstrojny/functional-php": "^1.7",
+                "opis/json-schema": "^1.0",
+                "php": ">=7.2",
+                "twig/twig": "^2.4"
+            },
+            "require-dev": {
+                "giorgiosironi/eris": "^0.10.0",
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Quarry\\": [
+                        "src/",
+                        "test/phpunit/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonas Schürmann",
+                    "email": "schuermann@creios.net"
+                }
+            ],
+            "time": "2018-07-20T10:43:18+00:00"
         },
         {
             "name": "consolidation/annotated-command",
@@ -433,54 +481,6 @@
             ],
             "description": "A port of JSR310 to PHP",
             "time": "2018-07-06T11:22:52+00:00"
-        },
-        {
-            "name": "creios/quarry",
-            "version": "v1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.com/creios/quarry.git",
-                "reference": "a2f7137a8c656cdadfb749e8242c8c5a7fdec4a6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/creios%2Fquarry/repository/archive.zip?sha=a2f7137a8c656cdadfb749e8242c8c5a7fdec4a6",
-                "reference": "a2f7137a8c656cdadfb749e8242c8c5a7fdec4a6",
-                "shasum": ""
-            },
-            "require": {
-                "consolidation/robo": "^1.2",
-                "creios/celest": "^1.0.0",
-                "league/flysystem": "^1.0",
-                "lstrojny/functional-php": "^1.7",
-                "opis/json-schema": "^1.0",
-                "php": ">=7.2",
-                "twig/twig": "^2.4"
-            },
-            "require-dev": {
-                "giorgiosironi/eris": "^0.10.0",
-                "phpunit/phpunit": "^7.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Quarry\\": [
-                        "src/",
-                        "test/phpunit/"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jonas Schürmann",
-                    "email": "schuermann@creios.net"
-                }
-            ],
-            "time": "2018-07-13T08:04:08+00:00"
         },
         {
             "name": "creios/tzdata",
@@ -1054,20 +1054,20 @@
         },
         {
             "name": "http-interop/http-factory",
-            "version": "0.3.0",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/http-interop/http-factory.git",
-                "reference": "c2587cc0a6f74987fefb5b8074acfd32c69a4b0f"
+                "reference": "c8d8491117c4ecc080b5d80e380f5aa590232fcb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/http-interop/http-factory/zipball/c2587cc0a6f74987fefb5b8074acfd32c69a4b0f",
-                "reference": "c2587cc0a6f74987fefb5b8074acfd32c69a4b0f",
+                "url": "https://api.github.com/repos/http-interop/http-factory/zipball/c8d8491117c4ecc080b5d80e380f5aa590232fcb",
+                "reference": "c8d8491117c4ecc080b5d80e380f5aa590232fcb",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0",
+                "php": ">=7.0.0",
                 "psr/http-message": "^1.0"
             },
             "type": "library",
@@ -1102,7 +1102,7 @@
                 "request",
                 "response"
             ],
-            "time": "2017-03-24T14:48:51+00:00"
+            "time": "2018-05-22T16:11:32+00:00"
         },
         {
             "name": "http-interop/http-server-middleware",
@@ -1566,20 +1566,20 @@
         },
         {
             "name": "middlewares/utils",
-            "version": "v1.1.0",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/middlewares/utils.git",
-                "reference": "9d619ead96066717e5e040814c6aad846facde58"
+                "reference": "92a018dde6ef7f394d8a68d22cec85f1ae549af9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/middlewares/utils/zipball/9d619ead96066717e5e040814c6aad846facde58",
-                "reference": "9d619ead96066717e5e040814c6aad846facde58",
+                "url": "https://api.github.com/repos/middlewares/utils/zipball/92a018dde6ef7f394d8a68d22cec85f1ae549af9",
+                "reference": "92a018dde6ef7f394d8a68d22cec85f1ae549af9",
                 "shasum": ""
             },
             "require": {
-                "http-interop/http-factory": "^0.3",
+                "http-interop/http-factory": "^0.4",
                 "php": "^7.0",
                 "psr/container": "^1.0",
                 "psr/http-message": "^1.0",
@@ -1612,7 +1612,7 @@
                 "psr-15",
                 "psr-7"
             ],
-            "time": "2018-06-25T18:06:18+00:00"
+            "time": "2018-07-17T17:04:07+00:00"
         },
         {
             "name": "middlewares/whoops",
@@ -1827,16 +1827,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.0.2",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "35b8caf75e791ba1b2d24fec1552168d72692b12"
+                "reference": "bd088dc940a418f09cda079a9b5c7c478890fb8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/35b8caf75e791ba1b2d24fec1552168d72692b12",
-                "reference": "35b8caf75e791ba1b2d24fec1552168d72692b12",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/bd088dc940a418f09cda079a9b5c7c478890fb8d",
+                "reference": "bd088dc940a418f09cda079a9b5c7c478890fb8d",
                 "shasum": ""
             },
             "require": {
@@ -1874,7 +1874,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2018-06-03T11:33:10+00:00"
+            "time": "2018-07-15T17:25:16+00:00"
         },
         {
             "name": "opis/json-schema",
@@ -3633,22 +3633,22 @@
         },
         {
             "name": "phar-io/manifest",
-            "version": "1.0.1",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/manifest.git",
-                "reference": "2df402786ab5368a0169091f61a7c1e0eb6852d0"
+                "reference": "7761fcacf03b4d4f16e7ccb606d4879ca431fcf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/manifest/zipball/2df402786ab5368a0169091f61a7c1e0eb6852d0",
-                "reference": "2df402786ab5368a0169091f61a7c1e0eb6852d0",
+                "url": "https://api.github.com/repos/phar-io/manifest/zipball/7761fcacf03b4d4f16e7ccb606d4879ca431fcf4",
+                "reference": "7761fcacf03b4d4f16e7ccb606d4879ca431fcf4",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-phar": "*",
-                "phar-io/version": "^1.0.1",
+                "phar-io/version": "^2.0",
                 "php": "^5.6 || ^7.0"
             },
             "type": "library",
@@ -3684,20 +3684,20 @@
                 }
             ],
             "description": "Component for reading phar.io manifest information from a PHP Archive (PHAR)",
-            "time": "2017-03-05T18:14:27+00:00"
+            "time": "2018-07-08T19:23:20+00:00"
         },
         {
             "name": "phar-io/version",
-            "version": "1.0.1",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/version.git",
-                "reference": "a70c0ced4be299a63d32fa96d9281d03e94041df"
+                "reference": "45a2ec53a73c70ce41d55cedef9063630abaf1b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/version/zipball/a70c0ced4be299a63d32fa96d9281d03e94041df",
-                "reference": "a70c0ced4be299a63d32fa96d9281d03e94041df",
+                "url": "https://api.github.com/repos/phar-io/version/zipball/45a2ec53a73c70ce41d55cedef9063630abaf1b6",
+                "reference": "45a2ec53a73c70ce41d55cedef9063630abaf1b6",
                 "shasum": ""
             },
             "require": {
@@ -3731,7 +3731,7 @@
                 }
             ],
             "description": "Library for handling version information and constraints",
-            "time": "2017-03-05T17:38:23+00:00"
+            "time": "2018-07-08T19:19:57+00:00"
         },
         {
             "name": "php-coveralls/php-coveralls",
@@ -4282,16 +4282,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.2.6",
+            "version": "7.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "400a3836ee549ae6f665323ac3f21e27eac7155f"
+                "reference": "8e878aff7917ef66e702e03d1359b16eee254e2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/400a3836ee549ae6f665323ac3f21e27eac7155f",
-                "reference": "400a3836ee549ae6f665323ac3f21e27eac7155f",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/8e878aff7917ef66e702e03d1359b16eee254e2c",
+                "reference": "8e878aff7917ef66e702e03d1359b16eee254e2c",
                 "shasum": ""
             },
             "require": {
@@ -4302,8 +4302,8 @@
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "myclabs/deep-copy": "^1.7",
-                "phar-io/manifest": "^1.0.1",
-                "phar-io/version": "^1.0",
+                "phar-io/manifest": "^1.0.2",
+                "phar-io/version": "^2.0",
                 "php": "^7.1",
                 "phpspec/prophecy": "^1.7",
                 "phpunit/php-code-coverage": "^6.0.7",
@@ -4362,7 +4362,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-06-21T13:13:39+00:00"
+            "time": "2018-07-15T05:20:50+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -5133,7 +5133,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "timtegeler/routerunner": 10
+        "timtegeler/routerunner": 10,
+        "benjaminknauer/quarry": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
