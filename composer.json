@@ -38,7 +38,7 @@
     "symfony/property-access": "^4.1",
     "symfony/property-info": "^4.1",
     "symfony/http-foundation": "^4.1",
-    "benjaminknauer/quarry": "^1.0"
+    "benjaminknauer/quarry": "dev-master@dev"
   },
   "autoload": {
     "psr-4": {
