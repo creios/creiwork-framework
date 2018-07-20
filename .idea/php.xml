@@ -90,10 +90,10 @@
       <path value="$PROJECT_DIR$/vendor/jeremeamia/SuperClosure" />
       <path value="$PROJECT_DIR$/vendor/league/flysystem" />
       <path value="$PROJECT_DIR$/vendor/twig/twig" />
-      <path value="$PROJECT_DIR$/vendor/creios/quarry" />
       <path value="$PROJECT_DIR$/vendor/lstrojny/functional-php" />
       <path value="$PROJECT_DIR$/vendor/creios/celest" />
       <path value="$PROJECT_DIR$/vendor/creios/tzdata" />
+      <path value="$PROJECT_DIR$/vendor/benjaminknauer/quarry" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />
