@@ -48,6 +48,6 @@
   "autoload-dev": {
     "psr-4": {
       "Creios\\Creiwork\\Framework\\": "phpunit/tests"
-    },
+    }
   }
 }
