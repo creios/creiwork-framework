@@ -48,5 +48,7 @@
     "psr-4": {
       "Creios\\Creiwork\\Framework\\": "phpunit/tests"
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
