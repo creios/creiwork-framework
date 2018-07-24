@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8566e659e62d10dea99ced8120db50ca",
+    "content-hash": "43775da63d9a3502d51ade746e07c2bb",
     "packages": [
         {
             "name": "aura/session",
@@ -69,40 +69,37 @@
             "time": "2016-10-03T20:28:32+00:00"
         },
         {
-            "name": "benjaminknauer/quarry",
-            "version": "dev-master",
+            "name": "cakephp/chronos",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
-                "url": "https://gitlab.com/benjaminknauer/quarry.git",
-                "reference": "4af3214b655d714f05c5fb0ffc66b9a380ce2918"
+                "url": "https://github.com/cakephp/chronos.git",
+                "reference": "30f5b26bcf76a5e53ecc274700ad1ec49dc05567"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/benjaminknauer%2Fquarry/repository/archive.zip?sha=4af3214b655d714f05c5fb0ffc66b9a380ce2918",
-                "reference": "4af3214b655d714f05c5fb0ffc66b9a380ce2918",
+                "url": "https://api.github.com/repos/cakephp/chronos/zipball/30f5b26bcf76a5e53ecc274700ad1ec49dc05567",
+                "reference": "30f5b26bcf76a5e53ecc274700ad1ec49dc05567",
                 "shasum": ""
             },
             "require": {
-                "consolidation/robo": "^1.2",
-                "creios/celest": "^1.0.0",
-                "league/flysystem": "^1.0",
-                "lstrojny/functional-php": "^1.7",
-                "opis/json-schema": "^1.0",
-                "php": ">=7.2",
-                "twig/twig": "^2.4"
+                "php": "^5.5.9|^7"
             },
             "require-dev": {
-                "giorgiosironi/eris": "^0.10.0",
-                "phpunit/phpunit": "^7.0"
+                "athletic/athletic": "~0.1",
+                "cakephp/cakephp-codesniffer": "^3.0",
+                "phpbench/phpbench": "@dev",
+                "phpstan/phpstan": "^0.6.4",
+                "phpunit/phpunit": "<6.0 || ^7.0"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Quarry\\": [
-                        "src/",
-                        "test/phpunit/"
-                    ]
-                }
+                    "Cake\\Chronos\\": "src/"
+                },
+                "files": [
+                    "src/carbon_compat.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -110,11 +107,23 @@
             ],
             "authors": [
                 {
-                    "name": "Jonas Schürmann",
-                    "email": "schuermann@creios.net"
+                    "name": "Brian Nesbitt",
+                    "email": "brian@nesbot.com",
+                    "homepage": "http://nesbot.com"
+                },
+                {
+                    "name": "The CakePHP Team",
+                    "homepage": "http://cakephp.org"
                 }
             ],
-            "time": "2018-07-20T10:43:18+00:00"
+            "description": "A simple API extension for DateTime.",
+            "homepage": "http://cakephp.org",
+            "keywords": [
+                "date",
+                "datetime",
+                "time"
+            ],
+            "time": "2018-07-11T18:51:56+00:00"
         },
         {
             "name": "consolidation/annotated-command",
@@ -438,87 +447,52 @@
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
-            "name": "creios/celest",
-            "version": "v1.0.0",
+            "name": "creios/quarry",
+            "version": "dev-3-use-cakephp-chronos-instead-of-creios-celest",
             "source": {
                 "type": "git",
-                "url": "https://gitlab.com/creios/celest.git",
-                "reference": "003f63fb6eef01253caa90667fd5be913367d727"
+                "url": "https://gitlab.com/creios/quarry.git",
+                "reference": "0070eabd1df224722b398f4ac0a2480b817f6cb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/creios%2Fcelest/repository/archive.zip?sha=003f63fb6eef01253caa90667fd5be913367d727",
-                "reference": "003f63fb6eef01253caa90667fd5be913367d727",
+                "url": "https://gitlab.com/api/v4/projects/creios%2Fquarry/repository/archive.zip?sha=0070eabd1df224722b398f4ac0a2480b817f6cb2",
+                "reference": "0070eabd1df224722b398f4ac0a2480b817f6cb2",
                 "shasum": ""
             },
             "require": {
-                "creios/tzdata": "^1.0.0",
-                "ext-gmp": "*",
-                "ext-intl": "*",
-                "php": ">=5.6",
-                "php-64bit": "*"
+                "cakephp/chronos": "^1.2",
+                "consolidation/robo": "^1.2",
+                "league/flysystem": "^1.0",
+                "lstrojny/functional-php": "^1.7",
+                "opis/json-schema": "^1.0",
+                "php": ">=7.2",
+                "twig/twig": "^2.4"
+            },
+            "require-dev": {
+                "giorgiosironi/eris": "^0.10.0",
+                "phpunit/phpunit": "^7.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.1.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "Celest\\": "src/Celest"
+                    "Quarry\\": [
+                        "src/",
+                        "test/phpunit/"
+                    ]
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-2.0"
+                "MIT"
             ],
             "authors": [
                 {
-                    "name": "Steffen Hanikel",
-                    "email": "steffen.hanikel@gmail.com"
+                    "name": "Jonas Schürmann",
+                    "email": "schuermann@creios.net"
                 }
             ],
-            "description": "A port of JSR310 to PHP",
-            "time": "2018-07-06T11:22:52+00:00"
-        },
-        {
-            "name": "creios/tzdata",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.com/creios/tzdata.git",
-                "reference": "378cc8e33f584803380250d33a5b351482b07c78"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/creios%2Ftzdata/repository/archive.zip?sha=378cc8e33f584803380250d33a5b351482b07c78",
-                "reference": "378cc8e33f584803380250d33a5b351482b07c78",
-                "shasum": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Celest\\TzData\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Steffen Hanikel",
-                    "email": "steffen.hanikel@gmail.com"
-                }
-            ],
-            "description": "Timezone data for Celest based on IANA's time zone database.",
-            "time": "2018-07-06T11:12:07+00:00"
+            "time": "2018-07-24T11:50:02+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -2406,16 +2380,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "70591cda56b4b47c55776ac78e157c4bb6c8b43f"
+                "reference": "5c31f6a97c1c240707f6d786e7e59bfacdbc0219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/70591cda56b4b47c55776ac78e157c4bb6c8b43f",
-                "reference": "70591cda56b4b47c55776ac78e157c4bb6c8b43f",
+                "url": "https://api.github.com/repos/symfony/console/zipball/5c31f6a97c1c240707f6d786e7e59bfacdbc0219",
+                "reference": "5c31f6a97c1c240707f6d786e7e59bfacdbc0219",
                 "shasum": ""
             },
             "require": {
@@ -2470,20 +2444,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-05-31T10:17:53+00:00"
+            "time": "2018-07-16T14:05:40+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "2391ed210a239868e7256eb6921b1bd83f3087b5"
+                "reference": "00d64638e4f0703a00ab7fc2c8ae5f75f3b4020f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/2391ed210a239868e7256eb6921b1bd83f3087b5",
-                "reference": "2391ed210a239868e7256eb6921b1bd83f3087b5",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/00d64638e4f0703a00ab7fc2c8ae5f75f3b4020f",
+                "reference": "00d64638e4f0703a00ab7fc2c8ae5f75f3b4020f",
                 "shasum": ""
             },
             "require": {
@@ -2533,11 +2507,11 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2018-04-06T07:35:57+00:00"
+            "time": "2018-07-10T11:02:47+00:00"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -2587,7 +2561,7 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -2636,16 +2610,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "4f9c7cf962e635b0b26b14500ac046e07dbef7f3"
+                "reference": "8da9ea68ab2d80dfabd41e0d14b9606bb47a10c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/4f9c7cf962e635b0b26b14500ac046e07dbef7f3",
-                "reference": "4f9c7cf962e635b0b26b14500ac046e07dbef7f3",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/8da9ea68ab2d80dfabd41e0d14b9606bb47a10c0",
+                "reference": "8da9ea68ab2d80dfabd41e0d14b9606bb47a10c0",
                 "shasum": ""
             },
             "require": {
@@ -2686,11 +2660,11 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2018-06-19T21:38:16+00:00"
+            "time": "2018-07-16T14:05:40+00:00"
         },
         {
             "name": "symfony/inflector",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/inflector.git",
@@ -2970,7 +2944,7 @@
         },
         {
             "name": "symfony/process",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
@@ -3019,7 +2993,7 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
@@ -3086,16 +3060,16 @@
         },
         {
             "name": "symfony/property-info",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
-                "reference": "724cca5ae45760156029f14d2e293a281fab89e0"
+                "reference": "6a5538f1c820573da06b3522539c12af0887a583"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-info/zipball/724cca5ae45760156029f14d2e293a281fab89e0",
-                "reference": "724cca5ae45760156029f14d2e293a281fab89e0",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/6a5538f1c820573da06b3522539c12af0887a583",
+                "reference": "6a5538f1c820573da06b3522539c12af0887a583",
                 "shasum": ""
             },
             "require": {
@@ -3104,7 +3078,7 @@
             },
             "conflict": {
                 "phpdocumentor/reflection-docblock": "<3.0||>=3.2.0,<3.2.2",
-                "phpdocumentor/type-resolver": "<0.2.1",
+                "phpdocumentor/type-resolver": "<0.3.0",
                 "symfony/dependency-injection": "<3.4"
             },
             "require-dev": {
@@ -3158,20 +3132,20 @@
                 "type",
                 "validator"
             ],
-            "time": "2018-05-16T14:33:22+00:00"
+            "time": "2018-07-07T16:00:36+00:00"
         },
         {
             "name": "symfony/serializer",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "2ddc6ec084eba809aec92bf723e007bc3a8345c0"
+                "reference": "a88b92bec8681cb58a3555c9026efaf747e92879"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/2ddc6ec084eba809aec92bf723e007bc3a8345c0",
-                "reference": "2ddc6ec084eba809aec92bf723e007bc3a8345c0",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/a88b92bec8681cb58a3555c9026efaf747e92879",
+                "reference": "a88b92bec8681cb58a3555c9026efaf747e92879",
                 "shasum": ""
             },
             "require": {
@@ -3238,11 +3212,11 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2018-06-22T08:59:39+00:00"
+            "time": "2018-07-12T08:11:46+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.12",
+            "version": "v3.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
@@ -4929,7 +4903,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
@@ -4992,7 +4966,7 @@
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
@@ -5134,7 +5108,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "timtegeler/routerunner": 10,
-        "benjaminknauer/quarry": 20
+        "creios/quarry": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

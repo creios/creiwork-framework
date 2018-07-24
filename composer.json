@@ -22,7 +22,6 @@
   "require": {
     "php": ">=7.2.0",
     "timtegeler/routerunner": "^5.0.0-beta",
-    "creios/celest": "^1.0.0",
     "mindplay/middleman": "3.0.3",
     "aura/session": "^2.0.0",
     "league/plates": "^3.1",
@@ -38,7 +37,7 @@
     "symfony/property-access": "^4.1",
     "symfony/property-info": "^4.1",
     "symfony/http-foundation": "^4.1",
-    "creios/quarry": "^1.1.0"
+    "creios/quarry": "dev-3-use-cakephp-chronos-instead-of-creios-celest@dev"
   },
   "autoload": {
     "psr-4": {
