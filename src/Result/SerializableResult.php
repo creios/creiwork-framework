@@ -23,32 +23,40 @@ class SerializableResult extends Result implements
 
     /** @var object|array  */
     private $data;
+    /**
+     * @var array
+     */
+    private $attributesToBeSerialized;
 
     /**
      * SerializableResult constructor.
      * @param mixed $data
+     * @param array $attributesToBeSerialized
      */
-    public function __construct($data)
+    public function __construct($data, $attributesToBeSerialized = [])
     {
         $this->data = $data;
+        $this->attributesToBeSerialized = $attributesToBeSerialized;
     }
 
     /**
      * @param mixed $data
+     * @param array $attributesToBeSerialized
      * @return SerializableResult
      */
-    public static function createJsonResult($data)
+    public static function createJsonResult($data,  $attributesToBeSerialized = [])
     {
-        return (new SerializableResult($data))->withMimeType('application/json');
+        return (new SerializableResult($data, $attributesToBeSerialized))->withMimeType('application/json');
     }
 
     /**
      * @param mixed $data
+     * @param array $attributesToBeSerialized
      * @return SerializableResult
      */
-    public static function createXmlResult($data)
+    public static function createXmlResult($data, $attributesToBeSerialized = [])
     {
-        return (new SerializableResult($data))->withMimeType('text/xml');
+        return (new SerializableResult($data, $attributesToBeSerialized))->withMimeType('text/xml');
     }
 
     /**
@@ -58,5 +66,15 @@ class SerializableResult extends Result implements
     {
         return $this->data;
     }
+
+    /**
+     * @return array
+     */
+    public function getAttributesToBeSerialized(): array
+    {
+        return $this->attributesToBeSerialized;
+    }
+
+
 
 }

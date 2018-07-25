@@ -53,7 +53,7 @@ class PostProcessor implements PostProcessorInterface
 
     /**
      * OutputLayer constructor.
-     * @param Serializer $serializer
+     * @param SerializerInterface $serializer
      * @param Engine $templateEngine
      * @param SharedDataProvider $sharedDataProvider
      */
@@ -180,14 +180,19 @@ class PostProcessor implements PostProcessorInterface
     private function modifyResponseForSerializableResult(ResponseInterface $response, SerializableResult $serializableResult)
     {
         $mimeType = $serializableResult->getMimeType() ? $serializableResult->getMimeType() : 'application/json';
+        $attributesToBeSerialized = $serializableResult->getAttributesToBeSerialized();
+        $context = [];
+        if (is_array($attributesToBeSerialized && count($attributesToBeSerialized) > 0)) {
+            $context = ['attributes' => $attributesToBeSerialized];
+        }
 
         switch ($mimeType) {
             case 'text/xml':
-                $payload = $this->serializer->serialize($serializableResult->getData(), 'xml');
+                $payload = $this->serializer->serialize($serializableResult->getData(), 'xml', $context);
                 break;
-             case 'application/json':
+            case 'application/json':
             default:
-                $payload = $this->serializer->serialize($serializableResult->getData(), 'json');
+                $payload = $this->serializer->serialize($serializableResult->getData(), 'json', $context);
                 break;
         }
         $stream = \GuzzleHttp\Psr7\stream_for($payload);

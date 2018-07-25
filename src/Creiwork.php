@@ -40,6 +40,7 @@ use Quarry\Framework\Database;
 use Quarry\Framework\PdoDatabase;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -274,7 +275,7 @@ class Creiwork
 
             Serializer::class => function () {
                 $encoders = ['json' => new JsonEncoder(), 'xml' => new XmlEncoder()];
-                $normalizers = [new ObjectNormalizer()];
+                $normalizers = [new DateTimeNormalizer('y-m-d H:i:s'), new ObjectNormalizer()];
                 return new Serializer($normalizers, $encoders);
             },
 
