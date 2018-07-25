@@ -182,7 +182,7 @@ class PostProcessor implements PostProcessorInterface
         $mimeType = $serializableResult->getMimeType() ? $serializableResult->getMimeType() : 'application/json';
         $attributesToBeSerialized = $serializableResult->getAttributesToBeSerialized();
         $context = [];
-        if (is_array($attributesToBeSerialized && count($attributesToBeSerialized) > 0)) {
+        if (is_array($attributesToBeSerialized) && count($attributesToBeSerialized) > 0) {
             $context = ['attributes' => $attributesToBeSerialized];
         }
 
