@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b6d84826744158b2b164028198bacd91",
+    "content-hash": "2fb410b2f0ab48ea9482640878c49552",
     "packages": [
         {
             "name": "aura/session",
@@ -448,16 +448,16 @@
         },
         {
             "name": "creios/quarry",
-            "version": "dev-3-use-cakephp-chronos-instead-of-creios-celest",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/creios/quarry.git",
-                "reference": "0070eabd1df224722b398f4ac0a2480b817f6cb2"
+                "reference": "09e96e98eadcbd384eeaa18df5cb729a8ea25771"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/creios%2Fquarry/repository/archive.zip?sha=0070eabd1df224722b398f4ac0a2480b817f6cb2",
-                "reference": "0070eabd1df224722b398f4ac0a2480b817f6cb2",
+                "url": "https://gitlab.com/api/v4/projects/creios%2Fquarry/repository/archive.zip?sha=09e96e98eadcbd384eeaa18df5cb729a8ea25771",
+                "reference": "09e96e98eadcbd384eeaa18df5cb729a8ea25771",
                 "shasum": ""
             },
             "require": {
@@ -492,7 +492,7 @@
                     "email": "schuermann@creios.net"
                 }
             ],
-            "time": "2018-07-24T11:50:02+00:00"
+            "time": "2018-07-26T07:23:39+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -5105,9 +5105,9 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "beta",
     "stability-flags": {
-        "creios/quarry": 20
+        "timtegeler/routerunner": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,

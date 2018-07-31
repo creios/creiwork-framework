@@ -37,7 +37,7 @@
     "symfony/property-access": "^4.1",
     "symfony/property-info": "^4.1",
     "symfony/http-foundation": "^4.1",
-    "creios/quarry": "dev-3-use-cakephp-chronos-instead-of-creios-celest@dev"
+    "creios/quarry": "^2.0.0"
   },
   "autoload": {
     "psr-4": {
@@ -49,6 +49,6 @@
       "Creios\\Creiwork\\Framework\\": "phpunit/tests"
     }
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "beta",
   "prefer-stable": true
 }
