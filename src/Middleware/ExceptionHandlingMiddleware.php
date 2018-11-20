@@ -44,7 +44,7 @@ class ExceptionHandlingMiddleware implements ExceptionHandlingMiddlewareInterfac
     {
         try {
             return $requestHandler->handle($request);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $result = $this->buildResult();
             return $this->postProcessor->process($request, $result);
         }
@@ -53,7 +53,7 @@ class ExceptionHandlingMiddleware implements ExceptionHandlingMiddlewareInterfac
     /**
      * @return SerializableResult
      */
-    protected function buildResult()
+    protected function buildResult(): SerializableResult
     {
         $error = $this->buildError();
         return (new SerializableResult($error))->withStatusCode(StatusCodes::HTTP_INTERNAL_SERVER_ERROR);
@@ -62,7 +62,7 @@ class ExceptionHandlingMiddleware implements ExceptionHandlingMiddlewareInterfac
     /**
      * @return \Creios\Creiwork\Framework\Message\Error
      */
-    protected function buildError()
+    protected function buildError(): \Creios\Creiwork\Framework\Message\Error
     {
         return (new ErrorFactory($this->getSupportContact()))->buildError('Unfortunately an error occurred');
     }
@@ -70,7 +70,7 @@ class ExceptionHandlingMiddleware implements ExceptionHandlingMiddlewareInterfac
     /**
      * @return string
      */
-    private function getSupportContact()
+    private function getSupportContact(): string
     {
         return $this->config->get('support-contact');
     }
