@@ -12,6 +12,10 @@
     {
       "type": "composer",
       "url": "https://composer.creios.net/"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/creios/routerunner.git"
     }
   ],
   "require-dev": {
@@ -21,7 +25,7 @@
   },
   "require": {
     "php": ">=7.2.0",
-    "timtegeler/routerunner": "^5.0.0-beta",
+    "creios/routerunner": "^5.0.0-beta",
     "mindplay/middleman": "3.0.3",
     "aura/session": "^2.0.0",
     "league/plates": "^3.1",
