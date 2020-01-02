@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "81dfe3e093d39193e5d8e14939fb744a",
+    "content-hash": "4cffeb4b11c3f48caca7113cbb5b5c5e",
     "packages": [
         {
             "name": "aura/session",
@@ -97,7 +97,56 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
+            "abandoned": "psr/container",
             "time": "2017-02-14T19:40:03+00:00"
+        },
+        {
+            "name": "creios/routerunner",
+            "version": "v4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/creios/routerunner.git",
+                "reference": "d6c7fc43781ab9a43fa1ba29f65b061e9731e693"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/creios/routerunner/zipball/d6c7fc43781ab9a43fa1ba29f65b061e9731e693",
+                "reference": "d6c7fc43781ab9a43fa1ba29f65b061e9731e693",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/psr7": "^1.3",
+                "php": ">=7.1.0",
+                "php-di/php-di": "^5.2",
+                "phpfastcache/phpfastcache": "^4.3",
+                "psr/http-server-middleware": "^1.0",
+                "symfony/yaml": "^3.0"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/phpunit": "^5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TimTegeler\\Routerunner\\": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tim Tegeler",
+                    "email": "mail@timtegeler.de"
+                }
+            ],
+            "description": "Routerunner is a router for HTTP-request written in PHP",
+            "support": {
+                "source": "https://github.com/creios/routerunner/tree/v4.0.0",
+                "issues": "https://github.com/creios/routerunner/issues"
+            },
+            "time": "2018-06-13T12:33:04+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -507,6 +556,7 @@
                 "request",
                 "response"
             ],
+            "abandoned": "psr/http-factory",
             "time": "2017-03-24T14:48:51+00:00"
         },
         {
@@ -1848,51 +1898,6 @@
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
             "time": "2018-05-03T23:18:14+00:00"
-        },
-        {
-            "name": "timtegeler/routerunner",
-            "version": "v4.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/timtegeler/routerunner.git",
-                "reference": "d6c7fc43781ab9a43fa1ba29f65b061e9731e693"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/timtegeler/routerunner/zipball/d6c7fc43781ab9a43fa1ba29f65b061e9731e693",
-                "reference": "d6c7fc43781ab9a43fa1ba29f65b061e9731e693",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/psr7": "^1.3",
-                "php": ">=7.1.0",
-                "php-di/php-di": "^5.2",
-                "phpfastcache/phpfastcache": "^4.3",
-                "psr/http-server-middleware": "^1.0",
-                "symfony/yaml": "^3.0"
-            },
-            "require-dev": {
-                "php-coveralls/php-coveralls": "^2.1",
-                "phpunit/phpunit": "^5.7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "TimTegeler\\Routerunner\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tim Tegeler",
-                    "email": "mail@timtegeler.de"
-                }
-            ],
-            "description": "Routerunner is a router for HTTP-request written in PHP",
-            "time": "2018-06-13T12:33:04+00:00"
         },
         {
             "name": "willdurand/negotiation",
